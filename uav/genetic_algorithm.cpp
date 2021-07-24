@@ -36,9 +36,36 @@ bool genetic_algorithm::approx_equal(double a, double b, double eps) {
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * eps);
 }
 
+template <class circumnaviation>
+void genetic_algorithm::crossover_ordered(circumnaviation& parent1, circumnaviation& parent2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator)
+{
+	vector<int> crossover_pnts[2];
+	for (int i = 0 i < 2; i++) 
+		crossover_pnts[i] = 1;
+	
+	sort(crossover_pnts);
+
+	for (int i = crossover_pnts[0]; i < crossover_pnts[1]; i++) {
+		child1.route[i] = parent1.route[i];
+		child2.route[i] = parent2.route[i];
+	}
+
+	for (int i = 0; i < crossover_pnts[0]; i++) {
+		if (std::find(begin(child1.route + crossover_pnts[0]), end(child1.route), parent2.route[i]) == end(child1.route))
+			child1.route[i] = parent2.route[i];
+		if (std::find(begin(child2.route + crossover_pnts[0]), end(child2.route), parent1.route[i]) == end(child2.route))
+			child2.route[i] = parent1.route[i];
+	}
+	for (int i = crossover_pnts[1]; i < rt_size; i++) {
+		if (std::find(begin(child1.route), end(child1.route), parent2.route[i]) == end(child1.route))
+			child1.route[i] = parent2.route[i];
+		if (std::find(begin(child2.route), end(child2.route), parent1.route[i]) == end(child2.route))
+			child2.route[i] = parent1.route[i];
+	}
+}
 //operator> ()
 template <class circumnaviation>
-void genetic_algorithm::crossover(circumnaviation& parent1, circumnaviation& parent2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator)
+void genetic_algorithm::crossover_collision(circumnaviation& parent1, circumnaviation& parent2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator)
 {
 	for (int i = 0; i < rt_size; i++) 
 	{
@@ -70,7 +97,15 @@ void genetic_algorithm::crossover(circumnaviation& parent1, circumnaviation& par
 	}
 }
 
-void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v) {
+//void genetic_algorithm::multi_point_crossover(int no_pivots) 
+//{
+//	vector<int> partitions(no_pivots);
+//	for (int i = 0; i < no_pivots; i++)
+//
+//
+//}
+void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v) 
+{
 	for (int i = 0; i < lista.generation_size; i++)
 		fitness_v[i] = fitness(generation[i]);
 
@@ -124,14 +159,15 @@ double genetic_algorithm::fitness(Circuit& circ1)
 }
 
 template <class circumnaviation>
-result genetic_algorithm::run_algorithm_genetic()
+result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 {
-	int seed = 42;
-	default_random_engine generator(seed);
+	lista.generation_size++;
+	default_random_engine generator(lista.seed);
 	uniform_int_distribution<int> randgen(0, lista.generation_size - 1);
 	vector<circumnaviation> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
 	vector<double> fitness_v(lista.generation_size + 1);
 	vector<double> performance_v;
+	vector<circumnaviation> temp_v(2);
 
 	result Result;
 	int ind1, ind2;
@@ -139,7 +175,7 @@ result genetic_algorithm::run_algorithm_genetic()
 		generation[i] = Circuit(obj1.centroids);
 	}
 
-	int gen = 0, conv_cnt = 0;
+	int gen = 0, conv_cnt = 0, n;
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
@@ -164,22 +200,30 @@ result genetic_algorithm::run_algorithm_genetic()
 			break;
 		}
 
-		int n = 1;
-		while (n < lista.generation_size ) {
-			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generation);
-			while (ind2 == selection(fitness_v, lista.generation_size, fitness_total, generation));
+		n = 1;
+		while (n < lista.generation_size - 1) {
+			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
+			while (ind2 == selection(fitness_v, lista.generation_size, fitness_total, generator));
+
 
 			double rand_number = rand_number(generator);
 			if (rand_number < lista.crossover_prob)
-				crossover(generation[ind1], generation[ind2], new_generation[n], new_generation[n + 1], generator);
+				crossover_collision(generation[ind1], generation[ind2], temp_v[0], temp_v[1], generator);
 			else {
-				new_generation[n] = generation[ind1];
-				new_generation[n + 1] = generation[ind2];
+				temp_v[0] = generation[ind1];
+				temp_v[1] = generation[ind2];
+				}
+				mutation(temp_v[0], lista.mutation_prob, generator);
+				mutation(temp_v[1], lista.mutation_prob, generator);
+				if (new_generation[n].check_truck_route_validity()) {
+					generation[n] = temp_v[0];
+					n++;
+				}
+				if (new_generation[n + 1].check_truck_route_validity()) {
+					generation[n] = temp_v[1];
+					n++;
+				}
 			}
-			mutation(new_generation[n], lista.mutation_prob, generator);
-			mutation(new_generation[n + 1], lista.mutation_prob, generator);
-			n = n + 2;
-
 		}
 	}
 }

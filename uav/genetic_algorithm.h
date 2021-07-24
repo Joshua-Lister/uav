@@ -23,15 +23,17 @@ public:
 	genetic_algorithm(param_list list, T (*obj_function)(), clustering obj1);
 	~genetic_algorithm();
 	template <class circumnaviation>
-	void crossover(circumnaviation& Circuit1, circumnaviation& Circuit2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator);
+	void crossover_collision(circumnaviation& Circuit1, circumnaviation& Circuit2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator);
 	void calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v);
 	void mutation(Circuit& circ, double mutation_prob, std::default_random_engine& generator);
 	bool approx_equal(double a, double b, double epsilion);
+	template <class circumnaviation>
+	void crossover_ordered(circumnaviation& parent1, circumnaviation& parent2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator);
 	int selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 	double objective_function();
 	double fitness(Circuit& circ1);
 	template <class circumnaviation>
-	result run_algorithm_genetic();
+	result run_algorithm_genetic(int max_conv_cnt);
 	int rt_size;
 	vector<double> distances;
 	vector<Circuit> generation, new_generation;

@@ -122,13 +122,14 @@ void Circuit::check_drone(vector<drone> drone_list) {
 //	}
 //}
 
-bool Circuit::check_truck_route_validity(vector<address_metadata>& centroids) {
+bool Circuit::check_truck_route_validity(vector<address_metadata>& centroids, bool verbose) {
 	for (int ic1 = 0; ic1<centroids.size();ic1++)
 	{
 		for (int ic2 = ic1+1; ic2<centroids.size();ic2++)
 			if (route[ic1].num == route[ic2].num)
 			{
-				cout << "Duplicate centroid found in truck route : " << centroids[ic1].id << " " << centroids[ic2].id << "\n";
+				if (verbose)
+					cout << "Duplicate centroid found in truck route : " << centroids[ic1].id << " " << centroids[ic2].id << "\n";
 				return false;
 			}
 	}
