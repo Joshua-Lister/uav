@@ -31,6 +31,7 @@ int main()
 
 	genetic_algorithm vb(f, cl);
 	vb.run_algorithm_genetic(10);
+	cout << "success";
 	//cl.run_K_means();
 	//Circuit tt(cl);
 	return 0;

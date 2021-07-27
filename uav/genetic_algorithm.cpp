@@ -167,11 +167,10 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 	vector<double> fitness_v(lista.generation_size + 1);
 	vector<double> performance_v;
 	vector<Circuit> temp_v(2);
-	cout << "size: " << lista.generation_size << "\n";
 	result Result;
 	int ind1, ind2;
 	for (int i = 0; i < lista.generation_size + 1; i++) {
-		gen[i] = Circuit(obj1.centroids); // bollocks is here
+		gen[i] = Circuit(obj1.centroids); // is here
 	}
 
 	int gen_cnt = 0, conv_cnt = 0, n;
@@ -226,6 +225,5 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 		gen_cnt++;
 		swap(generation, new_generation);
 		}
-	cout << "donene\n";
 	return Result;
 	}

@@ -3,7 +3,7 @@
 Circuit::Circuit(const vector<address_metadata>& centroids) : centroids(centroids) {
 	route_size = centroids.size();
 	route.resize(route_size);
-	velocity_v.resize(route_size - 1);
+	//velocity_v.resize(route_size - 1); // here
 	mix(route);
 	//route = centroids;
 	check_truck_route_validity(false);
@@ -16,7 +16,7 @@ Circuit::Circuit(const clustering& c1) : route(c1.centroids) {
 	mix(route);
 	//route = centroids;
 	check_truck_route_validity(false);
-	cout << "working from circuit.cpp\n";
+
 }
 Circuit::Circuit() {};
 Circuit::~Circuit() {};
@@ -143,7 +143,8 @@ bool Circuit::check_truck_route_validity(bool verbose) {
 		
 		return false;
 	}*/
-	cout << "No duplicate centroid found in truck route\n";
+	if (verbose)
+		cout << "No duplicate centroid found in truck route\n";
 	return true;
 	// make standard IF
 }

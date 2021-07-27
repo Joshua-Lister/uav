@@ -5,7 +5,7 @@ clustering::clustering(size_t epochs, size_t k, read_data& d) : epochs(epochs), 
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 };
 clustering::clustering() {};
-clustering::~clustering() { cout << centroids.size() << "\n"; for (auto i : centroids) cout << i.id << "\n"; };
+clustering::~clustering() {};
 
 //double clustering::length(const address_metadata& adr, const address_metadata& centroid) {
 //	return (adr.x_coord - centroid.x_coord) * (adr.x_coord - centroid.x_coord) + (adr.y_coord - centroid.y_coord) * (adr.y_coord - centroid.y_coord);
