@@ -2,9 +2,10 @@
 
 clustering::clustering(size_t epochs, size_t k, read_data& d) : epochs(epochs), k(k), d(d), no_of_addresses(d.no_of_addresses) {
 	centroids.resize(k);
-	no_of_points.resize(d.no_of_addresses); easting_sum.resize(d.no_of_addresses); northing_sum.resize(d.no_of_addresses);
+	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 };
-clustering::~clustering() {};
+clustering::clustering() {};
+clustering::~clustering() { cout << centroids.size() << "\n"; for (auto i : centroids) cout << i.id << "\n"; };
 
 //double clustering::length(const address_metadata& adr, const address_metadata& centroid) {
 //	return (adr.x_coord - centroid.x_coord) * (adr.x_coord - centroid.x_coord) + (adr.y_coord - centroid.y_coord) * (adr.y_coord - centroid.y_coord);
@@ -23,12 +24,12 @@ void clustering::set_rand_centroids() {
 	}
 }
 void clustering::K_means() {
-	distances.resize(no_of_addresses * k);
+	//distances.resize(no_of_addresses * k);
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		min_distance = DBL_MAX;
 		for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
 			const double distance = calc::length(d.data[adr_no], centroids[cluster_no]);
-			this->distances[cluster_no + adr_no * no_of_addresses] = distance;
+			//this->distances[cluster_no + adr_no * no_of_addresses] = distance; // this line
 			if (distance < min_distance) {
 				min_distance = distance;
 				d.data[adr_no].id = centroids[cluster_no].id;
@@ -40,7 +41,7 @@ void clustering::K_means() {
 		easting_sum[i] = 0;
 		northing_sum[i] = 0;
 	}
-	int id_cluster = -1;
+	int id_cluster;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		id_cluster = d.data[adr_no].id;
 		no_of_points[id_cluster] += 1;
@@ -51,7 +52,14 @@ void clustering::K_means() {
 		centroids[cluster_no].x_coord = easting_sum[cluster_no] / no_of_points[cluster_no];
 		centroids[cluster_no].y_coord = northing_sum[cluster_no] / no_of_points[cluster_no];
 	}
+	/*ofstream myfile;
+	myfile.open("output_csv.txt");
+	myfile << "x, y,id" << endl;
 
+	for (auto i = 0; i < no_of_addresses; i++) {
+		myfile << d.data[i].x_coord << "," << d.data[i].y_coord << "," << d.data[i].id << endl;
+	}
+	myfile.close();*/
 }
 //void bla{
 //	ofstream myfile;
@@ -67,30 +75,33 @@ void clustering::K_means() {
 bool clustering::stopping_condition(address_metadata const& obj, address_metadata const& obj2) {
 	if ((abs(obj.x_coord - obj2.x_coord) < 1e-15) || (abs(obj.y_coord - obj2.y_coord) < 1e-15))
 		return true;
+	return false;
 }
 //operator !=(vector<address_metadata> const& obj, vector<address_metadata> const& obj2){
 //	for (size_t i = 0; i < obj.size(); i++){
 //		if ()
 //	}
 void clustering::run_K_means() {
-
+	no_of_points.resize(d.no_of_addresses); easting_sum.resize(d.no_of_addresses); northing_sum.resize(d.no_of_addresses);
 	set_rand_centroids();
-	for (auto i = 0; i < 30; i++) {
-		bool help = true;
-		while (help == true) {
-			for (auto j = 0; j < k; j++) {
-				if (stopping_condition(centroids[j], centroid_track[j]) == true)
+	vector<int> k_values;
+	for (int k = k_values[0]; k < k_values[k_values.size() - 1]; k++) {
+		bool convergence = false;
+		int cnt = 0;
+		while (!convergence){
+				for (auto j = 0; j < k; j++) {
+					if (stopping_condition(centroids[j], centroid_track[j]) == true)
+						cnt += 1;
+				}
+				centroid_track = centroids;
+				if (cnt == centroids.size()) break;
+			}
+			//std::all_of(std::execution::par, begin(distances), end(distances), )
+			for (auto const& i : distances)
+				if (drone::maxiumum_distance < i) {
+					success = false;
 					break;
-			}
-			centroid_track = centroids;
-			K_means();
+				}
+			success = true;
 		}
-		//std::all_of(std::execution::par, begin(distances), end(distances), )
-		for (auto const& i : distances)
-			if (drone::maxiumum_distance < i) {
-				success = false;
-				break;
-			}
-		success = true;
-	}
 }

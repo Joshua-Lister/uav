@@ -12,27 +12,28 @@ struct GA_param_list {
 
 struct result {
 	int iteration;
-	vector<int> circuit_vector;
+	vector<address_metadata> circuit_vector;
 	double optimal_performance;
 };
-
+//T(*obj_function)()
 class genetic_algorithm
 {
 public:
-	template <class T, class param_list>
-	genetic_algorithm(param_list list, T (*obj_function)(), clustering obj1);
+
+	genetic_algorithm(GA_param_list list, clustering obj1);
+	genetic_algorithm();
 	~genetic_algorithm();
-	template <class circumnaviation>
-	void crossover_collision(circumnaviation& Circuit1, circumnaviation& Circuit2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator);
+	//template <class Circuit>
+	void crossover_collision(Circuit& Circuit1, Circuit& Circuit2, Circuit& child1, Circuit& child2, default_random_engine& generator);
 	void calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v);
 	void mutation(Circuit& circ, double mutation_prob, std::default_random_engine& generator);
 	bool approx_equal(double a, double b, double epsilion);
-	template <class circumnaviation>
-	void crossover_ordered(circumnaviation& parent1, circumnaviation& parent2, circumnaviation& child1, circumnaviation& child2, default_random_engine& generator);
+	//template <class Circuit>
+	void crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator);
 	int selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 	double objective_function();
 	double fitness(Circuit& circ1);
-	template <class circumnaviation>
+	//template <class Circuit>
 	result run_algorithm_genetic(int max_conv_cnt);
 	int rt_size;
 	vector<double> distances;

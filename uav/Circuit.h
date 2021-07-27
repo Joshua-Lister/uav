@@ -10,6 +10,7 @@ class Circuit
 public:
 	Circuit(const vector<address_metadata>& centroids);
 	Circuit(const clustering& c1);
+	Circuit();
 	~Circuit() ;
 
 	static void swap_addresses(vector<address_metadata>& c, const int& p1, const int& p2);
@@ -28,7 +29,7 @@ public:
 
 	void check_drone(vector<drone> drone_list);
 
-	bool check_truck_route_validity(vector<address_metadata>& centroids);
+	bool check_truck_route_validity(bool verbose);
 
 	double dist(vector<address_metadata>& circuit_vector);
 
