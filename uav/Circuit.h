@@ -8,8 +8,8 @@
 class Circuit
 {
 public:
-	Circuit(const vector<address_metadata>& centroids);
-	Circuit(const clustering& c1);
+	Circuit(vector<address_metadata>& centroids);
+	Circuit(clustering& c1);
 	Circuit();
 	~Circuit() ;
 

@@ -25,7 +25,7 @@ public:
 	~genetic_algorithm();
 	//template <class Circuit>
 	void crossover_collision(Circuit& Circuit1, Circuit& Circuit2, Circuit& child1, Circuit& child2, default_random_engine& generator);
-	void calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v);
+	void calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen);
 	void mutation(Circuit& circ, double mutation_prob, std::default_random_engine& generator);
 	bool approx_equal(double a, double b, double epsilion);
 	//template <class Circuit>

@@ -15,7 +15,7 @@ int main()
 {
 	read_data tets("postal_data.txt");
 	tets.fill_data();
-	tets.print_data("All");
+	//tets.print_data("All");
 	//cout << tets.data[0].y_coord<<  "\n";
 	//cout << "hi\n";
 	clustering cl(1, 4, tets);
@@ -23,6 +23,7 @@ int main()
 	cl.K_means(); // problem with this func
 	GA_param_list f;
 	f.generation_size = 5;
+	f.max_generation = 3;
 	f.crossover_prob = 0.5;
 	f.max_iterations = 30;
 	f.mutation_prob = 0.1;

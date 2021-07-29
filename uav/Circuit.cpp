@@ -1,15 +1,18 @@
 #include "Circuit.h"
 
-Circuit::Circuit(const vector<address_metadata>& centroids) : centroids(centroids) {
-	route_size = centroids.size();
+Circuit::Circuit(vector<address_metadata>& centroids) : route(centroids) {
+	this->route_size = this->route.size();
+	//cout << "route_size circuit" << this->centroids.size() << "\n";
 	route.resize(route_size);
 	//velocity_v.resize(route_size - 1); // here
 	mix(route);
 	//route = centroids;
 	check_truck_route_validity(false);
 };
-Circuit::Circuit(const clustering& c1) : route(c1.centroids) {
+Circuit::Circuit(clustering& c1) : route(c1.centroids) {
+	cout << "working\n";
 	route_size = route.size();
+	cout << "route_size circuit" << this->route_size << "\n";
 	route.resize(route_size);
 	velocity_v.resize(route_size - 1);
 	masses.resize(route_size);
@@ -18,6 +21,17 @@ Circuit::Circuit(const clustering& c1) : route(c1.centroids) {
 	check_truck_route_validity(false);
 
 }
+//Circuit::Circuit(const Circuit& c_old)
+//{
+//	this->route_size = c_old.route_size;
+//	this->route = c_old.centroids;
+//
+//}
+//operator = (const Circuit& mat_old)
+//{
+//	if (this == &mat_old) return *this;
+//
+//}
 Circuit::Circuit() {};
 Circuit::~Circuit() {};
 
@@ -125,9 +139,9 @@ void Circuit::check_drone(vector<drone> drone_list) {
 //}
 
 bool Circuit::check_truck_route_validity(bool verbose) {
-	for (int ic1 = 0; ic1<centroids.size();ic1++)
+	for (int ic1 = 0; ic1 < centroids.size();ic1++)
 	{
-		for (int ic2 = ic1+1; ic2<centroids.size();ic2++)
+		for (int ic2 = ic1 + 1; ic2 < centroids.size();ic2++)
 			if (this->route[ic1].num == this->route[ic2].num)
 			{
 				if (verbose)
