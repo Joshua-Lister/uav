@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="postal_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="read_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,7 +45,10 @@
     <ClInclude Include="truck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calc.h">
+    <ClInclude Include="utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,10 +80,16 @@
     <ClCompile Include="truck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Charging_stations.cpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="utility.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="calc.cpp">
+    <ClCompile Include="fitness_f.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Charging_stations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tsp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

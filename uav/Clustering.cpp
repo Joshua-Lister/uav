@@ -15,26 +15,34 @@ clustering::~clustering() {};
 //	return (adr.x_coord - x) * (adr.x_coord - x) + (adr.y_coord - y) * (adr.y_coord - y);
 //}
 void clustering::set_rand_centroids() {
-	
-	srand(time(0));
+	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+	uniform_int_distribution<int> randunit(1, no_of_addresses - 1);
+	set<int> index_track;
 	for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
-		idx = rand() % no_of_addresses;
+		do {
+			idx = randunit(generator);
+		} while (index_track.find(idx) != index_track.end());
+		index_track.insert(idx);
 		centroids[cluster_no] = d.data[idx];
 		centroids[cluster_no].id = cluster_no;
 	}
 }
-void clustering::K_means() {
+void clustering::K_means(vector<int> unq_num_adr) {
 	//distances.resize(no_of_addresses * k);
+	double distance;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		min_distance = DBL_MAX;
 		for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
-			const double distance = calc::length(d.data[adr_no], centroids[cluster_no]);
+			distance = utility::length(d.data[adr_no], centroids[cluster_no]);// change this
 			//this->distances[cluster_no + adr_no * no_of_addresses] = distance; // this line
 			if (distance < min_distance) {
 				min_distance = distance;
 				d.data[adr_no].id = centroids[cluster_no].id;
 			}
 		}
+		if (verbose)
+			if (min_distance > drone::maxiumum_distance)
+				unq_num_adr.push_back(d.data[])
 	}
 	for (auto i = 0; i < no_of_addresses; i++) {
 		no_of_points[i] = 0;
@@ -44,7 +52,7 @@ void clustering::K_means() {
 	int id_cluster;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		id_cluster = d.data[adr_no].id;
-		no_of_points[id_cluster] += 1;
+		no_of_points[id_cluster] += 1; //id cluster = -1
 		easting_sum[id_cluster] += d.data[adr_no].x_coord;
 		northing_sum[id_cluster] += d.data[adr_no].y_coord;
 	}
@@ -71,7 +79,16 @@ void clustering::K_means() {
 //	}
 //	myfile.close();
 //}
-
+bool clustering::check_ids(bool verbose) {
+	for (auto i : d.data) {
+		if (i.id == -1) {
+			if (verbose)
+				cout << "Incorrect ID at num : " << i.num << " " << "(Clustering Error 1)" << "\n";
+			return false;
+		}
+	}
+	return true;
+}
 bool clustering::stopping_condition(address_metadata const& obj, address_metadata const& obj2) {
 	if ((abs(obj.x_coord - obj2.x_coord) < 1e-15) || (abs(obj.y_coord - obj2.y_coord) < 1e-15))
 		return true;

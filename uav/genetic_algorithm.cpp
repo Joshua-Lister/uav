@@ -40,28 +40,35 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 void genetic_algorithm::crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
 {
 	int a, b;
-	while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
+	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
+	uniform_int_distribution<int> randunit(1, rt_size - 1);
+	a = randunit(generator);
+	while ((b = randunit(generator)) == a && b == a - 1 && b == a + 1);
 
 	if (a > b) swap(a, b);
 	// something
 	
 	for (int i = a; i < b; i++) {
-		child1.route[i] = parent1.route[i]; // vector subscirp out of range here
+		child1.route[i] = parent1.route[i]; 
 		child2.route[i] = parent2.route[i];
 		}
 	
 	
 	//shortest difference between any pairs of routes. Find shortest route between one point on graph and another 
 	for (int i = 0; i < a; i++) {
-		if (std::find(begin(child1.route) + a, end(child1.route) - b, parent2.route[i]) == end(child1.route) - b)
+		
+		if (utility::find(child1.route, parent2.route[i], a, b))
 			child1.route[i] = parent2.route[i];
-		if (std::find(begin(child2.route) + a, end(child2.route) - b, parent1.route[i]) == end(child2.route) - b)
+		
+		if (utility::find(child2.route, parent1.route[i], a, b))
 			child2.route[i] = parent1.route[i];
 	}
 	for (int i = b; i < rt_size; i++) {
-		if (std::find(begin(child1.route) + a, end(child1.route) - b, parent2.route[i]) == end(child1.route) - b)
+		
+		if (utility::find(child1.route, parent2.route[i], a, b))
 			child1.route[i] = parent2.route[i];
-		if (std::find(begin(child2.route) + a, end(child2.route) - b, parent1.route[i]) == end(child2.route) - b)
+		
+		if (utility::find(child2.route, parent1.route[i], a, b))
 			child2.route[i] = parent1.route[i];
 	}
 }
@@ -124,13 +131,12 @@ void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_
 }
 void genetic_algorithm::mutation(Circuit& circ, const double mutation_prob, default_random_engine& generator)
 {
-	
+	int idx1, idx2;
 	for (int idx = 0; idx < rt_size; idx++) {
 		double rn = rand_number(generator);
 		if (rn < mutation_prob) {
 			uniform_int_distribution<int> randunit(1, rt_size - 1);
-			int idx1 = randunit(generator);
-			int idx2;
+			idx1 = randunit(generator);
 			while ((idx2 = randunit(generator)) == idx1); // here
 			Circuit::swap_addresses(circ.route, idx1, idx2);
 		}
@@ -158,11 +164,8 @@ int genetic_algorithm::selection(vector<double>& fitness_v, int generation_size,
 double genetic_algorithm::fitness(Circuit& circ1)
 {
 	double f = 0;
-	for (int i = 1; i < rt_size; i++) {
-		f += calc::length(circ1.route[i], circ1.route[i - 1]); // vector subscript out of range again
-		cout << "i = " << i << "\t" << " length = " << f;
-	}
-	cout << "\n";
+	for (int i = 1; i < rt_size; i++) 
+		f += utility::length(circ1.route[i], circ1.route[i - 1]); 
 	return f;
 }
 
@@ -179,21 +182,23 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 	result Result;
 	int ind1, ind2;
 	for (int i = 0; i < lista.generation_size + 1; i++) {
-		gen[i] = Circuit(obj1.centroids); // is here
+		gen[i] = Circuit(obj1.centroids, false); 
+		new_gen[i] = Circuit(obj1.centroids, true);
 	}
+	for (int i = 0; i < temp_v.size(); i++)
+		temp_v[i] = Circuit(obj1.centroids, true);
 
-	int gen_cnt = 0, conv_cnt = 0, n;
+	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
 	// reciporcal of fitness remember small distance is better
 	double max, min;
 	vector<double>::iterator max_it;
-	cout << lista.max_generation;
 	while (gen_cnt <= lista.max_generation) {
 		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
 		// Store best performing circuit
-		int elite_ind = std::distance(fitness_v.begin(), max_it);
+		elite_ind = std::distance(fitness_v.begin(), max_it);
 		performance_v.push_back(max);
 
 		if (std::abs(max - prev_max) < lista.tolerance)
@@ -204,7 +209,7 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 
 		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation)) {
 			Result.iteration = gen_cnt;
-			Result.circuit_vector = generation[elite_ind].route;
+			Result.circuit_vector = gen[elite_ind].route; // fails here 
 			Result.optimal_performance = max;
 			break;
 		}
@@ -214,7 +219,7 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
 			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
 			double random_number = rand_number(generator);
-			if (random_number < lista.crossover_prob)
+			if (0 < lista.crossover_prob)
 				crossover_ordered(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
 			else {
 				temp_v[0] = gen[ind1];

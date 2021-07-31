@@ -1,9 +1,11 @@
 #pragma once
 #include "Circuit.h"
+#include "postal_region.h"
 #include <cmath>
 #include <random>
 #include <stdio.h>
 #include <algorithm>
+
 struct GA_param_list {
 	int num_units, generation_size, max_generation, max_iterations;
 	double crossover_prob, mutation_prob, tolerance;

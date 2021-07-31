@@ -8,7 +8,7 @@
 class Circuit
 {
 public:
-	Circuit(vector<address_metadata>& centroids);
+	Circuit(vector<address_metadata>& centroids, bool empty);
 	Circuit(clustering& c1);
 	Circuit();
 	~Circuit() ;
@@ -28,6 +28,7 @@ public:
 	bool check_if_complete(vector<address_metadata>& obj, vector<int>& undelivered_adr_id);
 
 	void check_drone(vector<drone> drone_list);
+
 
 	bool check_truck_route_validity(bool verbose);
 

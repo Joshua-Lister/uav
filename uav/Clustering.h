@@ -3,7 +3,12 @@
 #include <algorithm>
 #include "drone.h"
 #include "truck.h"
-#include "calc.h"
+#include "utility.h"
+#include <cmath>
+#include <random>
+#include <stdio.h>
+#include <chrono>
+#include <set>
 class clustering
 {
 public:
@@ -15,6 +20,7 @@ public:
 	void set_rand_centroids();
 	void K_means();
 	void run_K_means();
+	bool check_ids(bool verbose);
 	bool stopping_condition(address_metadata const& obj, address_metadata const& obj2);
 	size_t epochs, k;
 	bool success;

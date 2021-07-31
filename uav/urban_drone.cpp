@@ -6,7 +6,7 @@ bool urban_drone::energy_flight_constraint(double L, const vector<address_metada
 	double min1 = DBL_MAX;
 	size_t cnt = 0;
 	for (auto const& i : depots) {
-		double temp_min = calc::length(i, x_coord, y_coord);
+		double temp_min = utility::length(i, x_coord, y_coord);
 		if (temp_min < min1) {
 			min1 = temp_min;
 			cnt += 1;
@@ -23,7 +23,7 @@ bool urban_drone::energy_flight_constraint(double L, const vector<address_metada
 	min1 = DBL_MAX;
 	cnt = 0;
 	for (auto const& i : charging_ports) {
-		double temp_min = calc::length(i, x_coord, y_coord);
+		double temp_min = utility::length(i, x_coord, y_coord);
 		if (temp_min < min1) {
 			min1 = temp_min;
 			cnt += 1;

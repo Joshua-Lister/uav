@@ -1,13 +1,22 @@
 #include "Circuit.h"
 
-Circuit::Circuit(vector<address_metadata>& centroids) : route(centroids) {
-	this->route_size = this->route.size();
-	//cout << "route_size circuit" << this->centroids.size() << "\n";
-	route.resize(route_size);
-	//velocity_v.resize(route_size - 1); // here
-	mix(route);
-	//route = centroids;
-	check_truck_route_validity(false);
+Circuit::Circuit(vector<address_metadata>& centroids, bool empty) : route(centroids) {
+	if (!empty)
+	{
+		this->route_size = this->route.size();
+		//cout << "route_size circuit" << this->centroids.size() << "\n";
+		route.resize(route_size);
+		//velocity_v.resize(route_size - 1); // here
+		mix(route);
+		//route = centroids;
+		check_truck_route_validity(false);
+	}
+	else
+	{
+		this->route_size = this->route.size();
+		route.resize(route_size);
+	}
+
 };
 Circuit::Circuit(clustering& c1) : route(c1.centroids) {
 	cout << "working\n";
@@ -43,12 +52,13 @@ Circuit::~Circuit() {};
 //}
 //template <class T>
 void Circuit::mix(vector<address_metadata>& vec) {
-	int seed = 42;
+	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	int r_idx;
 	default_random_engine generator(seed);
 	for (int i = 0; i < route_size; i++) {
 		uniform_int_distribution<int> dist(i, route_size - 1);
-		int r_idx = dist(generator);
-		swap_addresses(vec, i, r_idx);
+		r_idx = dist(generator);
+		swap(vec[i], vec[r_idx]);
 	}
 }
 void Circuit::swap_addresses(vector<address_metadata>& c, const int& p1, const int& p2) {
@@ -61,12 +71,12 @@ void Circuit::swap_addresses(vector<address_metadata>& c, const int& p1, const i
 
 void Circuit::calc_masses() {
 	for (size_t i = 1; i < route_size - 1; i++) 
-		masses.push_back(calc::length(route[i - 1], route[i + 1]));
+		masses.push_back(utility::length(route[i - 1], route[i + 1]));
 }
 void Circuit::calc_intial_velocities() {
 	double temp_velocity = -1;
 	for (int i = 0; i < route_size - 1; i++) {
-		temp_velocity = calc::length(route[i], route[i + 1]);
+		temp_velocity = utility::length(route[i], route[i + 1]);
 		this->velocity_v[i] = temp_velocity;// calc_mass(route[i], route[i + 1]);
 	}
 }

@@ -141,13 +141,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="calc.h" />
+    <ClInclude Include="tsp.h" />
+    <ClInclude Include="utility.h" />
     <ClInclude Include="Charging_stations.h" />
     <ClInclude Include="Circuit.h" />
     <ClInclude Include="clustering.h" />
     <ClInclude Include="drone.h" />
     <ClInclude Include="genetic_algorithm.h" />
-    <ClInclude Include="postal_data.h" />
     <ClInclude Include="postal_region.h" />
     <ClInclude Include="read_data.h" />
     <ClInclude Include="rural_drone.h" />
@@ -155,11 +155,13 @@
     <ClInclude Include="urban_drone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="calc.cpp" />
+    <ClCompile Include="tsp.cpp" />
+    <ClCompile Include="utility.cpp" />
     <ClCompile Include="Charging_stations.cpp" />
     <ClCompile Include="Circuit.cpp" />
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="drone.cpp" />
+    <ClCompile Include="fitness_f.cpp" />
     <ClCompile Include="genetic_algorithm.cpp" />
     <ClCompile Include="main_test.cpp" />
     <ClCompile Include="read_data.cpp" />
