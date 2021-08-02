@@ -1,9 +1,14 @@
 #include "genetic_algorithm.h"
 
 
-genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
+genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1, address_metadata& depot, bool unique) : lista(lista), obj1(obj1)
 {
 	rt_size = obj1.centroids.size();
+	if (unique)
+	{
+		obj1.centroids.push_back(depot);
+		obj1.centroids.insert(obj1.centroids.begin(), depot);
+	}
 }
 genetic_algorithm::genetic_algorithm() {};
 uniform_real_distribution<double> rand_number(0, 1.0);
@@ -166,7 +171,7 @@ double genetic_algorithm::fitness(Circuit& circ1)
 	double f = 0;
 	for (int i = 1; i < rt_size; i++) 
 		f += utility::length(circ1.route[i], circ1.route[i - 1]); 
-	return f;
+	return  1.0 / f;
 }
 
 //template <class Circuit>

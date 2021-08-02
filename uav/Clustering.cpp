@@ -1,7 +1,7 @@
 #include "clustering.h"
 
-clustering::clustering(size_t epochs, size_t k, read_data& d) : epochs(epochs), k(k), d(d), no_of_addresses(d.no_of_addresses) {
-	centroids.resize(k);
+clustering::clustering(size_t epochs, read_data& d) : epochs(epochs),  d(d), no_of_addresses(d.no_of_addresses) {
+	centroids.resize(2);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 };
 clustering::clustering() {};
@@ -14,11 +14,11 @@ clustering::~clustering() {};
 //double clustering::length(const address_metadata& adr, const double& x, const double& y) {
 //	return (adr.x_coord - x) * (adr.x_coord - x) + (adr.y_coord - y) * (adr.y_coord - y);
 //}
-void clustering::set_rand_centroids() {
+void clustering::set_rand_centroids(int k_val) {
 	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 	uniform_int_distribution<int> randunit(1, no_of_addresses - 1);
 	set<int> index_track;
-	for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
+	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 		do {
 			idx = randunit(generator);
 		} while (index_track.find(idx) != index_track.end());
@@ -27,22 +27,21 @@ void clustering::set_rand_centroids() {
 		centroids[cluster_no].id = cluster_no;
 	}
 }
-void clustering::K_means(vector<int> unq_num_adr) {
+void clustering::K_means(int k_val, vector<double>& distances, bool verbose) {
 	//distances.resize(no_of_addresses * k);
 	double distance;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		min_distance = DBL_MAX;
-		for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
+		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 			distance = utility::length(d.data[adr_no], centroids[cluster_no]);// change this
 			//this->distances[cluster_no + adr_no * no_of_addresses] = distance; // this line
 			if (distance < min_distance) {
 				min_distance = distance;
 				d.data[adr_no].id = centroids[cluster_no].id;
+				distances.push_back(min_distance); 
+
 			}
 		}
-		if (verbose)
-			if (min_distance > drone::maxiumum_distance)
-				unq_num_adr.push_back(d.data[])
 	}
 	for (auto i = 0; i < no_of_addresses; i++) {
 		no_of_points[i] = 0;
@@ -56,18 +55,20 @@ void clustering::K_means(vector<int> unq_num_adr) {
 		easting_sum[id_cluster] += d.data[adr_no].x_coord;
 		northing_sum[id_cluster] += d.data[adr_no].y_coord;
 	}
-	for (auto cluster_no = 0; cluster_no < k; cluster_no++) {
+	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 		centroids[cluster_no].x_coord = easting_sum[cluster_no] / no_of_points[cluster_no];
 		centroids[cluster_no].y_coord = northing_sum[cluster_no] / no_of_points[cluster_no];
 	}
-	/*ofstream myfile;
-	myfile.open("output_csv.txt");
-	myfile << "x, y,id" << endl;
+	if (verbose) {
+		ofstream myfile;
+		myfile.open("output_csv.txt");
+		myfile << "x, y, id" << endl;
 
-	for (auto i = 0; i < no_of_addresses; i++) {
-		myfile << d.data[i].x_coord << "," << d.data[i].y_coord << "," << d.data[i].id << endl;
+		for (auto i = 0; i < no_of_addresses; i++) {
+			myfile << d.data[i].x_coord << "," << d.data[i].y_coord << "," << d.data[i].id << endl;
+		}
+		myfile.close();
 	}
-	myfile.close();*/
 }
 //void bla{
 //	ofstream myfile;
@@ -89,8 +90,14 @@ bool clustering::check_ids(bool verbose) {
 	}
 	return true;
 }
-bool clustering::stopping_condition(address_metadata const& obj, address_metadata const& obj2) {
-	if ((abs(obj.x_coord - obj2.x_coord) < 1e-15) || (abs(obj.y_coord - obj2.y_coord) < 1e-15))
+bool clustering::stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2) {
+	int cnt = 0;
+	int cnt_to_match = obj.size();
+	for (int i = 0; i < cnt_to_match; i++) {
+		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-15) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-15))
+			cnt++;
+	}
+	if (cnt == cnt_to_match)
 		return true;
 	return false;
 }
@@ -98,27 +105,34 @@ bool clustering::stopping_condition(address_metadata const& obj, address_metadat
 //	for (size_t i = 0; i < obj.size(); i++){
 //		if ()
 //	}
+bool clustering::check_distances(vector<double>& check_d_v) {
+	for (auto loc_distance : check_d_v)
+		if (loc_distance > drone::maxiumum_distance)
+			return false;
+	return true;
+}
 void clustering::run_K_means() {
 	no_of_points.resize(d.no_of_addresses); easting_sum.resize(d.no_of_addresses); northing_sum.resize(d.no_of_addresses);
-	set_rand_centroids();
-	vector<int> k_values;
-	for (int k = k_values[0]; k < k_values[k_values.size() - 1]; k++) {
-		bool convergence = false;
-		int cnt = 0;
-		while (!convergence){
-				for (auto j = 0; j < k; j++) {
-					if (stopping_condition(centroids[j], centroid_track[j]) == true)
-						cnt += 1;
+	
+	int k = 2;
+	bool in_range = false;
+	bool converge;
+	vector<double> distances_v;
+	vector<address_metadata> track_centroids(2);
+	while (!in_range){
+		converge = false;
+		while (!converge) {
+			set_rand_centroids(k);
+			K_means(k, distances_v, false);
+			if (stopping_condition(centroids, track_centroids)) {
+				converge = true;
+				if (check_distances(distances_v)) {
+					in_range = true;
 				}
-				centroid_track = centroids;
-				if (cnt == centroids.size()) break;
+				k++;
+				centroids.resize(k);
+				track_centroids.resize(k);
 			}
-			//std::all_of(std::execution::par, begin(distances), end(distances), )
-			for (auto const& i : distances)
-				if (drone::maxiumum_distance < i) {
-					success = false;
-					break;
-				}
-			success = true;
 		}
+	}
 }

@@ -17,11 +17,12 @@ public:
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);
 	//inline static double length(const address_metadata& adr, const double& x, const double& y);
-	void set_rand_centroids();
-	void K_means();
+	void set_rand_centroids(int k_val);
+	void K_means(int k_val, vector<double>& distances, bool verbose);
+	bool check_distances(vector<double>& check_d_v);
 	void run_K_means();
 	bool check_ids(bool verbose);
-	bool stopping_condition(address_metadata const& obj, address_metadata const& obj2);
+	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
 	size_t epochs, k;
 	bool success;
 	read_data d;
