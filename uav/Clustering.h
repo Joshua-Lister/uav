@@ -12,7 +12,7 @@
 class clustering
 {
 public:
-	clustering(size_t epochs, size_t k, read_data& d);
+	clustering(size_t epochs, read_data& d);
 	clustering();
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);
