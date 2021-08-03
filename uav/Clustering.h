@@ -24,7 +24,7 @@ public:
 	void run_K_means();
 	bool check_ids(bool verbose);
 	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
-	size_t epochs, k;
+	size_t k;
 	bool success;
 	read_data d;
 	double min_distance;
