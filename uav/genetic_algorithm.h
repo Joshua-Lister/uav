@@ -33,10 +33,9 @@ public:
 	//template <class Circuit>
 	void crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator);
 	int selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
-	double objective_function();
 	double fitness(Circuit& circ1);
 	//template <class Circuit>
-	result run_algorithm_genetic(int max_conv_cnt);
+	result run_algorithm_genetic(int max_conv_cnt, double (*fitness_func)(Circuit));
 	int rt_size;
 	vector<double> distances;
 	vector<Circuit> generation, new_generation;

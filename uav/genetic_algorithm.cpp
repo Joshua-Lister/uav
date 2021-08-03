@@ -166,16 +166,9 @@ int genetic_algorithm::selection(vector<double>& fitness_v, int generation_size,
 	return randgen(generator);
 }
 
-double genetic_algorithm::fitness(Circuit& circ1)
-{
-	double f = 0;
-	for (int i = 1; i < rt_size; i++) 
-		f += utility::length(circ1.route[i], circ1.route[i - 1]); 
-	return  1.0 / f;
-}
 
 //template <class Circuit>
-result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt)
+result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, double (*fitness_func)(Circuit))
 {
 	//lista.generation_size++;
 	default_random_engine generator(lista.seed);

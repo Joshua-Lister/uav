@@ -94,7 +94,7 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 	int cnt = 0;
 	int cnt_to_match = obj.size();
 	for (int i = 0; i < cnt_to_match; i++) {
-		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-15) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-15))
+		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-6) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-6))
 			cnt++;
 	}
 	if (cnt == cnt_to_match)

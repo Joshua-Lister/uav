@@ -1,5 +1,12 @@
 #include "genetic_algorithm.h"
 
+void setup_drones(int number_of_drones)
+{
+	vector<drone> drones_v (number_of_drones);
+	for (int i = 0; i < number_of_drones; i++) {
+		 
+	}
+}
 void set_GA_params(GA_param_list& lst)
 {
 	lst.generation_size = 5;
