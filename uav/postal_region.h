@@ -10,7 +10,7 @@ struct address_metadata
 	int id = -1;
 	bool visited = false;
 	int num = -1;
-	int total_parcel_mass = 0, no_of_parcels = 0;
+	int parcel_mass = 0, no_of_parcels = 0;
 	double mass = 0;
 
 };

@@ -49,6 +49,8 @@ void read_data::fill_data()
 		data[i].post_code = parsedCsv[i][0];
 		data[i].x_coord = stoi(parsedCsv[i][1]);
 		data[i].y_coord = stoi(parsedCsv[i][2]);
+		data[i].parcel_mass = stoi(parsedCsv[i][3]);
+		total_parcel_mass += data[i].parcel_mass;
 		data[i].num = i;
 	}
 	parsedCsv.clear();

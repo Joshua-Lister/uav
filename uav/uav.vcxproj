@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="depot.cpp" />
+    <ClCompile Include="driver_code.cpp" />
     <ClCompile Include="tsp.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="Charging_stations.cpp" />

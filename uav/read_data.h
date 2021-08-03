@@ -24,7 +24,8 @@ public:
 	vector<vector<string>> parsedCsv;
 	vector<address_metadata> data;
 	vector<int> y_coord, x_coord;
-	int no_of_addresses = -0;
+	int no_of_addresses = 0;
+	int total_parcel_mass = 0;
 
 	//vector<address_metadata> data;
 };

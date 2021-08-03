@@ -43,7 +43,7 @@ bool drone::energy_flight_constraint(double l)
 double drone::power_consumption()
 {
 	//vehicle routing problems for drone delivery - https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7513397
-	return (pow((this->drone_mass + this->payload), 1.5) * sqrt(9.8 * 9.8 * 9.8 / 2 * fluid_density * disc_area * rotors));
+	return (pow((this->drone_mass + this->payload), 1.5) * utility::fast_inv_sqrt(9.8 * 9.8 * 9.8 / 2 * fluid_density * disc_area * rotors));
 }
 
 double drone::time_to_charge()
@@ -67,10 +67,10 @@ void drone::update_battery_time(string bt_condition, double l)
 
 void drone::update_payload(string pd_condition, double weight)
 {
-	if (pd_condition == "release" || "release")
+	if (pd_condition == "Release" || "release")
 		payload -= weight; // fill in here
 
-	else if (pd_condition == "load" || "load")
+	else if (pd_condition == "Load" || "load")
 		payload += weight; // fill in here
 
 	else
