@@ -1,14 +1,14 @@
 #include "genetic_algorithm.h"
 
 
-genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1, address_metadata& depot, bool unique) : lista(lista), obj1(obj1)
+genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
 {
 	rt_size = obj1.centroids.size();
-	if (unique)
+	/*if (unique)
 	{
 		obj1.centroids.push_back(depot);
 		obj1.centroids.insert(obj1.centroids.begin(), depot);
-	}
+	}*/
 }
 genetic_algorithm::genetic_algorithm() {};
 uniform_real_distribution<double> rand_number(0, 1.0);

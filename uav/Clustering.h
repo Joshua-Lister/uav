@@ -12,14 +12,15 @@
 class clustering
 {
 public:
-	clustering(size_t epochs, read_data& d);
+	clustering(read_data& d);
 	clustering();
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);
 	//inline static double length(const address_metadata& adr, const double& x, const double& y);
 	void set_rand_centroids(int k_val);
-	void K_means(int k_val, vector<double>& distances, bool verbose);
-	bool check_distances(vector<double>& check_d_v);
+	void K_means(int k_val, vector<float>& distances, bool verbose);
+	void coord_sort(vector<address_metadata>& arg1);
+	bool check_distances(vector<float>& check_d_v);
 	void run_K_means();
 	bool check_ids(bool verbose);
 	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);

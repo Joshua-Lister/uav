@@ -21,8 +21,8 @@ struct result {
 class genetic_algorithm
 {
 public:
-
-	genetic_algorithm(GA_param_list list, clustering obj1, address_metadata& depot, bool unique);
+	// address_metadata& depot, bool unique
+	genetic_algorithm(GA_param_list list, clustering obj1);
 	genetic_algorithm();
 	~genetic_algorithm();
 	//template <class Circuit>

@@ -23,12 +23,11 @@ int run_main()
 	//tets.print_data("All");
 	//cout << tets.data[0].y_coord<<  "\n";
 	//cout << "hi\n";
-	clustering cl(1, 4, tets);
+	clustering cl(tets);
 	testnum = 1;
-	cl.set_rand_centroids();
+	cl.run_K_means();
 	testnum = 2;
-	cl.K_means(); // problem with this func
-	testnum = 3;
+	
 	cl.check_ids(true);
 	GA_param_list f;
 	testnum = 4;
@@ -39,7 +38,6 @@ int run_main()
 	f.mutation_prob = 0.1;
 	f.seed = std::chrono::system_clock::now().time_since_epoch().count();
 	f.tolerance = 1.0e-3;
-
 	genetic_algorithm vb(f, cl);
 	testnum = 5;
 	vb.run_algorithm_genetic(10);

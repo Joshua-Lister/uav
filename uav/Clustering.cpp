@@ -1,6 +1,6 @@
 #include "clustering.h"
 
-clustering::clustering(size_t epochs, read_data& d) : epochs(epochs),  d(d), no_of_addresses(d.no_of_addresses) {
+clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) {
 	centroids.resize(2);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 };
@@ -27,11 +27,11 @@ void clustering::set_rand_centroids(int k_val) {
 		centroids[cluster_no].id = cluster_no;
 	}
 }
-void clustering::K_means(int k_val, vector<double>& distances, bool verbose) {
+void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
 	//distances.resize(no_of_addresses * k);
-	double distance;
+	float distance;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
-		min_distance = DBL_MAX;
+		min_distance = FLT_MAX;
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 			distance = utility::length(d.data[adr_no], centroids[cluster_no]);// change this
 			//this->distances[cluster_no + adr_no * no_of_addresses] = distance; // this line
@@ -105,29 +105,52 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 //	for (size_t i = 0; i < obj.size(); i++){
 //		if ()
 //	}
-bool clustering::check_distances(vector<double>& check_d_v) {
+void clustering::coord_sort(vector<address_metadata>& arg1) {
+	int i = 1;
+	int j;
+	double temp_num1, temp_num2;
+	address_metadata temp_obj;
+	size_t rt_size = arg1.size();
+	while (i < rt_size) {
+		temp_num1 = arg1[i].x_coord;
+		temp_num2 = arg1[i].y_coord;
+		temp_obj = arg1[i];
+		j = i - 1;
+		while (j >= 0 && (arg1[j].x_coord > temp_num2 && arg1[j].y_coord)) {
+			arg1[j + 1] = arg1[j];
+			j--;
+		}
+		arg1[j + 1] = temp_obj;
+		i++;
+	}
+}
+bool clustering::check_distances(vector<float>& check_d_v) {
 	for (auto loc_distance : check_d_v)
 		if (loc_distance > drone::maxiumum_distance)
 			return false;
 	return true;
-}
+} // NEED SQRT IN  DISTANCE FUNCTION
 void clustering::run_K_means() {
-	no_of_points.resize(d.no_of_addresses); easting_sum.resize(d.no_of_addresses); northing_sum.resize(d.no_of_addresses);
 	
 	int k = 2;
 	bool in_range = false;
 	bool converge;
-	vector<double> distances_v;
+	vector<float> distances_v;
 	vector<address_metadata> track_centroids(2);
 	while (!in_range){
 		converge = false;
+		set_rand_centroids(k);
 		while (!converge) {
-			set_rand_centroids(k);
+			track_centroids = centroids;
 			K_means(k, distances_v, false);
-			if (stopping_condition(centroids, track_centroids)) {
+			coord_sort(centroids);
+			coord_sort(track_centroids);
+			if (stopping_condition(centroids, track_centroids)) { // strange bug where postcodes have same but swapped coordinates
 				converge = true;
+				cout << "stopping_condiiton";
 				if (check_distances(distances_v)) {
 					in_range = true;
+					cout << "check_distance";
 				}
 				k++;
 				centroids.resize(k);
