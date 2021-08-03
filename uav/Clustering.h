@@ -21,7 +21,7 @@ public:
 	void K_means(int k_val, vector<float>& distances, bool verbose);
 	void coord_sort(vector<address_metadata>& arg1);
 	bool check_distances(vector<float>& check_d_v);
-	void run_K_means();
+	void run_K_means(bool verbose);
 	bool check_ids(bool verbose);
 	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
 	size_t k;

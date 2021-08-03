@@ -130,7 +130,7 @@ bool clustering::check_distances(vector<float>& check_d_v) {
 			return false;
 	return true;
 } // NEED SQRT IN  DISTANCE FUNCTION
-void clustering::run_K_means() {
+void clustering::run_K_means(bool verbose) {
 	
 	int k = 2;
 	bool in_range = false;
@@ -140,6 +140,8 @@ void clustering::run_K_means() {
 	while (!in_range){
 		converge = false;
 		set_rand_centroids(k);
+		if (verbose)
+			check_ids(false);
 		while (!converge) {
 			track_centroids = centroids;
 			K_means(k, distances_v, false);

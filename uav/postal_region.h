@@ -12,5 +12,6 @@ struct address_metadata
 	int num = -1;
 	int parcel_mass = 0, no_of_parcels = 0;
 	double mass = 0;
+	bool depot = false;
 
 };
