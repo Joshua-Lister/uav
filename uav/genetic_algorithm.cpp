@@ -41,8 +41,8 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 {
 	return (c1.num == c2.num);
 }
-//template <class Circuit>
-void genetic_algorithm::crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
+template <class C>
+void genetic_algorithm::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
 {
 	int a, b;
 	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
@@ -79,7 +79,7 @@ void genetic_algorithm::crossover_ordered(Circuit& parent1, Circuit& parent2, Ci
 }
 //operator> ()
 //template <class Circuit>
-void genetic_algorithm::crossover_collision(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
+//void genetic_algorithm::crossover_collision(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
 {
 	/*for (int i = 0; i < rt_size; i++) 
 	{
@@ -118,11 +118,9 @@ void genetic_algorithm::crossover_collision(Circuit& parent1, Circuit& parent2, 
 //
 //
 //}
-void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen) 
+void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_it, 
+	double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen)
 {
-	for (int i = 0; i < lista.generation_size; i++)
-		fitness_v[i] = fitness(gen[i]);
-
 	max_it = std::max_element(fitness_v.begin(), fitness_v.end());
 	max = *max_it;
 	min = *(std::min_element(fitness_v.begin(), fitness_v.end()));
@@ -134,7 +132,8 @@ void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_
 		cout << i << "\t";
 	cout << "\n";
 }
-void genetic_algorithm::mutation(Circuit& circ, const double mutation_prob, default_random_engine& generator)
+template <class adr_v>
+void genetic_algorithm::mutation(adr_v& circ, const double mutation_prob, default_random_engine& generator)
 {
 	int idx1, idx2;
 	for (int idx = 0; idx < rt_size; idx++) {
@@ -143,7 +142,9 @@ void genetic_algorithm::mutation(Circuit& circ, const double mutation_prob, defa
 			uniform_int_distribution<int> randunit(1, rt_size - 1);
 			idx1 = randunit(generator);
 			while ((idx2 = randunit(generator)) == idx1); // here
-			Circuit::swap_addresses(circ.route, idx1, idx2);
+			//Circuit::swap_addresses(circ.route, idx1, idx2);
+			swap(circ[idx1], circ[idx2]);
+
 		}
 	}
 }
@@ -165,10 +166,19 @@ int genetic_algorithm::selection(vector<double>& fitness_v, int generation_size,
 	std::uniform_int_distribution<int> randgen(0, generation_size - 1);
 	return randgen(generator);
 }
+void genetic_algorithm::initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<Circuit>& temp_gen)
+{
+	for (int i = 0; i < lista.generation_size + 1; i++) {
+		gen1[i] = Circuit(obj1.centroids, false);
+		gen2[i] = Circuit(obj1.centroids, true);
+	}
+	for (int i = 0; i < 2; i++)
+		temp_gen[i] = Circuit(obj1.centroids, true);
+}
 
-
-//template <class Circuit>
-result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, double (*fitness_func)(Circuit))
+template <class C>
+result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, std::function<double(C)> fitness_func,
+	std::function<void (C, C, C)> initialise_gen_v)
 {
 	//lista.generation_size++;
 	default_random_engine generator(lista.seed);
@@ -179,13 +189,14 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, double (*fitne
 	vector<Circuit> temp_v(2);
 	result Result;
 	int ind1, ind2;
-	for (int i = 0; i < lista.generation_size + 1; i++) {
+	initialise_gen_v(gen, new_gen, temp_v);
+	/*for (int i = 0; i < lista.generation_size + 1; i++) {
 		gen[i] = Circuit(obj1.centroids, false); 
 		new_gen[i] = Circuit(obj1.centroids, true);
 	}
 	for (int i = 0; i < temp_v.size(); i++)
-		temp_v[i] = Circuit(obj1.centroids, true);
-
+		temp_v[i] = Circuit(obj1.centroids, true); */
+		
 	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
@@ -194,6 +205,8 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, double (*fitne
 	double max, min;
 	vector<double>::iterator max_it;
 	while (gen_cnt <= lista.max_generation) {
+		for (int i = 0; i < lista.generation_size; i++)
+			fitness_v[i] = fitness_func(gen[i]);
 		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
 		// Store best performing circuit
 		elite_ind = std::distance(fitness_v.begin(), max_it);
@@ -218,13 +231,13 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, double (*fitne
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
 			double random_number = rand_number(generator);
 			if (0 < lista.crossover_prob)
-				crossover_ordered(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
+				crossover_ordered<Circuit>(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
 			else {
 				temp_v[0] = gen[ind1];
 				temp_v[1] = gen[ind2];
 				}
-				mutation(temp_v[0], lista.mutation_prob, generator);
-				mutation(temp_v[1], lista.mutation_prob, generator);
+				mutation<vector<address_metadata>>(temp_v[0].route, lista.mutation_prob, generator);
+				mutation<vector<address_metadata>>(temp_v[1].route, lista.mutation_prob, generator);
 				if (new_gen[n].check_truck_route_validity(false)) {
 					gen[n] = temp_v[0];
 					n++;

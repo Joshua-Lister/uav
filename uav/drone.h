@@ -4,6 +4,7 @@ using namespace std;
 #include <iostream>
 #include "clustering.h"
 #include "utility.h"
+#include <functional>
 
 
 class drone
