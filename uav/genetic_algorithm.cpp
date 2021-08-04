@@ -1,7 +1,7 @@
 #include "genetic_algorithm.h"
 
-
-genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
+template <class C>
+genetic_algorithm<C>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
 {
 	rt_size = obj1.centroids.size();
 	/*if (unique)
@@ -9,10 +9,13 @@ genetic_algorithm::genetic_algorithm(GA_param_list lista,  clustering obj1) : li
 		obj1.centroids.push_back(depot);
 		obj1.centroids.insert(obj1.centroids.begin(), depot);
 	}*/
+
 }
-genetic_algorithm::genetic_algorithm() {};
+template <class C>
+genetic_algorithm<C>::genetic_algorithm() {};
 uniform_real_distribution<double> rand_number(0, 1.0);
-genetic_algorithm::~genetic_algorithm()
+template <class C>
+genetic_algorithm<C>::~genetic_algorithm()
 {
 }
 
@@ -33,7 +36,8 @@ genetic_algorithm::~genetic_algorithm()
 //	for (int )
 //}
 
-bool genetic_algorithm::approx_equal(double a, double b, double eps) {
+template <class C>
+bool genetic_algorithm<C>::approx_equal(double a, double b, double eps) {
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * eps);
 }
 // template class class__<int>
@@ -42,7 +46,7 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 	return (c1.num == c2.num);
 }
 template <class C>
-void genetic_algorithm::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
+void genetic_algorithm<C>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
 {
 	int a, b;
 	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
@@ -80,7 +84,7 @@ void genetic_algorithm::crossover_ordered(C& parent1, C& parent2, C& child1, C& 
 //operator> ()
 //template <class Circuit>
 //void genetic_algorithm::crossover_collision(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
-{
+//{
 	/*for (int i = 0; i < rt_size; i++) 
 	{
 		if (!approx_equal(parent1.route[i], parent2.route[i], 1e-6) 
@@ -109,7 +113,7 @@ void genetic_algorithm::crossover_ordered(C& parent1, C& parent2, C& child1, C& 
 			}
 		}
 	}*/
-}
+//}
 
 //void genetic_algorithm::multi_point_crossover(int no_pivots) 
 //{
@@ -118,7 +122,8 @@ void genetic_algorithm::crossover_ordered(C& parent1, C& parent2, C& child1, C& 
 //
 //
 //}
-void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_it, 
+template <class C>
+void genetic_algorithm<C>::calc_fitness(double& max, vector<double>::iterator& max_it, 
 	double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen)
 {
 	max_it = std::max_element(fitness_v.begin(), fitness_v.end());
@@ -128,12 +133,12 @@ void genetic_algorithm::calc_fitness(double& max, vector<double>::iterator& max_
 		fitness_v[i] = (fitness_v[i] - min) / (max - min + 1e-6); // max and in are -nan
 		fitness_total += fitness_v[i];
 	}
-	for (auto i : fitness_v)
+	/*for (auto i : fitness_v)
 		cout << i << "\t";
-	cout << "\n";
+	cout << "\n";*/
 }
-template <class adr_v>
-void genetic_algorithm::mutation(adr_v& circ, const double mutation_prob, default_random_engine& generator)
+template <class C>
+void genetic_algorithm<C>::mutation(C& circ, const double mutation_prob, default_random_engine& generator)
 {
 	int idx1, idx2;
 	for (int idx = 0; idx < rt_size; idx++) {
@@ -148,8 +153,8 @@ void genetic_algorithm::mutation(adr_v& circ, const double mutation_prob, defaul
 		}
 	}
 }
-
-int genetic_algorithm::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
+template <class C>
+int genetic_algorithm<C>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
 {
 
 	double random_number = rand_number(generator);
@@ -166,18 +171,19 @@ int genetic_algorithm::selection(vector<double>& fitness_v, int generation_size,
 	std::uniform_int_distribution<int> randgen(0, generation_size - 1);
 	return randgen(generator);
 }
-void genetic_algorithm::initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<Circuit>& temp_gen)
-{
-	for (int i = 0; i < lista.generation_size + 1; i++) {
-		gen1[i] = Circuit(obj1.centroids, false);
-		gen2[i] = Circuit(obj1.centroids, true);
-	}
-	for (int i = 0; i < 2; i++)
-		temp_gen[i] = Circuit(obj1.centroids, true);
-}
+//template <class C>
+//void genetic_algorithm<C>::initialise_circuit_v(vector<C>& gen1, vector<C>& gen2, vector<C>& temp_gen)
+//{
+//	for (int i = 0; i < lista.generation_size + 1; i++) {
+//		gen1[i] = Circuit(obj1.centroids, false);
+//		gen2[i] = Circuit(obj1.centroids, true);
+//	}
+//	for (int i = 0; i < 2; i++)
+//		temp_gen[i] = Circuit(obj1.centroids, true);
+//}
 
 template <class C>
-result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, std::function<double(C)> fitness_func,
+result genetic_algorithm<C>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C)> fitness_func,
 	std::function<void (C, C, C)> initialise_gen_v)
 {
 	//lista.generation_size++;
@@ -189,17 +195,11 @@ result genetic_algorithm::run_algorithm_genetic(int max_conv_cnt, std::function<
 	vector<Circuit> temp_v(2);
 	result Result;
 	int ind1, ind2;
-	initialise_gen_v(gen, new_gen, temp_v);
-	/*for (int i = 0; i < lista.generation_size + 1; i++) {
-		gen[i] = Circuit(obj1.centroids, false); 
-		new_gen[i] = Circuit(obj1.centroids, true);
-	}
-	for (int i = 0; i < temp_v.size(); i++)
-		temp_v[i] = Circuit(obj1.centroids, true); */
-		
 	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
+
+	initialise_gen_v(gen, new_gen, temp_v);
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
 	// reciporcal of fitness remember small distance is better
 	double max, min;

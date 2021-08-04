@@ -1,4 +1,6 @@
+#pragma once
 #include "genetic_algorithm.h"
+#include "fitness_f.cpp"
 
 void setup_drones(int number_of_drones)
 {
@@ -17,6 +19,11 @@ void set_GA_params(GA_param_list& lst)
 	lst.seed = std::chrono::system_clock::now().time_since_epoch().count();
 	lst.tolerance = 1.0e-3;
 }
+void drone_clusters()
+{
+
+
+}
 void run_truck_tandem_drone()
 {
 	cout << "Running truck & tandem drone method\n";
@@ -26,8 +33,8 @@ void run_truck_tandem_drone()
 	cl.run_K_means(false);
 	GA_param_list f;
 	set_GA_params(f);
-	genetic_algorithm vb(f, cl);
-	vb.run_algorithm_genetic(10);
+	genetic_algorithm<Circuit> vb(f, cl);
+	vb.run_algorithm_genetic(10, &genetic_algorithm<Circuit>::fitness, &genetic_algorithm<Circuit>::initialise_circuit_v<Circuit>);
 }
 
 void run_charging_port_tandem_drone()

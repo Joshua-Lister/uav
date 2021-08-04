@@ -22,9 +22,10 @@ public:
 	void coord_sort(vector<address_metadata>& arg1);
 	bool check_distances(vector<float>& check_d_v);
 	void run_K_means(bool verbose);
+	void group_clusters();
 	bool check_ids(bool verbose);
 	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
-	size_t k;
+	int k = 2;
 	bool success;
 	read_data d;
 	double min_distance;
@@ -33,6 +34,9 @@ public:
 	vector<size_t> no_of_points;
 	vector<double> easting_sum, northing_sum;
 	vector<address_metadata> centroids, centroid_track;
+	vector<vector<address_metadata>> cluster_regions;
+	
+	unordered_map<int, int> id_count;
 	int idx = -1;
 	int no_of_addresses = -1;
 };

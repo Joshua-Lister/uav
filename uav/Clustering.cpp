@@ -27,6 +27,7 @@ void clustering::set_rand_centroids(int k_val) {
 		centroids[cluster_no].id = cluster_no;
 	}
 }
+
 void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
 	//distances.resize(no_of_addresses * k);
 	float distance;
@@ -41,6 +42,7 @@ void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
 				distances.push_back(min_distance); 
 
 			}
+
 		}
 	}
 	for (auto i = 0; i < no_of_addresses; i++) {
@@ -130,9 +132,9 @@ bool clustering::check_distances(vector<float>& check_d_v) {
 			return false;
 	return true;
 } // NEED SQRT IN  DISTANCE FUNCTION
+// need to add depot 
 void clustering::run_K_means(bool verbose) {
 	
-	int k = 2;
 	bool in_range = false;
 	bool converge;
 	vector<float> distances_v;
@@ -159,5 +161,24 @@ void clustering::run_K_means(bool verbose) {
 				track_centroids.resize(k);
 			}
 		}
+
 	}
+}
+
+void clustering::group_clusters()
+{
+	for (int i = 0; i < k; i++)
+		id_count[i] = 0;
+	cluster_regions.resize(k);
+	for (auto i : d.data)
+		id_count.at(i.id) += 1;
+
+	cluster_regions.resize(k);
+	for (int i = 0; i < k; i++)
+		cluster_regions[i].resize(id_count.count(i));
+
+	for (int i = 0; i < d.data.size(); i++)
+		cluster_regions[d.data[i].id].push_back(d.data[i]); // change this
+
+		
 }
