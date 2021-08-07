@@ -13,19 +13,16 @@ public:
 	bool battery_swap;
 	string battery_type;
 	double battery_energy = -1;
-	inline static double maxiumum_distance;
 	bool out_of_use = false;
 protected:
 	double battery_time_remaining;
 	double payload;
 	double drone_mass;
 	double motor_power;
-	const double max_flight_time = 30;
 	double arrival_time;
 	double tempus = 0;
 	double x_coord, y_coord;
 	double battery_energy_capacity = -1;
-	double maximum_payload_capacity = -1;;
 	double horizontal_max_velocity = -1;
 	double vertical_max_velocity = -1;
 	double maximum_battery_time = -1;
@@ -43,7 +40,9 @@ public:
 	~drone();
 	void set_h_velocity_drone(double m_h_v);
 	void set_v_velocity_drone(double m_v_v);
-	bool virtual energy_flight_constraint(double L) = 0;
+	//virtual bool energy_flight_constraint(double L) = 0;
+
+	virtual bool energy_flight_constraint(double L) = 0;
 	double time_to_charge();
 	double power_consumption();
 	void set_battery_time(double t);
@@ -51,6 +50,8 @@ public:
 	void update_battery_time(string bc_condition, double L);
 	void update_payload(string pd_condition, double weight);
 	static double return_battery_energy_capacity();
-	 
+
+	double maxiumum_distance;
+	double maximum_payload_capacity;
 };
 

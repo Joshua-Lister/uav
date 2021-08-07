@@ -18,33 +18,33 @@ double testval = 0.0;
 
 int run_main()
 {
-	read_data tets("postal_data.txt");
-	tets.fill_data();
-	//tets.print_data("All");
-	//cout << tets.data[0].y_coord<<  "\n";
-	//cout << "hi\n";
-	clustering cl(tets);
-	testnum = 1;
-	cl.run_K_means();
-	testnum = 2;
-	
-	cl.check_ids(true);
-	GA_param_list f;
-	testnum = 4;
-	f.generation_size = 5;
-	f.max_generation = 3;
-	f.crossover_prob = 0.5;
-	f.max_iterations = 30;
-	f.mutation_prob = 0.1;
-	f.seed = std::chrono::system_clock::now().time_since_epoch().count();
-	f.tolerance = 1.0e-3;
-	genetic_algorithm vb(f, cl);
-	testnum = 5;
-	vb.run_algorithm_genetic(10);
-	//testnum = 6;
-	//cout << "success";
-	////cl.run_K_means();
-	////Circuit tt(cl);
+	//read_data tets("postal_data.txt");
+	//tets.fill_data();
+	////tets.print_data("All");
+	////cout << tets.data[0].y_coord<<  "\n";
+	////cout << "hi\n";
+	//clustering cl(tets);
+	//testnum = 1;
+	//cl.run_K_means();
+	//testnum = 2;
+	//
+	//cl.check_ids(true);
+	//GA_param_list f;
+	//testnum = 4;
+	//f.generation_size = 5;
+	//f.max_generation = 3;
+	//f.crossover_prob = 0.5;
+	//f.max_iterations = 30;
+	//f.mutation_prob = 0.1;
+	//f.seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//f.tolerance = 1.0e-3;
+	//genetic_algorithm vb(f, cl);
+	//testnum = 5;
+	//vb.run_algorithm_genetic(10);
+	////testnum = 6;
+	////cout << "success";
+	//////cl.run_K_means();
+	//////Circuit tt(cl);
 	return 0;
 }
 

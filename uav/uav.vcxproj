@@ -141,7 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="tsp.h" />
+    <ClInclude Include="tsp_funcs.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="Charging_stations.h" />
     <ClInclude Include="Circuit.h" />
@@ -157,13 +157,13 @@
   <ItemGroup>
     <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
-    <ClCompile Include="tsp.cpp" />
+    <ClCompile Include="exact_tsp.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="Charging_stations.cpp" />
     <ClCompile Include="Circuit.cpp" />
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="drone.cpp" />
-    <ClCompile Include="fitness_f.cpp" />
+    <ClCompile Include="tsp_funcs.cpp" />
     <ClCompile Include="genetic_algorithm.cpp" />
     <ClCompile Include="main_test.cpp" />
     <ClCompile Include="read_data.cpp" />

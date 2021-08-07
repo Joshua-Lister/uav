@@ -1,12 +1,14 @@
 #include "drone.h"
-drone::drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
-	int rotors): maximum_battery_time(maximum_battery_time), maximum_payload_capacity(maximum_payload_capacity), drone_mass(drone_mass),
-	payload(payload), max_flight_time(max_flight_time){};
 
-drone::drone() : maximum_battery_time(30), maximum_payload_capacity(5), rotors(6) {};
+
+drone::drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
+	int rotors): maximum_battery_time(maximum_battery_time),  drone_mass(drone_mass),
+	payload(payload) {};
+
+drone::drone() :  rotors(6) {};
 drone::~drone() {};
 // linear energy consumption model that energy consumptions increases linearly with battery and payload weight.
-// consume same power whether hovering or flying at constant speed
+// consume same power whether hovering or flying at constant spee
 void drone::set_payload_capacity()
 {
 	payload = maximum_payload_capacity;

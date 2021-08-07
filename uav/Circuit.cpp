@@ -154,8 +154,6 @@ bool Circuit::check_truck_route_validity(bool verbose) {
 		for (int ic2 = ic1 + 1; ic2 < centroids.size();ic2++)
 			if (this->route[ic1].num == this->route[ic2].num)
 			{
-				if (verbose)
-					cout << "Duplicate centroid found in truck route : " << this->centroids[ic1].id << " " << this->centroids[ic2].id << "\n";
 				return false;
 			}
 	}

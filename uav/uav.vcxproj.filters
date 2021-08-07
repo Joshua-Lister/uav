@@ -48,7 +48,7 @@
     <ClInclude Include="utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp.h">
+    <ClInclude Include="tsp_funcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,13 +83,13 @@
     <ClCompile Include="utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fitness_f.cpp">
+    <ClCompile Include="tsp_funcs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Charging_stations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tsp.cpp">
+    <ClCompile Include="exact_tsp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="depot.cpp">

@@ -7,13 +7,7 @@ clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) 
 clustering::clustering() {};
 clustering::~clustering() {};
 
-//double clustering::length(const address_metadata& adr, const address_metadata& centroid) {
-//	return (adr.x_coord - centroid.x_coord) * (adr.x_coord - centroid.x_coord) + (adr.y_coord - centroid.y_coord) * (adr.y_coord - centroid.y_coord);
-//}
 
-//double clustering::length(const address_metadata& adr, const double& x, const double& y) {
-//	return (adr.x_coord - x) * (adr.x_coord - x) + (adr.y_coord - y) * (adr.y_coord - y);
-//}
 void clustering::set_rand_centroids(int k_val) {
 	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 	uniform_int_distribution<int> randunit(1, no_of_addresses - 1);
@@ -21,31 +15,29 @@ void clustering::set_rand_centroids(int k_val) {
 	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 		do {
 			idx = randunit(generator);
-		} while (index_track.find(idx) != index_track.end());
-		index_track.insert(idx);
+		} while (index_track.find(idx) != index_track.end()); //Ensuring idx is not already present in index_track
+		index_track.insert(idx); 
 		centroids[cluster_no] = d.data[idx];
-		centroids[cluster_no].id = cluster_no;
+		centroids[cluster_no].id = cluster_no; //Giving the random data point a unique id number
 	}
 }
 
-void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
-	//distances.resize(no_of_addresses * k);
+void clustering::K_means(int k_val, vector<float>& distances) {
 	float distance;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		min_distance = FLT_MAX;
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
 			distance = utility::length(d.data[adr_no], centroids[cluster_no]);// change this
-			//this->distances[cluster_no + adr_no * no_of_addresses] = distance; // this line
-			if (distance < min_distance) {
+			if (distance < min_distance) //Continually comparing distance between a single address and the centroids
+			{ 
 				min_distance = distance;
-				d.data[adr_no].id = centroids[cluster_no].id;
-				distances.push_back(min_distance); 
-
+				d.data[adr_no].id = centroids[cluster_no].id; //Setting id of address equal to id of centroid which has the small distance
 			}
 
 		}
+		distances.push_back(min_distance); // do i need this yes i do
 	}
-	for (auto i = 0; i < no_of_addresses; i++) {
+	for (auto i = 0; i < no_of_addresses; i++) { //Intialising vectors required to recompute/improve centroids
 		no_of_points[i] = 0;
 		easting_sum[i] = 0;
 		northing_sum[i] = 0;
@@ -53,15 +45,15 @@ void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
 	int id_cluster;
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) {
 		id_cluster = d.data[adr_no].id;
-		no_of_points[id_cluster] += 1; //id cluster = -1
+		no_of_points[id_cluster] += 1;  //Adding +1 to count how many addresses are associated with each centroid
 		easting_sum[id_cluster] += d.data[adr_no].x_coord;
 		northing_sum[id_cluster] += d.data[adr_no].y_coord;
 	}
-	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) {
-		centroids[cluster_no].x_coord = easting_sum[cluster_no] / no_of_points[cluster_no];
+	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) { //Computing new x and y coordinates for each cluster by calculating mean value
+		centroids[cluster_no].x_coord = easting_sum[cluster_no] / no_of_points[cluster_no]; 
 		centroids[cluster_no].y_coord = northing_sum[cluster_no] / no_of_points[cluster_no];
 	}
-	if (verbose) {
+	/*if (verbose) {
 		ofstream myfile;
 		myfile.open("output_csv.txt");
 		myfile << "x, y, id" << endl;
@@ -70,21 +62,12 @@ void clustering::K_means(int k_val, vector<float>& distances, bool verbose) {
 			myfile << d.data[i].x_coord << "," << d.data[i].y_coord << "," << d.data[i].id << endl;
 		}
 		myfile.close();
-	}
+	}*/
 }
-//void bla{
-//	ofstream myfile;
-//	myfile.open("output_csv.txt");
-//	myfile << "x, y,id" << endl;
-//
-//	for (auto i = 0; i < no_of_addresses; i++) {
-//		myfile << d.data[i].x_coord << "," << d.data[i].y_coord << "," << d.data[i].id << endl;
-//	}
-//	myfile.close();
-//}
+
 bool clustering::check_ids(bool verbose) {
 	for (auto i : d.data) {
-		if (i.id == -1) {
+		if (i.id == -1) { //If id = -1 the address id has not been correctly updated in K_means funciton 
 			if (verbose)
 				cout << "Incorrect ID at num : " << i.num << " " << "(Clustering Error 1)" << "\n";
 			return false;
@@ -96,7 +79,7 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 	int cnt = 0;
 	int cnt_to_match = obj.size();
 	for (int i = 0; i < cnt_to_match; i++) {
-		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-6) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-6))
+		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-6) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-6)) //Checking coords are in range of tol
 			cnt++;
 	}
 	if (cnt == cnt_to_match)
@@ -107,7 +90,7 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 //	for (size_t i = 0; i < obj.size(); i++){
 //		if ()
 //	}
-void clustering::coord_sort(vector<address_metadata>& arg1) {
+void clustering::coord_insert_sort(vector<address_metadata>& arg1) {
 	int i = 1;
 	int j;
 	double temp_num1, temp_num2;
@@ -126,37 +109,36 @@ void clustering::coord_sort(vector<address_metadata>& arg1) {
 		i++;
 	}
 }
-bool clustering::check_distances(vector<float>& check_d_v) {
+bool clustering::check_distances(vector<float>& check_d_v, double max_dist) {
 	for (auto loc_distance : check_d_v)
-		if (loc_distance > drone::maxiumum_distance)
+		if (loc_distance > max_dist) //Distance between centroid and address greater than max distance of drone return false
 			return false;
 	return true;
-} // NEED SQRT IN  DISTANCE FUNCTION
+} // NEED SQRT IN  DISTANCE FUNCTION ACUTALLY DON'T NEED IT JUST SQUARE THE DRONE MAXIMUM DISTANCE
 // need to add depot 
-void clustering::run_K_means(bool verbose) {
-	
+void clustering::run_K_means() {
+	// come back to ordering of while loops
 	bool in_range = false;
 	bool converge;
 	vector<float> distances_v;
 	vector<address_metadata> track_centroids(2);
-	while (!in_range){
+	while (!in_range){ //continue all distances are within the flying distance
 		converge = false;
 		set_rand_centroids(k);
-		if (verbose)
-			check_ids(false);
-		while (!converge) {
+		/*if (verbose)
+			check_ids(false);*/
+		while (!converge) { //continue until all centroids have converged
 			track_centroids = centroids;
-			K_means(k, distances_v, false);
-			coord_sort(centroids);
-			coord_sort(track_centroids);
+			K_means(k, distances_v);
+			coord_insert_sort(centroids); //Sorting by lowest x & y coordinates to prevent stopping_condition returning false when actually true
+			coord_insert_sort(track_centroids);
 			if (stopping_condition(centroids, track_centroids)) { // strange bug where postcodes have same but swapped coordinates
 				converge = true;
-				cout << "stopping_condiiton";
-				if (check_distances(distances_v)) {
+				if (check_distances(distances_v, 5)) { // change second param
 					in_range = true;
 					cout << "check_distance";
 				}
-				k++;
+				k++; //Adding another cluster if conditions are not met
 				centroids.resize(k);
 				track_centroids.resize(k);
 			}
@@ -167,18 +149,17 @@ void clustering::run_K_means(bool verbose) {
 
 void clustering::group_clusters()
 {
-	for (int i = 0; i < k; i++)
-		id_count[i] = 0;
 	cluster_regions.resize(k);
-	for (auto i : d.data)
+	for (int i = 0; i < k; i++) //Initialising count values to 0
+		id_count[i] = 0;
+
+	for (auto i : d.data) //Calculating number of addresses associated with each centroid
 		id_count.at(i.id) += 1;
 
-	cluster_regions.resize(k);
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < k; i++) //Resizing row length depending on total count of addresses for each centroid
 		cluster_regions[i].resize(id_count.count(i));
 
 	for (int i = 0; i < d.data.size(); i++)
 		cluster_regions[d.data[i].id].push_back(d.data[i]); // change this
 
-		
 }

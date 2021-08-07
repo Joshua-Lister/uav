@@ -11,8 +11,9 @@ public:
     void set_battery_time() override;
     void set_payload_capacity() override;*/
     bool energy_flight_constraint(double L) override;
+
 private:
     double x_coord, y_coord;
- 
+   	
 };
 

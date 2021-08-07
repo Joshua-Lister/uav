@@ -1,7 +1,7 @@
 #include "genetic_algorithm.h"
 
-template <class C>
-genetic_algorithm<C>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
+template <class C, class D>
+genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
 {
 	rt_size = obj1.centroids.size();
 	/*if (unique)
@@ -11,13 +11,12 @@ genetic_algorithm<C>::genetic_algorithm(GA_param_list lista,  clustering obj1) :
 	}*/
 
 }
-template <class C>
-genetic_algorithm<C>::genetic_algorithm() {};
+template <class C, class D>
+genetic_algorithm<C, D>::genetic_algorithm() {};
 uniform_real_distribution<double> rand_number(0, 1.0);
-template <class C>
-genetic_algorithm<C>::~genetic_algorithm()
-{
-}
+
+template <class C, class D>
+genetic_algorithm<C, D>::~genetic_algorithm(){}
 
 //template <class T, class circumnaviation, class param_list>
 //void genetic_algorithm<T, circumnaviation, param_list>::calc_velocities() {
@@ -36,8 +35,9 @@ genetic_algorithm<C>::~genetic_algorithm()
 //	for (int )
 //}
 
-template <class C>
-bool genetic_algorithm<C>::approx_equal(double a, double b, double eps) {
+template <class C, class D>
+bool genetic_algorithm<C, D>::approx_equal(double a, double b, double eps) 
+{
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * eps);
 }
 // template class class__<int>
@@ -45,8 +45,8 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 {
 	return (c1.num == c2.num);
 }
-template <class C>
-void genetic_algorithm<C>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
+template <class C, class D>
+void genetic_algorithm<C, D>::crossover_ordered(vector<C>& parent1, vector<C>& parent2, vector<C>& child1, vector<C>& child2, default_random_engine& generator)
 {
 	int a, b;
 	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
@@ -122,8 +122,8 @@ void genetic_algorithm<C>::crossover_ordered(C& parent1, C& parent2, C& child1, 
 //
 //
 //}
-template <class C>
-void genetic_algorithm<C>::calc_fitness(double& max, vector<double>::iterator& max_it, 
+template <class C, class D>
+void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator& max_it, 
 	double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen)
 {
 	max_it = std::max_element(fitness_v.begin(), fitness_v.end());
@@ -137,8 +137,8 @@ void genetic_algorithm<C>::calc_fitness(double& max, vector<double>::iterator& m
 		cout << i << "\t";
 	cout << "\n";*/
 }
-template <class C>
-void genetic_algorithm<C>::mutation(C& circ, const double mutation_prob, default_random_engine& generator)
+template <class C, class D>
+void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, default_random_engine& generator)
 {
 	int idx1, idx2;
 	for (int idx = 0; idx < rt_size; idx++) {
@@ -153,8 +153,8 @@ void genetic_algorithm<C>::mutation(C& circ, const double mutation_prob, default
 		}
 	}
 }
-template <class C>
-int genetic_algorithm<C>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
+template <class C, class D>
+int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
 {
 
 	double random_number = rand_number(generator);
@@ -182,9 +182,9 @@ int genetic_algorithm<C>::selection(vector<double>& fitness_v, int generation_si
 //		temp_gen[i] = Circuit(obj1.centroids, true);
 //}
 
-template <class C>
-result genetic_algorithm<C>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C)> fitness_func,
-	std::function<void (C, C, C)> initialise_gen_v)
+template <class C, class D>
+result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
+	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(vector<D>&)> eval_circ)
 {
 	//lista.generation_size++;
 	default_random_engine generator(lista.seed);
@@ -199,12 +199,13 @@ result genetic_algorithm<C>::run_algorithm_genetic(int max_conv_cnt, std::functi
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
 
-	initialise_gen_v(gen, new_gen, temp_v);
+	initialise_gen_v(gen, new_gen, temp_v, obj1.centroids, 5); // change this lat one 
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
 	// reciporcal of fitness remember small distance is better
 	double max, min;
 	vector<double>::iterator max_it;
-	while (gen_cnt <= lista.max_generation) {
+	while (gen_cnt <= lista.max_generation) 
+	{
 		for (int i = 0; i < lista.generation_size; i++)
 			fitness_v[i] = fitness_func(gen[i]);
 		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
@@ -218,37 +219,44 @@ result genetic_algorithm<C>::run_algorithm_genetic(int max_conv_cnt, std::functi
 			conv_cnt = 0;
 		prev_max = max;
 
-		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation)) {
+		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation)) 
+		{
 			Result.iteration = gen_cnt;
-			Result.circuit_vector = gen[elite_ind].route; // fails here 
+			Result.circuit_vector = gen[elite_ind].route;
 			Result.optimal_performance = max;
 			break;
 		}
 
 		n = 1;
-		while (n < lista.generation_size) {
+		while (n < lista.generation_size)
+		{
 			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
 			double random_number = rand_number(generator);
-			if (0 < lista.crossover_prob)
-				crossover_ordered<Circuit>(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
-			else {
+			if (0 < lista.crossover_prob) // change
+				crossover_ordered(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
+			else
+			{
 				temp_v[0] = gen[ind1];
 				temp_v[1] = gen[ind2];
-				}
-				mutation<vector<address_metadata>>(temp_v[0].route, lista.mutation_prob, generator);
-				mutation<vector<address_metadata>>(temp_v[1].route, lista.mutation_prob, generator);
-				if (new_gen[n].check_truck_route_validity(false)) {
-					gen[n] = temp_v[0];
-					n++;
-				}
-				if (new_gen[n + 1].check_truck_route_validity(false)) {
-					gen[n] = temp_v[1];
-					n++;
-				}
 			}
-		gen_cnt++;
-		swap(gen, new_gen);
+			mutation(temp_v[0].route, lista.mutation_prob, generator);
+			mutation(temp_v[1].route, lista.mutation_prob, generator);
+			if (eval_circ(new_gen[n]))
+			{
+				gen[n] = temp_v[0];
+					n++;
+			}
+			if (eval_circ(new_gen[n]))
+			{
+				gen[n] = temp_v[1];
+					n++;
+			}
 		}
-	return Result;
+		gen_cnt++;
+		std::swap(gen, new_gen);
 	}
+	return Result;
+}
+
+
