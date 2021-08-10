@@ -50,7 +50,7 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 {
 	int cnt, cnt2, temp_num_of_addresses_distance = 0, temp_num_of_addresses_mass = 0;
 	double sum_d, sum_m;
-	all_distances = 0, all_mass = 0;
+	all_distances = 0, all_masses = 0;
 	int number_of_addresses = 0;
 	vector<double> total_dist_v(part_size + 2); 
 	vector<double> cluster_mass_v(part_size + 1);
@@ -109,7 +109,7 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 				
 			}
 			all_distances += sum_d;
-			all_mass += sum_m;
+			all_masses += sum_m;
 			number_of_addresses += lowest_num;
 			j += lowest_num;
 		}
