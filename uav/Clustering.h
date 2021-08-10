@@ -34,9 +34,10 @@ public:
 	vector<size_t> no_of_points;
 	vector<double> easting_sum, northing_sum;
 	vector<address_metadata> centroids, centroid_track;
-	vector<vector<address_metadata>> cluster_regions;
-	
+	vector<unique_ptr<address_metadata[]>> cluster_regions;
+	unique_ptr<address_metadata> p_organise_cluster;
 	unordered_map<int, int> id_count;
+	unordered_map<int, int> id_index_count;
 	int idx = -1;
 	int no_of_addresses = -1;
 };

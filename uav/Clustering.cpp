@@ -150,16 +150,23 @@ void clustering::run_K_means() {
 void clustering::group_clusters()
 {
 	cluster_regions.resize(k);
-	for (int i = 0; i < k; i++) //Initialising count values to 0
+	for (int i = 0; i < k; i++) {//Initialising count values to 0
+		id_index_count[i] = 0;
 		id_count[i] = 0;
-
+	}
 	for (auto i : d.data) //Calculating number of addresses associated with each centroid
 		id_count.at(i.id) += 1;
 
-	for (int i = 0; i < k; i++) //Resizing row length depending on total count of addresses for each centroid
-		cluster_regions[i].resize(id_count.count(i));
+	for (int i = 0; i < k; i++)
+		cluster_regions.emplace_back(new address_metadata[id_count.count(i)]);
 
-	for (int i = 0; i < d.data.size(); i++)
-		cluster_regions[d.data[i].id].push_back(d.data[i]); // change this
+	// COME BACK TO THIS DATA IS NOT CONTIGIOUS
+	for (int i = 0; i < d.data.size(); i++) {
+		// does this make sense?
+		cluster_regions[d.data[i].id][id_count[i]] = d.data[i];
+		id_count.at(d.data[i].id) += 1;
+	}
+
+
 
 }

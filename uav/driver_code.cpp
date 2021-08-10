@@ -1,12 +1,20 @@
 #pragma once
-#include "genetic_algorithm.h"
-#include "drone.h"
-#include "urban_drone.h"
-#include "rural_drone.h"
-#include "tsp_funcs.h"
+
+#include "driver_code.h"
 
 vector<drone*> drones_v;
 
+double total_cost_rural(int num_of_drones, double drone_price, double truck_distance, double tot_drone_distance, double elec_price, double fuel_price)
+{
+	double total_drone_cost = num_of_drones * drone_price;
+	double total_fuel_cost = truck_distance * fuel_price;
+	double total_elec_cost = tot_drone_distance * elec_price;
+	return total_drone_cost + total_fuel_cost + total_elec_cost;
+}
+double total_cost_urban()
+{
+	return;
+}
 void setup_drones(int number_of_drones, string type)
 {
 	drones_v.resize(number_of_drones);
@@ -23,7 +31,10 @@ void setup_drones(int number_of_drones, string type)
 	else
 		cout << "Incorrect drone type entered\n";
 }
-
+void drone_operation(vector<drone>& drone_v)
+{
+	for (i : )
+}
 void set_GA_params(GA_param_list& lst)
 {
 	lst.generation_size = 5;
@@ -34,7 +45,7 @@ void set_GA_params(GA_param_list& lst)
 	lst.seed = std::chrono::system_clock::now().time_since_epoch().count();
 	lst.tolerance = 1.0e-3;
 }
-void drone_clusters(int k, int part_size, vector<vector<address_metadata>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
+int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
 					double max_dist)
 {
 	int cnt, cnt2, temp_num_of_addresses_distance = 0, temp_num_of_addresses_mass = 0;
@@ -91,11 +102,13 @@ void drone_clusters(int k, int part_size, vector<vector<address_metadata>>& cl_d
 	}
 
 }
-void run_truck_tandem_drone()
+double run_truck_tandem_drone(string drone_type)
 {
 	cout << "Running truck & tandem drone method\n";
 	read_data tets("postal_data.txt");
 	tets.fill_data();
+	if (drone_type == "urban" || "Urban") urban_drone temp_drone();
+	else if (drone_type == "rural" || "Rural") rural_drone temp_drone();
 	clustering cl(tets);
 	cl.run_K_means();
 	GA_param_list f;
@@ -103,9 +116,11 @@ void run_truck_tandem_drone()
 	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
 	result Result = vb.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
 	Result.circuit_vector;
+	int no_of_drones_req = drone_clusters(cl.k, 2, cl.cluster_regions, cl.centroids, temp_drone., temp_drone.);
+	setup_drones(no_of_drones_req, "rural");
+	return total_cost_rural(no_of_drones_req, temp_drone., Result.optimal_performance, , );
+
 	
-
-
 }
 
 void run_charging_port_tandem_drone()

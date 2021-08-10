@@ -150,6 +150,10 @@ void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, defa
 			//Circuit::swap_addresses(circ.route, idx1, idx2);
 			swap(circ[idx1], circ[idx2]);
 
+
+
+
+
 		}
 	}
 }
@@ -233,7 +237,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
 			double random_number = rand_number(generator);
-			if (0 < lista.crossover_prob) // change
+			if (random_number < lista.crossover_prob) // change
 				crossover_ordered(gen[ind1], gen[ind2], temp_v[0], temp_v[1], generator);
 			else
 			{

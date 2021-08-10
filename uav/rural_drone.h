@@ -11,7 +11,7 @@ public:
     void set_battery_time() override;
     void set_payload_capacity() override;*/
     bool energy_flight_constraint(double L) override;
-
+    double cost_of_drone; //Currency GBP
 private:
     double x_coord, y_coord;
    	

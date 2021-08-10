@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="driver_code.h" />
     <ClInclude Include="tsp_funcs.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="Charging_stations.h" />
