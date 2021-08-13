@@ -30,7 +30,7 @@ public:
 	void check_drone(vector<drone> drone_list);
 
 
-	bool check_truck_route_validity(bool verbose);
+	bool check_truck_route_validity();
 
 	double dist(vector<address_metadata>& circuit_vector);
 

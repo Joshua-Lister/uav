@@ -23,8 +23,8 @@ public:
 	bool check_distances(vector<float>& check_d_v, double max_dist);
 	void run_K_means();
 	void group_clusters();
-	bool check_ids(bool verbose);
-	bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
+	bool check_ids();
+	static bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
 	int k = 2;
 	bool success;
 	read_data d;
@@ -34,8 +34,7 @@ public:
 	vector<size_t> no_of_points;
 	vector<double> easting_sum, northing_sum;
 	vector<address_metadata> centroids, centroid_track;
-	vector<unique_ptr<address_metadata[]>> cluster_regions;
-	unique_ptr<address_metadata> p_organise_cluster;
+	vector<vector<address_metadata*>> cluster_regions;
 	unordered_map<int, int> id_count;
 	unordered_map<int, int> id_index_count;
 	int idx = -1;

@@ -9,7 +9,6 @@ Circuit::Circuit(vector<address_metadata>& centroids, bool empty) : route(centro
 		//velocity_v.resize(route_size - 1); // here
 		mix(route);
 		//route = centroids;
-		check_truck_route_validity(false);
 	}
 	else
 	{
@@ -19,15 +18,12 @@ Circuit::Circuit(vector<address_metadata>& centroids, bool empty) : route(centro
 
 };
 Circuit::Circuit(clustering& c1) : route(c1.centroids) {
-	cout << "working\n";
 	route_size = route.size();
 	cout << "route_size circuit" << this->route_size << "\n";
 	route.resize(route_size);
 	velocity_v.resize(route_size - 1);
 	masses.resize(route_size);
 	mix(route);
-	//route = centroids;
-	check_truck_route_validity(false);
 
 }
 //Circuit::Circuit(const Circuit& c_old)
@@ -148,26 +144,13 @@ void Circuit::check_drone(vector<drone> drone_list) {
 //	}
 //}
 
-bool Circuit::check_truck_route_validity(bool verbose) {
+bool Circuit::check_truck_route_validity() {
 	for (int ic1 = 0; ic1 < centroids.size();ic1++)
 	{
 		for (int ic2 = ic1 + 1; ic2 < centroids.size();ic2++)
 			if (this->route[ic1].num == this->route[ic2].num)
-			{
 				return false;
-			}
 	}
-
-	/*auto duplicates = adjacent_find(this->centroids.begin() +1, this->centroids.end() -1);
-	if (centroids.end() != duplicates)
-	{
-		cout << "Duplicate centroid found in truck route : " << duplicates->id << "\n";
-		
-		return false;
-	}*/
-	if (verbose)
-		cout << "No duplicate centroid found in truck route\n";
 	return true;
-	// make standard IF
 }
 

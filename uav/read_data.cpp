@@ -29,9 +29,9 @@ void read_data::read_csv(string filename)
 		vector<string> parsedRow;
 		while (getline(lineStream, cell, ','))
 		{
-			parsedRow.push_back(cell);
+			parsedRow.push_back(cell); // adding each column of a single row to the vector
 		}
-		parsedCsv.push_back(parsedRow);
+		parsedCsv.push_back(parsedRow); // Adding the vector containing the separated line to another vector
 	}
 	file.close();
 
@@ -47,15 +47,16 @@ void read_data::fill_data()
 	data.resize(no_of_addresses);
 	for (size_t i = 0; i < no_of_addresses; i++) {
 		data[i].post_code = parsedCsv[i][0];
-		data[i].x_coord = stoi(parsedCsv[i][1]);
-		data[i].y_coord = stoi(parsedCsv[i][2]);
+		data[i].x_coord = stoi(parsedCsv[i][1]); //Converting str to double
+		data[i].y_coord = stoi(parsedCsv[i][2]); //Converting str to double
 		data[i].parcel_mass = stoi(parsedCsv[i][3]); // parcel mass is the total mass of all parcels attributed to a single address
-		total_parcel_mass += data[i].parcel_mass;
+		total_parcel_mass += data[i].parcel_mass; //Calclate total mass to check later whether drones have delivered all parcels
 		data[i].num = i;
 	}
 	parsedCsv.clear();
 }
 
+//Works like a dictionary
 const static unordered_map<string, int> string_to_int
 {
 	{"Post_codes", 1},

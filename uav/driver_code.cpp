@@ -13,7 +13,7 @@ double total_cost_rural(int num_of_drones, double drone_price, double truck_dist
 }
 double total_cost_urban()
 {
-	return;
+	return 0.0; //dummy
 }
 void setup_drones(int number_of_drones, string type)
 {
@@ -31,10 +31,10 @@ void setup_drones(int number_of_drones, string type)
 	else
 		cout << "Incorrect drone type entered\n";
 }
-void drone_operation(vector<drone>& drone_v)
-{
-	for (i : )
-}
+//void drone_operation(vector<drone>& drone_v)
+//{
+//	for (i : )
+//}
 void set_GA_params(GA_param_list& lst)
 {
 	lst.generation_size = 5;
@@ -45,7 +45,7 @@ void set_GA_params(GA_param_list& lst)
 	lst.seed = std::chrono::system_clock::now().time_since_epoch().count();
 	lst.tolerance = 1.0e-3;
 }
-int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
+int drone_clusters(int k, int part_size, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
 					double max_dist, double& all_distances, double& all_masses)
 {
 	int cnt, cnt2, temp_num_of_addresses_distance = 0, temp_num_of_addresses_mass = 0;
@@ -61,17 +61,17 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 			cnt = 0;
 			sum_m = 0;
 			sum_d = 0;
-			total_dist_v[cnt] =  utility::length(opt_route[i], cl_data[i][j]); //Calculate distance from centroid(id = i) to address with matching id
+			total_dist_v[cnt] =  utility::length(opt_route[i], *cl_data[i][j]); //Calculate distance from centroid(id = i) to address with matching id
 			for (int k = j; k < j + part_size; k++) 
 			{ //Iterate over user given part_size (potential maximum number of addresses a single drone can visit)
-				total_dist_v[cnt] = utility::length(cl_data[i][k], cl_data[i][k + 1]); //Calculate distance between addresses
+				total_dist_v[cnt] = utility::length(*cl_data[i][k], *cl_data[i][k + 1]); //Calculate distance between addresses
 				cnt++;
 			}
-			total_dist_v[cnt] = utility::length(cl_data[i][part_size + j], opt_route[i]); //Calculate distance from last address to centroid with matching id
+			total_dist_v[cnt] = utility::length(*cl_data[i][part_size + j], opt_route[i]); //Calculate distance from last address to centroid with matching id
 			cnt = 0; //Assing cnt to 0 to reuse as iterating over parcel mass size now
 			for (int k = j; k < j + part_size + 1; k++) 
 			{
-				cluster_mass_v[cnt] = cl_data[i][k + 1].parcel_mass; //Parcel mass of each address
+				cluster_mass_v[cnt] = cl_data[i][k + 1]->parcel_mass; //Parcel mass of each address
 				cnt++;
 			}
 			temp_num_of_addresses_distance = part_size + 1;
@@ -86,7 +86,7 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 			}
 			cnt2 = j + part_size - 1;
 			if (temp_num_of_addresses_mass == 1)
-				sum_d = utility::length(cl_data[i][cnt2], opt_route[i]);
+				sum_d = utility::length(*cl_data[i][cnt2], opt_route[i]);
 	
 			else if (temp_num_of_addresses_mass != 0) 
 			{//If payload capacity for a single drone has been met no need to recalculate distances
@@ -96,7 +96,7 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 					cnt--;
 					sum_d -= total_dist_v[cnt];
 					cnt--;
-					sum_d += utility::length(cl_data[i][cnt2], opt_route[i]);
+					sum_d += utility::length(*cl_data[i][cnt2], opt_route[i]);
 					cnt2--;
 					temp_num_of_addresses_distance -= 1;
 
@@ -105,7 +105,7 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 		
 			int lowest_num = min(temp_num_of_addresses_distance, temp_num_of_addresses_mass);
 			for (int k = j; k < lowest_num + j; k++) {
-				cl_data[i][k].visited = true;
+				cl_data[i][k]->visited = true;
 				
 			}
 			all_distances += sum_d;
@@ -120,19 +120,22 @@ int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& c
 double run_truck_tandem_drone(string drone_type)
 {
 	cout << "Running truck & tandem drone method\n";
+	std::unique_ptr<drone> ptr_drone = nullptr;
 	read_data tets("postal_data.txt");
 	tets.fill_data();
-	if (drone_type == "urban" || "Urban") urban_drone temp_drone();
-	else if (drone_type == "rural" || "Rural") rural_drone temp_drone();
+	if (drone_type == "urban" || "Urban")
+		ptr_drone = std::make_unique<urban_drone>(urban_drone());
+	else if (drone_type == "rural" || "Rural") 
+		ptr_drone = std::make_unique<rural_drone>(rural_drone());
+
 	clustering cl(tets);
 	cl.run_K_means();
 	GA_param_list f;
 	set_GA_params(f);
 	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
 	result Result = vb.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
-	Result.circuit_vector;
 	double total_mass, total_distance;
-	int no_of_drones_req = drone_clusters(cl.k, 2, cl.cluster_regions, cl.centroids, temp_drone., temp_drone., total_distance, total_mass);
+	int no_of_drones_req = drone_clusters(cl.k, 2, cl.cluster_regions, Result.circuit_vector, temp_drone, temp_drone., total_distance, total_mass);
 	setup_drones(no_of_drones_req, "rural");
 	return total_cost_rural(no_of_drones_req, temp_drone., Result.optimal_performance, , );
 
