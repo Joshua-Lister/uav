@@ -46,8 +46,9 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 	return (c1.num == c2.num);
 }
 template <class C, class D>
-void genetic_algorithm<C, D>::crossover_ordered(vector<C>& parent1, vector<C>& parent2, vector<C>& child1, vector<C>& child2, default_random_engine& generator)
+void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
 {
+	//TAKE A LOOK AT THIS FUNCTION
 	int a, b;
 	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
 	uniform_int_distribution<int> randunit(1, rt_size - 1);
@@ -154,7 +155,7 @@ void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, defa
 			idx1 = randunit(generator);
 			while ((idx2 = randunit(generator)) == idx1); // here
 			//Circuit::swap_addresses(circ.route, idx1, idx2);
-			swap(circ[idx1], circ[idx2]);
+			swap(circ.route[idx1], circ.route[idx2]);
 		}
 	}
 }
@@ -189,7 +190,7 @@ int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation
 
 template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
-	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(vector<D>&)> eval_circ)
+	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
 	//lista.generation_size++;
 	default_random_engine generator(lista.seed);
@@ -247,8 +248,8 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 				temp_v[0] = gen[ind1];
 				temp_v[1] = gen[ind2];
 			}
-			mutation(temp_v[0].route, lista.mutation_prob, generator);
-			mutation(temp_v[1].route, lista.mutation_prob, generator);
+			mutation(temp_v[0], lista.mutation_prob, generator);
+			mutation(temp_v[1], lista.mutation_prob, generator);
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[0];

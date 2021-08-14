@@ -51,7 +51,7 @@ public:
 	void update_payload(string pd_condition, double weight);
 	static double return_battery_energy_capacity();
 
-	double maxiumum_distance;
-	double maximum_payload_capacity;
+	double maxiumum_distance = 200;
+	double maximum_payload_capacity = 5;
 };
 

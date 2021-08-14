@@ -27,7 +27,7 @@ void read_data::read_csv(string filename)
 		std::stringstream lineStream(line);
 		string cell;
 		vector<string> parsedRow;
-		while (getline(lineStream, cell, ','))
+		while (getline(lineStream, cell, ' '))
 		{
 			parsedRow.push_back(cell); // adding each column of a single row to the vector
 		}
@@ -40,12 +40,19 @@ void read_data::read_csv(string filename)
 void read_data::fill_data()
 {
 	this->no_of_addresses = parsedCsv.size();
-	if (no_of_addresses <= 0) {
+	if (no_of_addresses <= 0) 
+	{
 		cout << "File is empty";
 		exit(0);
 	}
+	if (parsedCsv[0].size() != 4)
+	{
+		cout << "File headings should be Postcode, x-coordinate, y-coordinate, total parcel mass for matching postcode";
+		exit(0);
+	}
 	data.resize(no_of_addresses);
-	for (size_t i = 0; i < no_of_addresses; i++) {
+	for (size_t i = 0; i < no_of_addresses; i++) 
+	{
 		data[i].post_code = parsedCsv[i][0];
 		data[i].x_coord = stoi(parsedCsv[i][1]); //Converting str to double
 		data[i].y_coord = stoi(parsedCsv[i][2]); //Converting str to double
@@ -67,11 +74,13 @@ const static unordered_map<string, int> string_to_int
 
 void read_data::print_data(string type)
 {
-	if (!string_to_int.count(type)) {
+	if (!string_to_int.count(type)) 
+	{
 		cout << "Invalid entry try one of the following: Post_codes, X_values, Y_values, All";
 		exit(0);
 	}
-	switch (string_to_int.at(type)) {
+	switch (string_to_int.at(type)) 
+	{
 	case 1:
 		printf("Postcodes\n");
 		for (size_t i = 0; i < data.size(); i++)

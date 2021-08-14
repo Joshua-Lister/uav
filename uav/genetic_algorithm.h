@@ -31,11 +31,11 @@ public:
 	void calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen);
 	void mutation(C& circ, double mutation_prob, std::default_random_engine& generator);
 	bool approx_equal(double a, double b, double epsilion);
-	void crossover_ordered(vector<C>& parent1, vector<C>& parent2, vector<C>& child1, vector<C>& child2, default_random_engine& generator);
+	void crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator);
 	int selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 	//static void initialise_circuit_v(vector<C>& gen1, vector<C>& gen2, vector<C>& temp_gen);
 	result run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
-		std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(vector<D>&)> eval_circ);
+		std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ);
 	int rt_size;
 	clustering obj1;
 	//vector<double> distances;
@@ -46,3 +46,5 @@ public:
 	vector<vector<C>> track_route_ov_g;
 #endif
 };
+
+template class genetic_algorithm<Circuit, address_metadata>;

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{be051a9b-b821-4871-a4b4-550e757e3d89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="read_data.h">
@@ -54,6 +57,15 @@
     <ClInclude Include="driver_code.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="branch_bound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="read_data.cpp">
@@ -92,7 +104,7 @@
     <ClCompile Include="Charging_stations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exact_tsp.cpp">
+    <ClCompile Include="branch_bound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="depot.cpp">
@@ -100,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="driver_code.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testclass.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

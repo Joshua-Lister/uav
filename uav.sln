@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0FF0577C-6FED-4530-906B-82AA6FFE16F0}"
 	ProjectSection(SolutionItems) = preProject
 		clean_up.py = clean_up.py
+		wfile.py = wfile.py
 	EndProjectSection
 EndProject
 Global

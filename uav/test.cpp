@@ -53,8 +53,8 @@ bool GA_optimisation_test_1()
 	clustering cl(rd);
 	cl.run_K_means();
 
-	genetic_algorithm<Circuit, address_metadata> GA(f, cl);
-	GA.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
+	/*genetic_algorithm<Circuit, address_metadata> GA(f, cl);
+	GA.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);*/
 
 	return false;
 }

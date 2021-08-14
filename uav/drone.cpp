@@ -45,7 +45,9 @@ bool drone::energy_flight_constraint(double l)
 double drone::power_consumption()
 {
 	//vehicle routing problems for drone delivery - https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7513397
-	return (pow((this->drone_mass + this->payload), 1.5) * utility::fast_inv_sqrt(9.8 * 9.8 * 9.8 / 2 * fluid_density * disc_area * rotors));
+	/*return (pow((this->drone_mass + this->payload), 1.5) * utility::fast_inv_sqrt(9.8 * 9.8 * 9.8 / 2 * fluid_density * disc_area * rotors));
+	*/
+	return 1;
 }
 
 double drone::time_to_charge()

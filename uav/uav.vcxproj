@@ -141,7 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="branch_bound.h" />
     <ClInclude Include="driver_code.h" />
+    <ClInclude Include="test.h" />
+    <ClInclude Include="testclass.h" />
     <ClInclude Include="tsp_funcs.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="Charging_stations.h" />
@@ -158,7 +161,9 @@
   <ItemGroup>
     <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
-    <ClCompile Include="exact_tsp.cpp" />
+    <ClCompile Include="branch_bound.cpp" />
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="testclass.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="Charging_stations.cpp" />
     <ClCompile Include="Circuit.cpp" />

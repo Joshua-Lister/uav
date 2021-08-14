@@ -4,6 +4,8 @@ class urban_drone :
     public drone
 {
 public:
+    urban_drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
+        int rotors);
    /* double power_consumption() override;
     double time_to_charge() override;
     void set_h_velocity_drone(double m_h_v) override

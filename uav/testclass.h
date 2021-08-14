@@ -14,7 +14,6 @@ public:
 	~TestClass();
 	void test(bool(*test_func)(), std::string title);
 	static void Error(std::string message);
-	void createSummary();
 
 private:
 	int testsFailed = 0;

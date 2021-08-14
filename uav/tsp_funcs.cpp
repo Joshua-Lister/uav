@@ -6,7 +6,7 @@
 //tsp_funcs::~tsp_funcs();
 //extern vector<drone*> drones_v (number_of_drones);
 //clustering obj1;
-clustering* obj1;
+//clustering* obj1;
 double fitness(Circuit& circ1)
 {
 	size_t rt_length = circ1.route.size();
@@ -26,12 +26,12 @@ void initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<C
 		temp_gen[i] = Circuit(obj1, true);
 }
 
-bool check_truck_route_validity(vector<address_metadata>& obj1) {
-	int rt_size = obj1.size();
+bool check_truck_route_validity(Circuit& obj1) {
+	int rt_size = obj1.route.size();
 	for (int ic1 = 0; ic1 < rt_size; ic1++)
 	{
 		for (int ic2 = ic1 + 1; ic2 < rt_size; ic2++)
-			if (obj1[ic1].num == obj1[ic2].num)
+			if (obj1.route[ic1].num == obj1.route[ic2].num)
 			{
 				return false;
 			}

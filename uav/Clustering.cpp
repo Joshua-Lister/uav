@@ -3,6 +3,7 @@
 clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) {
 	centroids.resize(2);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
+	distances.resize(no_of_addresses);
 };
 clustering::clustering() {};
 clustering::~clustering() {};
@@ -28,12 +29,13 @@ void clustering::set_rand_centroids(int k_val)
 void clustering::K_means(int k_val, vector<float>& distances) 
 {
 	float distance;
+	distances.resize(no_of_addresses);
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) 
 	{
 		min_distance = FLT_MAX; // Assigning to maximum value to ensure if statement condition is true for first iteration of second for loop
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) 
 		{
-			distance = utility::length(d.data[adr_no], centroids[cluster_no]);// change this why??
+			distance = std::sqrt(utility::length(d.data[adr_no], centroids[cluster_no]));// change this why??
 			if (distance < min_distance) //Continually comparing distance between a single address and the centroids
 			{ 
 				min_distance = distance; //Set new min distance
@@ -41,7 +43,7 @@ void clustering::K_means(int k_val, vector<float>& distances)
 			}
 
 		}
-		distances.push_back(min_distance); // do i need this yes i do ,, resize this! going to be huge as repeatedly called sort this out!!
+		distances[adr_no] = min_distance; // do i need this yes i do ,, resize this! going to be huge as repeatedly called sort this out!!
 	}
 	//Intialising vectors required to recompute/improve centroids
 	for (auto i = 0; i < no_of_addresses; i++) 
@@ -160,16 +162,17 @@ void clustering::run_K_means()
 			if (stopping_condition(centroids, track_centroids)) 
 			{ // strange bug where postcodes have same but swapped coordinates
 				converge = true;
-				if (check_distances(distances_v, 5)) 
+				if (check_distances(distances_v, 20)) 
 				{ // change second param
 					in_range = true;
-					cout << "check_distance";
+					return;
 				}
-				k++; //Adding another cluster if conditions are not met
-				centroids.resize(k);
-				track_centroids.resize(k);
 			}
+
 		}
+		k++; //Adding another cluster if conditions are not met
+		centroids.resize(k);
+		track_centroids.resize(k);
 
 	}
 }
@@ -186,12 +189,15 @@ void clustering::group_clusters()
 		id_count.at(i.id) += 1;
 
 	for (int i = 0; i < k; i++)
-		cluster_regions[i].resize(id_count.count(i));
+		cluster_regions[i].resize(id_count.at(i)); // this line
 	
 	// COME BACK TO THIS DATA IS NOT CONTIGIOUS
-	for (int i = 0; i < d.data.size(); i++) {
+	int idx = -1;
+	for (int i = 0; i < d.data.size(); i++) 
+	{
 		// does this make sense?
-		cluster_regions[d.data[i].id][id_index_count[i]] = &d.data[i];
+		idx = d.data[i].id;
+		cluster_regions[idx][id_index_count.at(idx)] = &d.data[i]; //vector subscript out of range tf
 		id_index_count.at(d.data[i].id) += 1;
 	} 
 

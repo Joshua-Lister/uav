@@ -1,5 +1,8 @@
 #include "urban_drone.h"
 
+urban_drone::urban_drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
+	int rotors) : drone(){}
+
 bool urban_drone::energy_flight_constraint(double L)
 {
 ////, const vector<address_metadata>& depots, const vector<address_metadata>& charging_ports
