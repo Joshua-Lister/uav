@@ -14,6 +14,11 @@ Software for delivery of parcels with the use of autonomous drones or otherwise 
 
 ## Powerpoint
 
-## Author
+## Author and Course Information
+Author : Joshua P Lister
+CID : 01977866
+Github: @acse-jpl20
+Email: Joshua.Lister20@imperial.ac.uk
 
 ## Licence
+MIT Licence
