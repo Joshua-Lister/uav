@@ -67,7 +67,7 @@ int drone_clusters(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data
 			sum_m = 0;
 			sum_d = 0;
 			total_dist_v[cnt] = utility::length(opt_route[i], *cl_data[centroid_id][j]); //Calculate distance from centroid(id = i) to address with matching id
-			for (int adr = j; adr < adr + ad_adr; adr++)
+			for (int adr = j; adr < adr + ad_adr - 1; adr++)
 			{ //Iterate over user given part_size (potential maximum number of addresses a single drone can visit)
 				// if cluster only contains one address this doesn't work
 				total_dist_v[cnt] = utility::length(*cl_data[centroid_id][adr], *cl_data[centroid_id][adr + 1]); //Calculate distance between addresses
@@ -77,7 +77,6 @@ int drone_clusters(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data
 			cnt = 0; //Assing cnt to 0 to reuse as iterating over parcel mass size now
 			for (int adr = j; adr < j + ad_adr + 1; adr++)
 			{ // ADD IF STATEMENT
-				// why + 1 u numpty
 				cluster_mass_v[cnt] = cl_data[centroid_id][adr]->parcel_mass; //Parcel mass of each address
 				cnt++;
 			}
@@ -164,7 +163,16 @@ double run_truck_tandem_drone(string drone_type)
 
 	
 }
-
+void try_str()
+{
+	/*GA_param_list f;
+	testnum = 6;
+	set_GA_params(f);
+	testnum = 7;
+	extern string target_str;
+	genetic_algorithm<string, string> vb(f, target_str);
+	vb.run_algorithm_genetic(5, &string_fitness, &string_intialisation, &string_eval);*/
+}
 void run_charging_port_tandem_drone()
 {
 	cout << "Running drone & charging ports method\n";

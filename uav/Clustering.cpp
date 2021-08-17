@@ -1,14 +1,17 @@
 #include "clustering.h"
 
-clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) {
+clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) 
+{
 	centroids.resize(2);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 	distances.resize(no_of_addresses);
 };
-clustering::clustering() {};
 clustering::~clustering() {};
 
-
+clustering::clustering(int c_size)
+{
+	centroids.resize(c_size);
+}
 void clustering::set_rand_centroids(int k_val) 
 {
 	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
@@ -99,7 +102,7 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 	int cnt_to_match = obj.size();
 	for (int i = 0; i < cnt_to_match; i++) 
 	{
-		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-6) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-6)) //Checking coords are in range of tol
+		if ((abs(obj[i].x_coord - obj2[i].x_coord) < 1e-5) && (abs(obj[i].y_coord - obj2[i].y_coord) < 1e-5)) //Checking coords are in range of tol
 			cnt++;
 	}
 	if (cnt == cnt_to_match)
@@ -123,7 +126,7 @@ void clustering::coord_insert_sort(vector<address_metadata>& arg1)
 		temp_num2 = arg1[i].y_coord;
 		temp_obj = arg1[i];
 		j = i - 1;
-		while (j >= 0 && (arg1[j].x_coord > temp_num2 && arg1[j].y_coord)) 
+		while (j >= 0 && (arg1[j].x_coord > temp_num1 && arg1[j].y_coord > temp_num2)) 
 		{
 			arg1[j + 1] = arg1[j];
 			j--;
@@ -151,15 +154,13 @@ void clustering::run_K_means()
 	{ //continue all distances are within the flying distance
 		converge = false;
 		set_rand_centroids(k);
-		/*if (verbose)
-			check_ids(false);*/
 		while (!converge) 
 		{ //continue until all centroids have converged
 			track_centroids = centroids;
 			K_means(k, distances_v);
-			coord_insert_sort(centroids); //Sorting by lowest x & y coordinates to prevent stopping_condition returning false when actually true
-			coord_insert_sort(track_centroids);
-			if (stopping_condition(centroids, track_centroids)) 
+			//coord_insert_sort(centroids); //Sorting by lowest x & y coordinates to prevent stopping_condition returning false when actually true
+			//coord_insert_sort(track_centroids);
+			if (stopping_condition(centroids, track_centroids)) //never met for large routes think of new way to overocme issue
 			{ // strange bug where postcodes have same but swapped coordinates
 				converge = true;
 				if (check_distances(distances_v, 20)) 
@@ -176,6 +177,9 @@ void clustering::run_K_means()
 
 	}
 }
+//describe algorithms and also implmentation
+// describing tests,, validation test cases
+// actual results
 
 void clustering::group_clusters()
 {
@@ -191,14 +195,19 @@ void clustering::group_clusters()
 	for (int i = 0; i < k; i++)
 		cluster_regions[i].resize(id_count.at(i)); // this line
 	
-	// COME BACK TO THIS DATA IS NOT CONTIGIOUS
 	int idx = -1;
 	for (int i = 0; i < d.data.size(); i++) 
 	{
 		// does this make sense?
 		idx = d.data[i].id;
-		cluster_regions[idx][id_index_count.at(idx)] = &d.data[i]; //vector subscript out of range tf
+		cluster_regions[idx][id_index_count.at(idx)] = &d.data[i]; 
 		id_index_count.at(d.data[i].id) += 1;
 	} 
 
+}
+
+void clustering::add_depot(address_metadata dep)
+{
+	this->centroids.push_back(dep);
+	this->centroids.insert(centroids.begin(), dep);
 }

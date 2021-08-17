@@ -66,6 +66,9 @@
     <ClInclude Include="test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="string_GA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="read_data.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="test.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="string_GA.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,15 +4,15 @@ template <class C, class D>
 genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
 {
 	rt_size = obj1.centroids.size();
-	/*if (unique)
-	{
-		obj1.centroids.push_back(depot);
-		obj1.centroids.insert(obj1.centroids.begin(), depot);
-	}*/
-
 }
-template <class C, class D>
-genetic_algorithm<C, D>::genetic_algorithm() {};
+
+//template <class C, class D>
+//genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista, string target_str) :lista(lista)
+//{
+//
+//	rt_size = target_str.size();
+//
+//};
 uniform_real_distribution<double> rand_number(0, 1.0);
 
 template <class C, class D>
@@ -48,10 +48,11 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 template <class C, class D>
 void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, default_random_engine& generator)
 {
+	// DOES NOT WORK 17/07/21
 	//TAKE A LOOK AT THIS FUNCTION
 	int a, b;
 	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
-	uniform_int_distribution<int> randunit(1, rt_size - 1);
+	uniform_int_distribution<int> randunit(1, rt_size - 2);
 	a = randunit(generator);
 	while ((b = randunit(generator)) == a && b == a - 1 && b == a + 1);
 
@@ -66,7 +67,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 	
 	
 	//shortest difference between any pairs of routes. Find shortest route between one point on graph and another 
-	for (int i = 0; i < a; i++) 
+	for (int i = 1; i < a; i++) 
 	{
 		
 		if (utility::find(child1.route, parent2.route[i], a, b))
@@ -151,7 +152,7 @@ void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, defa
 		double rn = rand_number(generator);
 		if (rn < mutation_prob) 
 		{
-			uniform_int_distribution<int> randunit(1, rt_size - 1);
+			uniform_int_distribution<int> randunit(1, rt_size - 2);
 			idx1 = randunit(generator);
 			while ((idx2 = randunit(generator)) == idx1); // here
 			//Circuit::swap_addresses(circ.route, idx1, idx2);
@@ -195,9 +196,9 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	//lista.generation_size++;
 	default_random_engine generator(lista.seed);
 	uniform_int_distribution<int> randgen(0, lista.generation_size - 1);
-	vector<Circuit> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
+	vector<C> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
 	vector<double> fitness_v(lista.generation_size + 1);
-	vector<Circuit> temp_v(2);
+	vector<C> temp_v(2);
 	result Result;
 	int ind1, ind2;
 	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
@@ -216,15 +217,20 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
 		// Store best performing circuit
 		elite_ind = std::distance(fitness_v.begin(), max_it);
+		new_gen[0] = gen[elite_ind];
 #ifdef TEST
 		performance_v.push_back(max);
 		track_route_ov_g.push_back(gen[elite_ind].route);
 #endif
 
 		if (std::abs(max - prev_max) < lista.tolerance)
+		{
 			conv_cnt++;
+		}
 		else
+		{
 			conv_cnt = 0;
+		}
 		prev_max = max;
 
 		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation)) 
@@ -272,7 +278,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	myfile.open("Routes.txt");
 	myfile << "Route size" << " " << "Generations\n";
 	myfile << rt_size << " " << perf_v_size << "\n";
-	myfile << "X-Coordinate " <<  "Y-Coordinate " << "Route Distance " << "Generation number\n";
+	myfile << "X-Coordinate " <<  "Y-Coordinate " << "Route Distance " << "Generation Number\n";
 	for (int i = 0 i < perf_v_size; i++)
 	{
 		for (int j = 0; i < rt_size; j++)

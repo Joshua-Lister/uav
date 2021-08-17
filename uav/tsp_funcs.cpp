@@ -7,6 +7,7 @@
 //extern vector<drone*> drones_v (number_of_drones);
 //clustering obj1;
 //clustering* obj1;
+clustering test_route = set_dummy_route(4);
 double fitness(Circuit& circ1)
 {
 	size_t rt_length = circ1.route.size();
@@ -15,10 +16,33 @@ double fitness(Circuit& circ1)
 		f += utility::length(circ1.route[i], circ1.route[i - 1]);
 	return  1.0 / f;
 }
+clustering set_dummy_route(int rt_length)
+{
+	clustering c1(rt_length);
+	for (int i = 0; i < rt_length; i++)
+	{
+		c1.centroids[i].x_coord = rand() % 100;
+		c1.centroids[i].y_coord = rand() % 100;
+		c1.centroids[i].num = i;
+	}
+	return c1;
+}
+double test_fitness(Circuit& circ)
+{
+	int rt_length = circ.route.size();
+	double f = 0;
+	for (int i = 0; i < rt_length; i++)
+		if (circ.route[i].num == test_route.centroids[i].num)
+		{
+			f++;
+		}
+	return f;
+}
 
 void initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<Circuit>& temp_gen, vector<address_metadata>& obj1, int gen_size)
 {
-	for (int i = 0; i < gen_size + 1; i++) {
+	for (int i = 0; i < gen_size + 1; i++) 
+	{
 		gen1[i] = Circuit(obj1, false);
 		gen2[i] = Circuit(obj1, true);
 	}
@@ -26,7 +50,8 @@ void initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<C
 		temp_gen[i] = Circuit(obj1, true);
 }
 
-bool check_truck_route_validity(Circuit& obj1) {
+bool check_truck_route_validity(Circuit& obj1) 
+{
 	int rt_size = obj1.route.size();
 	for (int ic1 = 0; ic1 < rt_size; ic1++)
 	{
@@ -36,5 +61,9 @@ bool check_truck_route_validity(Circuit& obj1) {
 				return false;
 			}
 	}
+	return true;
+}
+bool check_validity_dummy(Circuit& obj1)
+{
 	return true;
 }

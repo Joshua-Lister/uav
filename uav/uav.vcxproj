@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="branch_bound.h" />
     <ClInclude Include="driver_code.h" />
+    <ClInclude Include="string_GA.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="testclass.h" />
     <ClInclude Include="tsp_funcs.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
     <ClCompile Include="branch_bound.cpp" />
+    <ClCompile Include="string_GA.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="testclass.cpp" />
     <ClCompile Include="utility.cpp" />

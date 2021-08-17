@@ -12,6 +12,7 @@
 #include "genetic_algorithm.h"
 #include <chrono>
 #include "driver_code.h"
+#include "test.h"
 //using namespace std;
 
 int testnum = 0;
@@ -19,8 +20,12 @@ double testval = 0.0;
 
 int run_main()
 {
-	run_truck_tandem_drone("rural");
-return 0;
+	//run_truck_tandem_drone("rural");
+	//TestClass test_software("Drone Delivery Software");
+	//test_software.run_tests();
+	run_tests();
+	//try_str();
+	return 0;
 }
 
 int __cdecl DescribeException(PEXCEPTION_POINTERS pData)

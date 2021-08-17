@@ -31,7 +31,7 @@ void read_data::read_csv(string filename)
 		{
 			parsedRow.push_back(cell); // adding each column of a single row to the vector
 		}
-		parsedCsv.push_back(parsedRow); // Adding the vector containing the separated line to another vector
+		this->parsedCsv.push_back(parsedRow); // Adding the vector containing the separated line to another vector
 	}
 	file.close();
 

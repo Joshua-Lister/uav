@@ -19,7 +19,7 @@ Circuit::Circuit(vector<address_metadata>& centroids, bool empty) : route(centro
 };
 Circuit::Circuit(clustering& c1) : route(c1.centroids) {
 	route_size = route.size();
-	cout << "route_size circuit" << this->route_size << "\n";
+	//cout << "route_size circuit" << this->route_size << "\n";
 	route.resize(route_size);
 	velocity_v.resize(route_size - 1);
 	masses.resize(route_size);
@@ -37,6 +37,10 @@ Circuit::Circuit(clustering& c1) : route(c1.centroids) {
 //	if (this == &mat_old) return *this;
 //
 //}
+Circuit::Circuit(int route_size) 
+{
+	route.resize(route_size);
+};
 Circuit::Circuit() {};
 Circuit::~Circuit() {};
 
@@ -50,7 +54,7 @@ Circuit::~Circuit() {};
 void Circuit::mix(vector<address_metadata>& vec) {
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	int r_idx;
-	default_random_engine generator(seed);
+	default_random_engine generator(seed); // does it generate same thing every time
 	for (int i = 0; i < route_size; i++) {
 		uniform_int_distribution<int> dist(i, route_size - 1);
 		r_idx = dist(generator);

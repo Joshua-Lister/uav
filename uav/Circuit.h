@@ -10,8 +10,9 @@ class Circuit
 public:
 	Circuit(vector<address_metadata>& centroids, bool empty);
 	Circuit(clustering& c1);
+	Circuit(int route_size);
 	Circuit();
-	~Circuit() ;
+	~Circuit();
 
 	static void swap_addresses(vector<address_metadata>& c, const int& p1, const int& p2);
 	void mix(vector<address_metadata>& vec);

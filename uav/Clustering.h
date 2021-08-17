@@ -13,7 +13,7 @@ class clustering
 {
 public:
 	clustering(read_data& d);
-	clustering();
+	clustering(int c_size);
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);
 	//inline static double length(const address_metadata& adr, const double& x, const double& y);
@@ -23,6 +23,7 @@ public:
 	bool check_distances(vector<float>& check_d_v, double max_dist);
 	void run_K_means();
 	void group_clusters();
+	void add_depot(address_metadata dep);
 	bool check_ids();
 	static bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
 	int k = 2;
