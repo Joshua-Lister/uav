@@ -11,5 +11,8 @@ bool check_for_duplicate_centroid();
 bool GA_optimisation_test_1();
 bool GA_optimisation_test_2();
 bool check_centroids_distance();
+bool mutation_test_1();
+bool mutation_test_2();
+bool crossover_test();
 void run_tests();
 

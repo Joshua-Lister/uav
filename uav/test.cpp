@@ -118,6 +118,68 @@ bool GA_optimisation_test_1()
 
 }
 
+bool mutation_test_1()
+{
+	extern clustering test_route;
+	clustering copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
+	Circuit c1(test_route);
+	default_random_engine generator(lstt.seed);
+	GA_test.mutation(c1, 1, generator);
+	bool check = c1.check_truck_route_validity();
+	return check;
+}
+
+bool mutation_test_2()
+{
+	extern clustering test_route;
+	clustering copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
+	Circuit c1(test_route);
+	default_random_engine generator(lstt.seed);
+	GA_test.mutation(c1, 1, generator);
+	int d_track = 0;
+	for (int i = 0; i < c1.route_size; i++)
+	{
+		if (c1.route[i].num == copy_test_route.centroids[i].num) 
+		{
+			d_track++;
+		}
+	}
+	if (d_track == c1.route_size)
+	{
+		return false;
+	}
+	return true;
+}
+bool crossover_test()
+{
+	extern clustering test_route;
+	clustering copy_test_route = test_route;
+	vector<Circuit> c_v(4);
+	for (int i = 0; i < 4; i++)
+	{
+		c_v[i] = Circuit(test_route.centroids, false);
+		c_v[i].mix(c_v[i].route);
+	}
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
+	default_random_engine generator(lstt.seed);
+	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], generator);
+	for (int i = 2; i < 4; i++)
+	{
+		if (!(c_v[i].check_truck_route_validity()))
+		{
+			return false;
+		}
+	}
+	return true;
+}
 bool GA_optimisation_test_2()
 {
 	extern clustering test_route;
@@ -147,5 +209,8 @@ void run_tests()
 	circuit_test.test(&check_circuit_mix, "Randomise route");
 	TestClass GA_tests("Genetic Algorithm checks");
 	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");
+	GA_tests.test(&mutation_test_1, "Mutation test 1");
+	GA_tests.test(&mutation_test_2, "Mutation test 2");
+	GA_tests.test(&crossover_test, "Crossover test");
 	
 }
