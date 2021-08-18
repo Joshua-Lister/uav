@@ -23,12 +23,24 @@ bool check_for_duplicate_centroid()
 	return check;
 }
 
-bool check_centroids_visited()
+bool check_centroids_distance()
 {
-	return false;
+	read_data rd("postal_data.txt");
+	rd.fill_data();
+	clustering cl(rd);
+	cl.run_K_means();
+	urban_drone ub();
+	bool check = cl.check_distances(cl.distances, 10);
+	return check;
 }
 
 bool check_cluster_stopping_condition()
+{
+	auto [test_adr1, test_adr2] = setup_adr_v();
+	bool check = clustering::stopping_condition(test_adr1, test_adr2);
+	return check;
+}
+std::tuple<vector<address_metadata>, vector<address_metadata>> setup_adr_v()
 {
 	size_t test_size = 5;
 	vector<address_metadata> test_adr1(test_size), test_adr2(test_size);
@@ -41,11 +53,25 @@ bool check_cluster_stopping_condition()
 		test_adr2[i].x_coord = rand_n_x;
 		test_adr1[i].y_coord = rand_n_y;
 		test_adr2[i].y_coord = rand_n_y;
+		test_adr1[i].num = i;
+		test_adr2[i].num = i; 
 	}
-	bool check = clustering::stopping_condition(test_adr1, test_adr2);
-	return check;
+	return make_tuple(test_adr1, test_adr2);
 }
-
+bool check_circuit_mix()
+{
+	auto [test_adr1, test_adr2] = setup_adr_v();
+	Circuit c1(test_adr1, false);
+	c1.mix(c1.route);
+	for (int i = 0; i < c1.route_size; i++)
+	{
+		if (c1.route[i].num != test_adr2[i].num)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 bool GA_optimisation_test_1()
 {
 	fstream myfile;
@@ -111,10 +137,15 @@ bool GA_optimisation_test_2()
 
 void run_tests()
 {
-	TestClass test_software("Drone Delivery Software");
-	test_software.test(&check_cluster_ids, "Cluster ids");
-	test_software.test(&check_for_duplicate_centroid, "Duplicate centroid");
-	test_software.test(&check_cluster_stopping_condition, "K-Means Stopping Condition");
-	test_software.test(&GA_optimisation_test_2, "GA test with target route");
+	TestClass cluster_test("Cluster class checks");
+	cluster_test.test(&check_cluster_ids, "Cluster ids");
+	cluster_test.test(&check_for_duplicate_centroid, "Duplicate centroid");
+	cluster_test.test(&check_centroids_distance, "Cluster distances");
+	cluster_test.test(&check_cluster_stopping_condition, "K-Means stopping condition");
+	
+	TestClass circuit_test("Circuit class checks");
+	circuit_test.test(&check_circuit_mix, "Randomise route");
+	TestClass GA_tests("Genetic Algorithm checks");
+	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");
 	
 }

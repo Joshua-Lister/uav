@@ -6,9 +6,10 @@
 bool check_cluster_ids();
 bool check_cluster_stopping_condition();
 bool check_cluster_ids();
+std::tuple<vector<address_metadata>, vector<address_metadata>> setup_adr_v();
 bool check_for_duplicate_centroid();
 bool GA_optimisation_test_1();
 bool GA_optimisation_test_2();
-bool check_centroids_visited();
+bool check_centroids_distance();
 void run_tests();
 
