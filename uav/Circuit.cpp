@@ -55,8 +55,8 @@ void Circuit::mix(vector<address_metadata>& vec) {
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	int r_idx;
 	default_random_engine generator(seed); // does it generate same thing every time
-	for (int i = 0; i < route_size; i++) {
-		uniform_int_distribution<int> dist(i, route_size - 1);
+	for (int i = 1; i < route_size - 1; i++) {
+		uniform_int_distribution<int> dist(i, route_size - 2);
 		r_idx = dist(generator);
 		swap(vec[i], vec[r_idx]);
 	}
@@ -149,11 +149,15 @@ void Circuit::check_drone(vector<drone> drone_list) {
 //}
 
 bool Circuit::check_truck_route_validity() {
-	for (int ic1 = 0; ic1 < centroids.size();ic1++)
+	for (int ic1 = 1; ic1 < route_size - 1; ic1++)
 	{
-		for (int ic2 = ic1 + 1; ic2 < centroids.size();ic2++)
+		for (int ic2 = ic1 + 1; ic2 < route_size - 1; ic2++)
+		{
 			if (this->route[ic1].num == this->route[ic2].num)
+			{
 				return false;
+			}
+		}
 	}
 	return true;
 }

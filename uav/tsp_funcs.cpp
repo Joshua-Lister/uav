@@ -7,7 +7,7 @@
 //extern vector<drone*> drones_v (number_of_drones);
 //clustering obj1;
 //clustering* obj1;
-clustering test_route = set_dummy_route(4);
+clustering test_route = set_dummy_route(5);
 double fitness(Circuit& circ1)
 {
 	size_t rt_length = circ1.route.size();
@@ -21,8 +21,8 @@ clustering set_dummy_route(int rt_length)
 	clustering c1(rt_length);
 	for (int i = 0; i < rt_length; i++)
 	{
-		c1.centroids[i].x_coord = rand() % 100;
-		c1.centroids[i].y_coord = rand() % 100;
+		c1.centroids[i].x_coord = 1 + rand() % 100;
+		c1.centroids[i].y_coord = 1 + rand() % 100;
 		c1.centroids[i].num = i;
 	}
 	return c1;
@@ -31,7 +31,7 @@ double test_fitness(Circuit& circ)
 {
 	int rt_length = circ.route.size();
 	double f = 0;
-	for (int i = 0; i < rt_length; i++)
+	for (int i = 1; i < rt_length - 1; i++)
 		if (circ.route[i].num == test_route.centroids[i].num)
 		{
 			f++;

@@ -124,8 +124,8 @@ bool mutation_test_1()
 	clustering copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
-	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
-	Circuit c1(test_route);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route);
 	default_random_engine generator(lstt.seed);
 	GA_test.mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
@@ -138,14 +138,14 @@ bool mutation_test_2()
 	clustering copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
-	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
-	Circuit c1(test_route);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route);
 	default_random_engine generator(lstt.seed);
 	GA_test.mutation(c1, 1, generator);
 	int d_track = 0;
 	for (int i = 0; i < c1.route_size; i++)
 	{
-		if (c1.route[i].num == copy_test_route.centroids[i].num) 
+		if (c1.route[i].num == test_route.centroids[i].num) 
 		{
 			d_track++;
 		}
@@ -156,21 +156,24 @@ bool mutation_test_2()
 	}
 	return true;
 }
-bool crossover_test()
+bool crossover_test_1()
 {
 	extern clustering test_route;
 	clustering copy_test_route = test_route;
+	address_metadata depot;
+	depot.x_coord = 1.3, depot.y_coord = 1.3;
+	copy_test_route.add_depot(depot);
 	vector<Circuit> c_v(4);
 	for (int i = 0; i < 4; i++)
 	{
-		c_v[i] = Circuit(test_route.centroids, false);
+		c_v[i] = Circuit(copy_test_route.centroids, false);
 		c_v[i].mix(c_v[i].route);
-	}
+    }
 	GA_param_list lstt;
 	set_GA_params(lstt);
-	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	default_random_engine generator(lstt.seed);
-	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], generator);
+	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 3);
 	for (int i = 2; i < 4; i++)
 	{
 		if (!(c_v[i].check_truck_route_validity()))
@@ -180,12 +183,65 @@ bool crossover_test()
 	}
 	return true;
 }
-bool GA_optimisation_test_2()
+bool crossover_test_2()
 {
 	extern clustering test_route;
+	clustering copy_test_route = test_route;
+	address_metadata depot;
+	depot.x_coord = 1.3, depot.y_coord = 1.3;
+	copy_test_route.add_depot(depot);
+	vector<Circuit> c_v(4);
+	for (int i = 0; i < 4; i++)
+	{
+		c_v[i] = Circuit(copy_test_route.centroids, true);
+		//c_v[i].mix(c_v[i].route);
+	}
+	for (auto i : c_v[0].route)
+	{
+		cout << i.num << " ";
+	}
+	cout << "\n";
+	std::reverse(c_v[1].route.begin(), c_v[1].route.end());
+	for (auto i : c_v[1].route)
+	{
+		cout << i.num << " ";
+	}
+	cout << "\n";
 	GA_param_list lstt;
 	set_GA_params(lstt);
-	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, test_route);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	default_random_engine generator(lstt.seed);
+	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 4);
+	vector<int> child_target_rt1 = { -1, 4, 1, 2, 3, 0, -1 };
+	vector<int> child_target_rt2 = { -1, 0, 3, 2, 1, 4, -1 };
+	for (int adr_idx = 0; adr_idx < c_v[2].route_size; adr_idx++)
+	{
+		if (c_v[2].route[adr_idx].num != child_target_rt1[adr_idx])
+		{
+			return false;
+		}
+		if (c_v[3].route[adr_idx].num != child_target_rt2[adr_idx])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool GA_optimisation_test_2()
+{
+	address_metadata depot;
+	depot.x_coord = 1.3, depot.y_coord = 1.3;
+	extern clustering test_route;
+	test_route.add_depot(depot);
+	clustering copy_test_route = test_route;
+	for (int i = 2; i < test_route.centroids.size() - 1; i++)
+	{
+		swap(copy_test_route.centroids[i], copy_test_route.centroids[i - 1]);
+	}
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	lstt.max_generation = 100;
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	result Result = GA_test.run_algorithm_genetic(5, &test_fitness, &initialise_circuit_v, &check_validity_dummy);
 	for (int i = 0; i < test_route.centroids.size(); i++)
 	{
@@ -208,9 +264,10 @@ void run_tests()
 	TestClass circuit_test("Circuit class checks");
 	circuit_test.test(&check_circuit_mix, "Randomise route");
 	TestClass GA_tests("Genetic Algorithm checks");
-	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");
 	GA_tests.test(&mutation_test_1, "Mutation test 1");
 	GA_tests.test(&mutation_test_2, "Mutation test 2");
-	GA_tests.test(&crossover_test, "Crossover test");
+	GA_tests.test(&crossover_test_1, "Crossover test 1");
+	GA_tests.test(&crossover_test_2, "Crossover test 2");
+	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");
 	
 }

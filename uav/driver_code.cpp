@@ -38,8 +38,8 @@ void setup_drones(int number_of_drones, string type)
 //}
 void set_GA_params(GA_param_list& lst)
 {
-	lst.generation_size = 5;
-	lst.max_generation = 3;
+	lst.generation_size = 14;
+	lst.max_generation = 16;
 	lst.crossover_prob = 0.5;
 	lst.max_iterations = 30;
 	lst.mutation_prob = 0.1;
@@ -57,17 +57,24 @@ int drone_clusters(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data
 	int number_of_addresses = 0;
 	vector<double> total_dist_v(ad_adr + 2);
 	vector<double> cluster_mass_v(ad_adr + 1);
+
 	for (int i = 0; i < k; i++)
 	{ //Iterate over each cluster
 		j = 0;
 		centroid_id = opt_route[i].id;
+
 		while (j < cl_data[i].size())
 		{ //Iterate over all addresses with id i 
+			
 			cnt = 0;
 			sum_m = 0;
 			sum_d = 0;
+			if (cl_data[i].size() - j < ad_adr)
+			{
+				break;
+			}
 			total_dist_v[cnt] = utility::length(opt_route[i], *cl_data[centroid_id][j]); //Calculate distance from centroid(id = i) to address with matching id
-			for (int adr = j; adr < adr + ad_adr - 1; adr++)
+			for (int adr = j; adr < adr + ad_adr; adr++)
 			{ //Iterate over user given part_size (potential maximum number of addresses a single drone can visit)
 				// if cluster only contains one address this doesn't work
 				total_dist_v[cnt] = utility::length(*cl_data[centroid_id][adr], *cl_data[centroid_id][adr + 1]); //Calculate distance between addresses

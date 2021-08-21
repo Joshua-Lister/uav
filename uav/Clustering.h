@@ -14,6 +14,7 @@ class clustering
 public:
 	clustering(read_data& d);
 	clustering(int c_size);
+	clustering(const clustering& cp);
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);
 	//inline static double length(const address_metadata& adr, const double& x, const double& y);

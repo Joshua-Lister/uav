@@ -26,3 +26,9 @@ void truck::set_drone_capacity(int dc){
 	this->drone_capacity = dc;
 }
 
+double truck::travel_cost(double travel_distance)
+{
+	//fill this out cmon
+	return 1.0;
+}
+

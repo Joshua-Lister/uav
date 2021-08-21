@@ -12,6 +12,10 @@ clustering::clustering(int c_size)
 {
 	centroids.resize(c_size);
 }
+clustering::clustering(const clustering& cp)
+{
+	centroids = cp.centroids;
+}
 void clustering::set_rand_centroids(int k_val) 
 {
 	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
@@ -163,7 +167,7 @@ void clustering::run_K_means()
 			if (stopping_condition(centroids, track_centroids)) //never met for large routes think of new way to overocme issue
 			{ // strange bug where postcodes have same but swapped coordinates
 				converge = true;
-				if (check_distances(distances_v, 20)) 
+				if (check_distances(distances_v, 20)) //change this
 				{ // change second param
 					in_range = true;
 					return;
@@ -210,4 +214,5 @@ void clustering::add_depot(address_metadata dep)
 {
 	this->centroids.push_back(dep);
 	this->centroids.insert(centroids.begin(), dep);
+	
 }

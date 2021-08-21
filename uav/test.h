@@ -3,6 +3,7 @@
 #include "tsp_funcs.h"
 #include "driver_code.h"
 #include "testclass.h"
+#include <algorithm>
 bool check_cluster_ids();
 bool check_cluster_stopping_condition();
 bool check_cluster_ids();
@@ -13,6 +14,6 @@ bool GA_optimisation_test_2();
 bool check_centroids_distance();
 bool mutation_test_1();
 bool mutation_test_2();
-bool crossover_test();
+bool crossover_test_1();
 void run_tests();
 

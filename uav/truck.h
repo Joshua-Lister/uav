@@ -10,6 +10,7 @@ public:
 	void set_coords(double x, double y);
 	double return_drone_capacity();
 	void set_drone_capacity(int dc);
+	double travel_cost(double travel_distance);
 	double tempus = 0;
 	double x_coord = 0, y_coord = 0;
 	double cost_per_litre = 0, fuel_consumption_rate = 0;

@@ -57,9 +57,6 @@
     <ClInclude Include="driver_code.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="branch_bound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="testclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -105,9 +102,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Charging_stations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="branch_bound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="depot.cpp">
