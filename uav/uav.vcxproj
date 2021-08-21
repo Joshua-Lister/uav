@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="driver_code.h" />
+    <ClInclude Include="intersection.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="testclass.h" />
     <ClInclude Include="tsp_funcs.h" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
+    <ClCompile Include="intersection.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="testclass.cpp" />
     <ClCompile Include="utility.cpp" />

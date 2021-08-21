@@ -359,7 +359,7 @@ int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation
 
 
 template <class C, class D>
-result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
+result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> fitness_func,
 	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
 
@@ -377,8 +377,10 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	result Result;
 	int ind1, ind2;
 	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
+	int max_conv_cnt = std::max(100, lista.max_generation / 5);
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
+
 
 	initialise_gen_v(gen, new_gen, temp_v, path, lista.generation_size); // change this lat one 
 	//int max_conv_cnt = max(100, lista.max_generation / 5);

@@ -216,3 +216,10 @@ void clustering::add_depot(address_metadata dep)
 	this->centroids.insert(centroids.begin(), dep);
 	
 }
+
+void clustering::run_clustering(address_metadata dep)
+{
+	run_K_means();
+	group_clusters();
+	add_depot(dep);
+}

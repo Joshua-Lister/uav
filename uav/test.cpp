@@ -110,7 +110,7 @@ bool GA_optimisation_test_1()
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, cl);
-	result Result = GA_test.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
+	result Result = GA_test.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
 	GA_test.*/
 
 	/*genetic_algorithm<Circuit, address_metadata> GA(f, cl);
@@ -120,41 +120,41 @@ bool GA_optimisation_test_1()
 
 bool mutation_test_1()
 {
-	/*extern vector<address_metadata>  test_route;
-	vector<address_metadata>  copy_test_route = test_route;
+	extern vector<address_metadata> test_route;
+	vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
-	Circuit c1(copy_test_route);
+	Circuit c1(copy_test_route, false);
 	default_random_engine generator(lstt.seed);
-	GA_test.mutation(c1, );
+	GA_test.mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
-	return check;*/
+	return check;
 	return true;
 }
 
 bool mutation_test_2()
 {
-	//extern vector<address_metadata>  test_route;
-	//vector<address_metadata>  copy_test_route = test_route;
-	//GA_param_list lstt;
-	//set_GA_params(lstt);
-	//genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
-	//Circuit c1(copy_test_route);
-	//default_random_engine generator(lstt.seed);
-	//GA_test.mutation(c1, 1, );
-	//int d_track = 0;
-	//for (int i = 0; i < c1.route_size; i++)
-	//{
-	//	if (c1.route[i].num == test_route.centroids[i].num) 
-	//	{
-	//		d_track++;
-	//	}
-	//}
-	//if (d_track == c1.route_size)
-	//{
-	//	return false;
-	//}
+	extern vector<address_metadata>  test_route;
+	vector<address_metadata>  copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route, false);
+	default_random_engine generator(lstt.seed);
+	GA_test.mutation(c1, 1, generator);
+	int d_track = 0;
+	for (int i = 0; i < c1.route_size; i++)
+	{
+		if (c1.route[i].num == test_route[i].num) 
+		{
+			d_track++;
+		}
+	}
+	if (d_track == c1.route_size)
+	{
+		return false;
+	}
 	return true;
 }
 bool crossover_test_1()
@@ -235,7 +235,7 @@ bool GA_optimisation_test_2()
 	set_GA_params(lstt);
 	lstt.max_generation = 200;
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
-	result Result = GA_test.run_algorithm_genetic(10, &test_fitness, &initialise_circuit_v, &check_validity_dummy);
+	result Result = GA_test.run_algorithm_genetic(&test_fitness, &initialise_circuit_v, &check_validity_dummy);
 	for (int i = 0; i < test_route.size(); i++)
 	{
 		if (test_route[i].num != Result.circuit_vector[i].num)

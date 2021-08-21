@@ -34,7 +34,7 @@ public:
 	void crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, int a, int b);
 	int selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 	//static void initialise_circuit_v(vector<C>& gen1, vector<C>& gen2, vector<C>& temp_gen);
-	result run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
+	result run_algorithm_genetic(std::function<double(C&)> fitness_func,
 		std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ);
 	// does it need to be vector d
 	int rt_size;
@@ -53,6 +53,6 @@ genetic_algorithm<Circuit, address_metadata>::genetic_algorithm(GA_param_list li
 void genetic_algorithm<Circuit, address_metadata>::crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, int a, int b);
 int  genetic_algorithm<Circuit, address_metadata>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 void genetic_algorithm<Circuit, address_metadata>::calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen);
-result genetic_algorithm<Circuit, address_metadata>::run_algorithm_genetic(int max_conv_cnt, std::function<double(Circuit&)> fitness_func,
+result genetic_algorithm<Circuit, address_metadata>::run_algorithm_genetic(std::function<double(Circuit&)> fitness_func,
 	std::function<void(vector<Circuit>&, vector<Circuit>&, vector<Circuit>&, vector<address_metadata>&, int)> initialise_gen_v, std::function<bool(Circuit&)> eval_circ);
 //template class genetic_algorithm<string, string>; // change
