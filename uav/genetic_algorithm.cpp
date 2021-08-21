@@ -362,9 +362,11 @@ template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
 	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
+
+#ifdef C_DATA
 	vector<double> performance_v;
 	vector<vector<D>> track_route_ov;
-
+#endif C_DATA
 
 	uniform_int_distribution<int> randunit(1, rt_size - 2);
 	default_random_engine generator(lista.seed);
@@ -393,10 +395,10 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 		// Store best performing circuit
 		elite_ind = std::distance(fitness_v.begin(), max_it);
 		new_gen[0] = gen[elite_ind];
-//#ifdef TEST
+#ifdef C_DATA
 		performance_v.push_back(1 / max);
 		track_route_ov.push_back(gen[elite_ind].route);
-//#endif
+#endif
 		if (((1 / max) - (1 / prev_max)) == 0)
 		{
 			conv_cnt++;
@@ -457,7 +459,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 		gen_cnt++;
 		std::swap(gen, new_gen);
 	}
-//#ifdef TEST
+#ifdef C_DATA
 
 	size_t route_gen_size = track_route_ov.size();
 	size_t perf_v_size = performance_v.size();
@@ -477,7 +479,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	}
 	myfile.close();
 
-//#endif
+#endif
 	return Result;
 }
 
