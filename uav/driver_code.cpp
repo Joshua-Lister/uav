@@ -162,12 +162,12 @@ double run_truck_tandem_drone(string drone_type)
 	GA_param_list f;
 	testnum = 6;
 	set_GA_params(f);
-	clustering cl = set_dummy_route(6);
+	vector<address_metadata> cl = set_dummy_route(6);
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	cl.add_depot(depot);
-	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
-	result Result = vb.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
+	/*cl.add_depot(depot);
+	genetic_algorithm<Circuit, address_metadata> vb(f, cl.centroids);
+	result Result = vb.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);*/
 	/*double total_mass, total_distance;
 	int no_of_drones_req = drone_clusters(cl.k, 2, cl.cluster_regions, Result.circuit_vector,
 			temp_drone_ptr->maximum_payload_capacity, temp_drone_ptr->maxiumum_distance, total_distance, total_mass);
@@ -184,10 +184,11 @@ result try_result()
 	GA_param_list f;
 	testnum = 6;
 	set_GA_params(f);
-	clustering cl = set_dummy_route(25);
+	vector<address_metadata> cl = set_dummy_route(25);
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	cl.add_depot(depot);
+	cl.push_back(depot);
+	cl.insert(cl.begin(), depot);
 	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
 	result Result = vb.run_algorithm_genetic(25, &fitness, &initialise_circuit_v, &check_validity_dummy);
 	return Result;

@@ -142,12 +142,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="driver_code.h" />
-    <ClInclude Include="string_GA.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="testclass.h" />
     <ClInclude Include="tsp_funcs.h" />
     <ClInclude Include="utility.h" />
-    <ClInclude Include="Charging_stations.h" />
     <ClInclude Include="Circuit.h" />
     <ClInclude Include="clustering.h" />
     <ClInclude Include="drone.h" />
@@ -161,11 +159,9 @@
   <ItemGroup>
     <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
-    <ClCompile Include="string_GA.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="testclass.cpp" />
     <ClCompile Include="utility.cpp" />
-    <ClCompile Include="Charging_stations.cpp" />
     <ClCompile Include="Circuit.cpp" />
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="drone.cpp" />

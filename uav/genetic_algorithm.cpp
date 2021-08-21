@@ -3,7 +3,7 @@
 uniform_real_distribution<double> rand_number(0, 1.0);
 
 template <class C, class D>
-genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1), rt_size(obj1.centroids.size())
+genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  vector<D>& path) : lista(lista), path(path), rt_size(path.size())
 {
 }
 
@@ -45,31 +45,18 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 	// DOES NOT WORK 17/07/21
 	//TAKE A LOOK AT THIS FUNCTION
 	child1.route.clear(); child2.route.clear();
-	//int s = rt_size - (b - a);
 	child1.route.resize(rt_size); child2.route.resize(rt_size);
 	child1.route[0] = parent1.route[0]; child1.route[rt_size - 1] = parent1.route[rt_size - 1];
 	child2.route[0] = parent2.route[0]; child2.route[rt_size - 1] = parent2.route[rt_size - 1];
-	//while ((a = rand() % rt_size - 1) == (b = rand() % rt_size - 1));
-	//uniform_int_distribution<int> randunit(1, rt_size - 2);
-	//a = randunit(generator);
-	////while ((b = randunit(generator)) == a && b == a - 1 && b == a + 1);
-	//while ((b = randunit(generator)) == a);
 
 	if (a > b) swap(a, b);
-	// something
-	/*vector<D> slice1(b - a);
-	vector<D> slice2(b - a);
-	int k = 0;
-	for (int j = a; j < b; j++)
-	{
-		slice1[k] = parent1.route[j];
-		k++;
-	}*/
+
 	for (int i = a; i < b; i++)
 	{
 		child1.route[i] = parent1.route[i];
 		child2.route[i] = parent2.route[i];
 	}
+
 	/*cout << "parent 1 : ";*/
 	//for (int i = 1; i < rt_size - 1; i++)
 	//{
@@ -376,7 +363,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
 	vector<double> performance_v;
-	vector<vector<address_metadata>> track_route_ov;
+	vector<vector<D>> track_route_ov;
 
 
 	uniform_int_distribution<int> randunit(1, rt_size - 2);
@@ -391,7 +378,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	double prev_max = -DBL_MAX;
 	double fitness_total = 0;
 
-	initialise_gen_v(gen, new_gen, temp_v, obj1.centroids, lista.generation_size); // change this lat one 
+	initialise_gen_v(gen, new_gen, temp_v, path, lista.generation_size); // change this lat one 
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
 	// reciporcal of fitness remember small distance is better
 	double max, min;

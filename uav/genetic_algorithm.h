@@ -23,7 +23,7 @@ class genetic_algorithm
 {
 public:
 	// address_metadata& depot, bool unique
-	genetic_algorithm(GA_param_list list, clustering obj1);
+	genetic_algorithm(GA_param_list list, vector<D>& path);
 	//genetic_algorithm(GA_param_list lista, string target_str);
 	~genetic_algorithm();
 	//static double fitness(Circuit& circ1);
@@ -38,7 +38,8 @@ public:
 		std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ);
 	// does it need to be vector d
 	int rt_size;
-	clustering obj1;
+	//clustering obj1;
+	vector<D> path;
 	//vector<double> distances;
 	vector<C> generation, new_generation;
 	GA_param_list lista;
@@ -48,7 +49,7 @@ public:
 
 
 template class genetic_algorithm<Circuit, address_metadata>;
-genetic_algorithm<Circuit, address_metadata>::genetic_algorithm(GA_param_list list, clustering obj1);
+genetic_algorithm<Circuit, address_metadata>::genetic_algorithm(GA_param_list list, vector<address_metadata>& path);
 void genetic_algorithm<Circuit, address_metadata>::crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, int a, int b);
 int  genetic_algorithm<Circuit, address_metadata>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
 void genetic_algorithm<Circuit, address_metadata>::calc_fitness(double& max, vector<double>::iterator& max_it, double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen);

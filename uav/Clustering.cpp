@@ -2,7 +2,7 @@
 
 clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) 
 {
-	centroids.resize(2);
+	centroids.resize(this->k);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
 	distances.resize(no_of_addresses);
 };
@@ -35,7 +35,7 @@ void clustering::set_rand_centroids(int k_val)
 	}
 }
 
-void clustering::K_means(int k_val, vector<float>& distances) 
+void clustering::K_means(int k_val, vector<double>& distances) 
 {
 	double distance;
 	distances.resize(no_of_addresses);
@@ -93,10 +93,7 @@ bool clustering::check_ids()
 	for (auto i : d.data) 
 	{
 		if (i.id == -1) { //If id = -1 the address id has not been correctly updated in K_means funciton 
-#ifdef TEST
 
-				cout << "Incorrect ID at num : " << i.num << " " << "(Clustering Error 1)" << "\n";
-#endif
 			return false;
 		}
 	}
@@ -141,7 +138,7 @@ void clustering::coord_insert_sort(vector<address_metadata>& arg1)
 		i++;
 	}
 }
-bool clustering::check_distances(vector<float>& check_d_v, double max_dist) 
+bool clustering::check_distances(vector<double>& check_d_v, double max_dist) 
 {
 	max_dist *= 0.5;
 	for (auto loc_distance : check_d_v)
@@ -155,7 +152,7 @@ void clustering::run_K_means()
 
 	bool in_range = false;
 	bool converge;
-	vector<float> distances_v;
+	vector<double> distances_v;
 	vector<address_metadata> track_centroids(2);
 	while (!in_range)
 	{ //continue all distances are within the flying distance

@@ -120,8 +120,8 @@ bool GA_optimisation_test_1()
 
 bool mutation_test_1()
 {
-	/*extern clustering test_route;
-	clustering copy_test_route = test_route;
+	/*extern vector<address_metadata>  test_route;
+	vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
@@ -135,8 +135,8 @@ bool mutation_test_1()
 
 bool mutation_test_2()
 {
-	//extern clustering test_route;
-	//clustering copy_test_route = test_route;
+	//extern vector<address_metadata>  test_route;
+	//vector<address_metadata>  copy_test_route = test_route;
 	//GA_param_list lstt;
 	//set_GA_params(lstt);
 	//genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
@@ -159,15 +159,16 @@ bool mutation_test_2()
 }
 bool crossover_test_1()
 {
-	extern clustering test_route;
-	clustering copy_test_route = test_route;
+	extern vector<address_metadata> test_route;
+	vector<address_metadata> copy_test_route = test_route;
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	copy_test_route.add_depot(depot);
+	copy_test_route.push_back(depot);
+	copy_test_route.insert(copy_test_route.begin(), depot);
 	vector<Circuit> c_v(4);
 	for (int i = 0; i < 4; i++)
 	{
-		c_v[i] = Circuit(copy_test_route.centroids, false);
+		c_v[i] = Circuit(copy_test_route, false);
 		c_v[i].mix(c_v[i].route);
     }
 	GA_param_list lstt;
@@ -186,15 +187,16 @@ bool crossover_test_1()
 }
 bool crossover_test_2()
 {
-	extern clustering test_route;
-	clustering copy_test_route = test_route;
+	extern vector<address_metadata>  test_route;
+	vector<address_metadata> copy_test_route = test_route;
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	copy_test_route.add_depot(depot);
+	copy_test_route.push_back(depot);
+	copy_test_route.insert(copy_test_route.begin(), depot);
 	vector<Circuit> c_v(4);
 	for (int i = 0; i < 4; i++)
 	{
-		c_v[i] = Circuit(copy_test_route.centroids, true);
+		c_v[i] = Circuit(copy_test_route, true);
 	}
 	std::reverse(c_v[1].route.begin(), c_v[1].route.end());
 	GA_param_list lstt;
@@ -221,21 +223,22 @@ bool GA_optimisation_test_2()
 {
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	extern clustering test_route;
-	test_route.add_depot(depot);
-	clustering copy_test_route = test_route;
-	for (int i = 2; i < test_route.centroids.size() - 1; i++)
+	extern vector<address_metadata> test_route;
+	vector<address_metadata>  copy_test_route = test_route;
+	/*copy_test_route.push_back(depot);
+	copy_test_route.insert(copy_test_route.begin(), depot);*/
+	for (int i = 2; i < test_route.size() - 1; i++)
 	{
-		swap(copy_test_route.centroids[i], copy_test_route.centroids[i - 1]);
+		swap(copy_test_route[i], copy_test_route[i - 1]);
 	}
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	lstt.max_generation = 200;
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	result Result = GA_test.run_algorithm_genetic(10, &test_fitness, &initialise_circuit_v, &check_validity_dummy);
-	for (int i = 0; i < test_route.centroids.size(); i++)
+	for (int i = 0; i < test_route.size(); i++)
 	{
-		if (test_route.centroids[i].num != Result.circuit_vector[i].num)
+		if (test_route[i].num != Result.circuit_vector[i].num)
 		{
 			return false;
 		}
