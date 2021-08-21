@@ -38,8 +38,8 @@ void setup_drones(int number_of_drones, string type)
 //}
 void set_GA_params(GA_param_list& lst)
 {
-	lst.generation_size = 14;
-	lst.max_generation = 16;
+	lst.generation_size = 20;
+	lst.max_generation = 150;
 	lst.crossover_prob = 0.5;
 	lst.max_iterations = 30;
 	lst.mutation_prob = 0.1;
@@ -136,7 +136,7 @@ int drone_clusters(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data
 }
 double run_truck_tandem_drone(string drone_type)
 {
-	cout << "Running truck & tandem drone method\n";
+	/*cout << "Running truck & tandem drone method\n";
 	testnum = 1;
 	std::unique_ptr<drone> temp_drone_ptr = nullptr;
 	read_data tets("postal_data.txt");
@@ -158,17 +158,40 @@ double run_truck_tandem_drone(string drone_type)
 	set_GA_params(f);
 	testnum = 7;
 	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
-	testnum = 8;
+	testnum = 8;*/
+	GA_param_list f;
+	testnum = 6;
+	set_GA_params(f);
+	clustering cl = set_dummy_route(6);
+	address_metadata depot;
+	depot.x_coord = 1.3, depot.y_coord = 1.3;
+	cl.add_depot(depot);
+	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
 	result Result = vb.run_algorithm_genetic(10, &fitness, &initialise_circuit_v, &check_truck_route_validity);
-	double total_mass, total_distance;
+	/*double total_mass, total_distance;
 	int no_of_drones_req = drone_clusters(cl.k, 2, cl.cluster_regions, Result.circuit_vector,
 			temp_drone_ptr->maximum_payload_capacity, temp_drone_ptr->maxiumum_distance, total_distance, total_mass);
 
 	
-	setup_drones(no_of_drones_req, "rural");
-	return total_cost_rural(no_of_drones_req, temp_drone_ptr->battery_energy, Result.optimal_performance,1 ,1 , 1);
+	setup_drones(no_of_drones_req, "rural");*/
+	//return total_cost_rural(no_of_drones_req, temp_drone_ptr->battery_energy, Result.optimal_performance,1 ,1 , 1);
+	return 1.0;
 
 	
+}
+result try_result()
+{
+	GA_param_list f;
+	testnum = 6;
+	set_GA_params(f);
+	clustering cl = set_dummy_route(25);
+	address_metadata depot;
+	depot.x_coord = 1.3, depot.y_coord = 1.3;
+	cl.add_depot(depot);
+	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
+	result Result = vb.run_algorithm_genetic(25, &fitness, &initialise_circuit_v, &check_validity_dummy);
+	return Result;
+
 }
 void try_str()
 {

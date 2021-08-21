@@ -13,7 +13,7 @@ double fitness(Circuit& circ1)
 	size_t rt_length = circ1.route.size();
 	double f = 0;
 	for (int i = 1; i < rt_length; i++)
-		f += utility::length(circ1.route[i], circ1.route[i - 1]);
+		f += std::sqrt(utility::length(circ1.route[i], circ1.route[i - 1]));
 	return  1.0 / f;
 }
 clustering set_dummy_route(int rt_length)

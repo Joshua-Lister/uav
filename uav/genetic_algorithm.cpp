@@ -1,19 +1,11 @@
 #include "genetic_algorithm.h"
 
-template <class C, class D>
-genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1)
-{
-	rt_size = obj1.centroids.size();
-}
-
-//template <class C, class D>
-//genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista, string target_str) :lista(lista)
-//{
-//
-//	rt_size = target_str.size();
-//
-//};
 uniform_real_distribution<double> rand_number(0, 1.0);
+
+template <class C, class D>
+genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  clustering obj1) : lista(lista), obj1(obj1), rt_size(obj1.centroids.size())
+{
+}
 
 template <class C, class D>
 genetic_algorithm<C, D>::~genetic_algorithm(){}
@@ -40,11 +32,13 @@ bool genetic_algorithm<C, D>::approx_equal(double a, double b, double eps)
 {
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * eps);
 }
-// template class class__<int>
+
+
 bool operator ==(const address_metadata& c1, const address_metadata& c2)
 {
 	return (c1.num == c2.num);
 }
+
 template <class C, class D>
 void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, int a, int b)
 {
@@ -255,7 +249,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 			s = child1.route.size();
 		}
 	}*/
-int j = 1, k = 1;
+	int j = 1, k = 1;
 	for (int i = 1; i < rt_size - 1; i++)
 	{
 		if (j == a)
@@ -277,18 +271,6 @@ int j = 1, k = 1;
 			k++;
 		}
 	}
-
-	/*cout << "\nchild 1 : ";
-	for (int i = 1; i < rt_size - 1; i++)
-	{
-		cerr << child1.route[i].num << " ";
-	}
-	cout << "\nchild 2 : ";
-	for (int i = 1; i < rt_size - 1; i++)
-	{
-		cerr << child2.route[i].num << " ";
-	}
-	cout << "\n";*/
 }
 
 
@@ -349,7 +331,7 @@ void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator
 	cout << "\n";*/
 }
 template <class C, class D>
-void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, default_random_engine& generator)
+void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, std::default_random_engine& generator)
 {
 	int idx1, idx2;
 	for (int idx = 1; idx < rt_size - 1; idx++) 
@@ -387,22 +369,17 @@ int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation
 	std::uniform_int_distribution<int> randgen(0, generation_size - 1);
 	return randgen(generator);
 }
-//template <class C>
-//void genetic_algorithm<C>::initialise_circuit_v(vector<C>& gen1, vector<C>& gen2, vector<C>& temp_gen)
-//{
-//	for (int i = 0; i < lista.generation_size + 1; i++) {
-//		gen1[i] = Circuit(obj1.centroids, false);
-//		gen2[i] = Circuit(obj1.centroids, true);
-//	}
-//	for (int i = 0; i < 2; i++)
-//		temp_gen[i] = Circuit(obj1.centroids, true);
-//}
+
 
 template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::function<double(C&)> fitness_func,
 	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
-	//lista.generation_size++;
+	vector<double> performance_v;
+	vector<vector<address_metadata>> track_route_ov;
+
+
+	uniform_int_distribution<int> randunit(1, rt_size - 2);
 	default_random_engine generator(lista.seed);
 	uniform_int_distribution<int> randgen(0, lista.generation_size - 1);
 	vector<C> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
@@ -419,20 +396,21 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 	// reciporcal of fitness remember small distance is better
 	double max, min;
 	vector<double>::iterator max_it;
+
 	while (gen_cnt <= lista.max_generation) 
 	{
 		for (int i = 0; i < lista.generation_size; i++)
 			fitness_v[i] = fitness_func(gen[i]);
+
 		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
 		// Store best performing circuit
 		elite_ind = std::distance(fitness_v.begin(), max_it);
 		new_gen[0] = gen[elite_ind];
-#ifdef TEST
-		performance_v.push_back(max);
-		track_route_ov_g.push_back(gen[elite_ind].route);
-#endif
-
-		if (std::abs(max - prev_max) < lista.tolerance)
+//#ifdef TEST
+		performance_v.push_back(1 / max);
+		track_route_ov.push_back(gen[elite_ind].route);
+//#endif
+		if (((1 / max) - (1 / prev_max)) == 0)
 		{
 			conv_cnt++;
 		}
@@ -446,63 +424,73 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(int max_conv_cnt, std::fun
 		{
 			Result.iteration = gen_cnt;
 			Result.circuit_vector = gen[elite_ind].route;
-			Result.optimal_performance = max;
+			Result.optimal_performance = 1 / max;
 			break;
 		}
 
 		n = 1;
+
 		while (n < lista.generation_size)
 		{
 			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
+
 			double random_number = rand_number(generator);
+
 			if (random_number < lista.crossover_prob)
 			{ // change
 				int a, b;
-				uniform_int_distribution<int> randunit(1, rt_size - 2);
 				a = randunit(generator);
 				while ((b = randunit(generator)) == a);
 				crossover_ordered(gen[ind1], gen[ind2], temp_v[0], temp_v[1], a, b);
 			}
+
 			else
 			{
 				temp_v[0] = gen[ind1];
 				temp_v[1] = gen[ind2];
 			}
+
 			mutation(temp_v[0], lista.mutation_prob, generator);
 			mutation(temp_v[1], lista.mutation_prob, generator);
+
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[0];
 					n++;
 			}
+
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[1];
 					n++;
 			}
 		}
+
 		gen_cnt++;
 		std::swap(gen, new_gen);
 	}
-#ifdef TEST
+//#ifdef TEST
 
-	size_t route_gen_size = track_route_ov_g.size();
+	size_t route_gen_size = track_route_ov.size();
 	size_t perf_v_size = performance_v.size();
 	ofstream myfile;
 	myfile.open("Routes.txt");
-	myfile << "Route size" << " " << "Generations\n";
-	myfile << rt_size << " " << perf_v_size << "\n";
-	myfile << "X-Coordinate " <<  "Y-Coordinate " << "Route Distance " << "Generation Number\n";
-	for (int i = 0 i < perf_v_size; i++)
+	myfile << "Route_size" << " " << "Generations " << "Convergence_count " << "Generation_count" << "\n";
+	myfile << rt_size << " " << perf_v_size  << " " << conv_cnt <<  " " << gen_cnt << "\n";
+	for (int i = 0; i < track_route_ov.size(); i++)
 	{
-		for (int j = 0; i < rt_size; j++)
-			myfile << track_route_ov_g[i][j].route.x_coord << " " << track_route_ov_g[i][j].route.y_coord << " ";
-		myfile << performance_v[i] << " " << i << "\n";
+		for (int j = 0; j < track_route_ov[i].size(); j++)
+		{
+			myfile << track_route_ov[i][j].x_coord << " " << track_route_ov[i][j].y_coord << " ";
+		}
+		myfile << performance_v[i] << " ";
+		myfile << i;
+		myfile << std::endl;
 	}
 	myfile.close();
 
-#endif
+//#endif
 	return Result;
 }
 

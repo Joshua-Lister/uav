@@ -180,6 +180,7 @@
   <ItemGroup>
     <Text Include="output_csv.txt" />
     <Text Include="postal_data.txt" />
+    <Text Include="Routes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

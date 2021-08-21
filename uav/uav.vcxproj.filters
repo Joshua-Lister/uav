@@ -127,5 +127,8 @@
     <Text Include="output_csv.txt">
       <Filter>Header Files\Resource Files</Filter>
     </Text>
+    <Text Include="Routes.txt">
+      <Filter>Header Files\Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

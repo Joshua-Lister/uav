@@ -32,7 +32,7 @@ public:
 	read_data d;
 	double min_distance;
 	vector<double> points;
-	vector<float> distances;
+	vector<double> distances;
 	vector<size_t> no_of_points;
 	vector<double> easting_sum, northing_sum;
 	vector<address_metadata> centroids, centroid_track;

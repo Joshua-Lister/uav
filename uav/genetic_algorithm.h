@@ -42,10 +42,8 @@ public:
 	//vector<double> distances;
 	vector<C> generation, new_generation;
 	GA_param_list lista;
-#ifdef TEST
-	vector<double> performance_v;
-	vector<vector<C>> track_route_ov_g;
-#endif
+//#ifdef TEST
+//#endif
 };
 
 

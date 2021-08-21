@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /uav/string_GA.cpp
 /uav/string_GA.h
+/uav/Routes.txt

@@ -11,4 +11,5 @@ void set_GA_params(GA_param_list& lst);
 int drone_clusters(int k, int part_size, vector<unique_ptr<address_metadata>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
 	double max_dist);
 double run_truck_tandem_drone(string drone_type);
+result try_result();
 void try_str();

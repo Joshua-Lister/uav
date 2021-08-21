@@ -12,7 +12,9 @@ clustering::clustering(int c_size)
 {
 	centroids.resize(c_size);
 }
-clustering::clustering(const clustering& cp)
+
+//Copy constructor
+clustering::clustering(const clustering& cp) 
 {
 	centroids = cp.centroids;
 }
@@ -35,11 +37,11 @@ void clustering::set_rand_centroids(int k_val)
 
 void clustering::K_means(int k_val, vector<float>& distances) 
 {
-	float distance;
+	double distance;
 	distances.resize(no_of_addresses);
 	for (auto adr_no = 0; adr_no < no_of_addresses; adr_no++) 
 	{
-		min_distance = FLT_MAX; // Assigning to maximum value to ensure if statement condition is true for first iteration of second for loop
+		min_distance = DBL_MAX; // Assigning to maximum value to ensure if statement condition is true for first iteration of second for loop
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) 
 		{
 			distance = std::sqrt(utility::length(d.data[adr_no], centroids[cluster_no]));// change this why??
@@ -141,15 +143,16 @@ void clustering::coord_insert_sort(vector<address_metadata>& arg1)
 }
 bool clustering::check_distances(vector<float>& check_d_v, double max_dist) 
 {
+	max_dist *= 0.5;
 	for (auto loc_distance : check_d_v)
 		if (loc_distance > max_dist) //Distance between centroid and address greater than max distance of drone return false
 			return false;
 	return true;
-} // NEED SQRT IN  DISTANCE FUNCTION ACUTALLY DON'T NEED IT JUST SQUARE THE DRONE MAXIMUM DISTANCE
-// need to add depot 
+}
+
 void clustering::run_K_means() 
 {
-	// come back to ordering of while loops
+
 	bool in_range = false;
 	bool converge;
 	vector<float> distances_v;
