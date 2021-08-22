@@ -212,14 +212,22 @@ void clustering::group_clusters()
 
 void clustering::add_depot(address_metadata dep)
 {
+	dep.depot = true;
 	this->centroids.push_back(dep);
 	this->centroids.insert(centroids.begin(), dep);
 	
+}
+
+void clustering::add_depot()
+{
+	address_metadata default_dep;
+	default_dep.x_coord = 0;
+	default_dep.y_coord = 0;
+	default_dep.depot = true;
 }
 
 void clustering::run_clustering(address_metadata dep)
 {
 	run_K_means();
 	group_clusters();
-	add_depot(dep);
 }

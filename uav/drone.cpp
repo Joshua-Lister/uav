@@ -85,3 +85,4 @@ double drone::return_battery_energy_capacity()
 {
 	return 0; //this->battery_energy_capacity;
 }
+

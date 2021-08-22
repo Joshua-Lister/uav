@@ -25,7 +25,8 @@ public:
 	void run_K_means();
 	void group_clusters();
 	void add_depot(address_metadata dep);
-	void run_clustering(address_metadata dep);
+	void add_depot();
+	void run_clustering();
 	bool check_ids();
 	static bool stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2);
 	int k = 2;
