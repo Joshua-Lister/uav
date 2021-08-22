@@ -98,9 +98,6 @@
     <ClCompile Include="tsp_funcs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="depot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="driver_code.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

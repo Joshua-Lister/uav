@@ -12,7 +12,7 @@
 class clustering
 {
 public:
-	clustering(read_data& d);
+	clustering(read_data& d, int max_distance);
 	clustering(int c_size);
 	clustering(const clustering& cp);
 	~clustering();

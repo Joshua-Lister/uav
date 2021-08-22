@@ -158,7 +158,6 @@
     <ClInclude Include="urban_drone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="depot.cpp" />
     <ClCompile Include="driver_code.cpp" />
     <ClCompile Include="intersection.cpp" />
     <ClCompile Include="test.cpp" />

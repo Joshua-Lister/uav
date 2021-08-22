@@ -5,7 +5,10 @@ drone::drone(double maximum_battery_time, double maximum_payload_capacity, doubl
 	int rotors): maximum_battery_time(maximum_battery_time),  drone_mass(drone_mass),
 	payload(payload) {};
 
-drone::drone() :  rotors(6) {};
+drone::drone(double payload, double max_flight_time) : maximum_battery_time(30), maximum_payload_capacity(5), drone_mass(4), rotors(6){};
+
+drone::drone() {};
+
 drone::~drone() {};
 // linear energy consumption model that energy consumptions increases linearly with battery and payload weight.
 // consume same power whether hovering or flying at constant spee

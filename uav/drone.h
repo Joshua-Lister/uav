@@ -37,6 +37,7 @@ protected:
 public:
 	drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
 		int rotors);
+	drone(double payload, double max_flight_time);
 	drone();
 	~drone();
 	void set_h_velocity_drone(double m_h_v);
@@ -44,9 +45,9 @@ public:
 	//virtual bool energy_flight_constraint(double L) = 0;
 
 	virtual bool energy_flight_constraint(double L) = 0;
-	virtual std::tuple<int, int, int, int> drone_delivery(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
+	virtual std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
 		double max_dist) = 0;
-	virtual void set_up_drones(int number_of_drones) = 0;
+	//virtual void set_up_drones(int number_of_drones) = 0;
 	double time_to_charge();
 	double power_consumption();
 	void set_battery_time(double t);

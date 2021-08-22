@@ -1,6 +1,6 @@
 #include "clustering.h"
 
-clustering::clustering(read_data& d) : d(d), no_of_addresses(d.no_of_addresses) 
+clustering::clustering(read_data& d, int max_distance = 500) : d(d), no_of_addresses(d.no_of_addresses) 
 {
 	centroids.resize(this->k);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);

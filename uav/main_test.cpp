@@ -13,6 +13,7 @@
 #include <chrono>
 #include "driver_code.h"
 #include "test.h"
+#include "intersection.h"
 //using namespace std;
 
 int testnum = 0;
@@ -23,7 +24,6 @@ int run_main()
 	//run_truck_tandem_drone("rural");
 	//TestClass test_software("Drone Delivery Software");
 	//test_software.run_tests();
-	run_tests();
 	//try_str();
 	//result R = try_result();
 	return 0;

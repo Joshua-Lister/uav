@@ -4,13 +4,11 @@
 //int rotors){}
 rural_drone::rural_drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
 	int rotors) : drone(){}
-rural_drone::~rural_drone()
-{
-	for (int i = 0; i < number_of_drones; i++)
-	{
-		delete[] drone_v_u[i];
-	}
-}
+
+rural_drone::rural_drone() : drone() {}
+
+rural_drone::~rural_drone(){}
+
 bool rural_drone::energy_flight_constraint(double L)
 {
 	/*double energy1 = power_consumption() * (L / horizontal_max_velocity);
@@ -18,7 +16,7 @@ bool rural_drone::energy_flight_constraint(double L)
 	return true;
 }
 
-std::tuple<int, int, int, int> rural_drone::drone_delivery(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap, double max_dist)
+std::tuple<int, int, int, int> rural_drone::drone_multi_delivery(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap, double max_dist)
 {
 	int cnt, cnt2, j;
 	int centroid_id;
@@ -54,7 +52,7 @@ std::tuple<int, int, int, int> rural_drone::drone_delivery(int k, int ad_adr, ve
 
 			total_dist_v[cnt] = utility::length(opt_route[i], *cl_data[centroid_id][j]); //Calculate distance from centroid(id = i) to address with matching id
 			
-			for (int adr = j; adr < adr + ad_adr; adr++)
+			for (int adr = j; adr < j + ad_adr; adr++)
 			{ //Iterate over user given part_size (potential maximum number of addresses a single drone can visit)
 				// if cluster only contains one address this doesn't work
 				total_dist_v[cnt] = utility::length(*cl_data[centroid_id][adr], *cl_data[centroid_id][adr + 1]); //Calculate distance between addresses
@@ -86,6 +84,9 @@ std::tuple<int, int, int, int> rural_drone::drone_delivery(int k, int ad_adr, ve
 			if (temp_num_of_addresses_mass == 1)
 			{
 				sum_d = 2. * utility::length(*cl_data[centroid_id][j], opt_route[i]); // check indexing
+				rural_drone uav;
+				set_up_single_drone(uav, opt_route[i], sum_m);
+				drone_v_u.push_back(uav);
 			}
 
 			else if (temp_num_of_addresses_mass == 0)
@@ -115,29 +116,51 @@ std::tuple<int, int, int, int> rural_drone::drone_delivery(int k, int ad_adr, ve
 				for (int k = j; k < lowest_num + j; k++)
 				{
 					cl_data[i][k]->visited = true;
+
 				}
+				
+				rural_drone uav;
+				set_up_single_drone(uav, opt_route[i], sum_m);
+				drone_v_u_m.push_back(uav);
 				
 				all_distances += sum_d;
 				all_masses += sum_m;
 				number_of_addresses += lowest_num;
 				number_of_drones++;
 				j += lowest_num;
-
-
 			}
+
 		}
 
 	}
 	return std::tuple<int, int, int, int>(all_distances, all_masses, number_of_addresses, number_of_drones);
 }
 
-void rural_drone::set_up_drones(int number_of_drones)
+void rural_drone::set_up_single_drone(rural_drone& uav, address_metadata arg, double mass_sum)
 {
-	this->number_of_drones = number_of_drones;
+	/*this->number_of_drones = number_of_drones;
 	for (int i = 0; i < number_of_drones; i++) {
 		this->drone_v_u[i] = new rural_drone(this->maximum_battery_time, this->maximum_payload_capacity, this->drone_mass,
-			this->payload, this->max_flight_time, this->rotors);
+			this->payload, this->max_flight_time, this->rotors);*/
+	uav.update_payload("Load", mass_sum);
+	uav.x_coord = arg.x_coord;
+	uav.y_coord = arg.y_coord;
 }
+
+void rural_drone::singular_flight(int k, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route)
+{
+
+	for (int i = 0; i < k; i++)
+	{
+		for (int j = 0; j < cl_data[i].size(); j++)
+		{
+			rural_drone uav;
+			set_up_single_drone(uav, opt_route[i], cl_data[i][k]->parcel_mass);
+			drone_v_u.push_back(uav);
+		}
+	}
+}
+
 
 
 		

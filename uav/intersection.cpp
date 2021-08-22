@@ -14,10 +14,13 @@ void intersection::set_GA_params(GA_param_list& lst)
 	lst.tolerance = 1.0e-3;
 }
 
+
 double intersection::run_truck_tandem_drone(string drone_type)
 {
 	cout << "Running truck & tandem drone method with drone type " << drone_type << "\n";
-	std::unique_ptr<drone> temp_drone_ptr = nullptr;
+	int additional_adr = 2;
+	double max_flight_distance = 1000; // in metres
+	rural_drone arcadian_drone;
 	read_data rd("postal_data.txt");
 	rd.fill_data();
 	clustering cl(rd);
@@ -27,8 +30,9 @@ double intersection::run_truck_tandem_drone(string drone_type)
 	set_GA_params(set_params);
 	genetic_algorithm<Circuit, address_metadata> tsp_ga(set_params, cl.centroids);
 	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
-	int no_of_drones_req = drone_delivery1(cl.k, 2, cl.cluster_regions, Result.circuit_vector,
-			temp_drone_ptr->maximum_payload_capacity, temp_drone_ptr->maxiumum_distance, total_distance, total_mass);
+	arcadian_drone.drone_multi_delivery(cl.k, additional_adr, cl.cluster_regions,  Result.circuit_vector, )
+
+
 	//truck t1(no_of_drones_req);
 	
 

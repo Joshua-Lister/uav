@@ -313,9 +313,6 @@ void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator
 		fitness_v[i] = (fitness_v[i] - min) / (max - min + 1e-6); // max and in are -nan
 		fitness_total += fitness_v[i];
 	}
-	/*for (auto i : fitness_v)
-		cout << i << "\t";
-	cout << "\n";*/
 }
 template <class C, class D>
 void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, std::default_random_engine& generator)
