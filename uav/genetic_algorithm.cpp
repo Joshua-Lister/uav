@@ -3,12 +3,12 @@
 uniform_real_distribution<double> rand_number(0, 1.0);
 
 template <class C, class D>
-genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista,  vector<D>& path) : lista(lista), path(path), rt_size(path.size())
+genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista, vector<D>& path) : lista(lista), path(path), rt_size(path.size())
 {
 }
 
 template <class C, class D>
-genetic_algorithm<C, D>::~genetic_algorithm(){}
+genetic_algorithm<C, D>::~genetic_algorithm() {}
 
 //template <class T, class circumnaviation, class param_list>
 //void genetic_algorithm<T, circumnaviation, param_list>::calc_velocities() {
@@ -28,7 +28,7 @@ genetic_algorithm<C, D>::~genetic_algorithm(){}
 //}
 
 template <class C, class D>
-bool genetic_algorithm<C, D>::approx_equal(double a, double b, double eps) 
+bool genetic_algorithm<C, D>::approx_equal(double a, double b, double eps)
 {
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * eps);
 }
@@ -57,185 +57,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 		child2.route[i] = parent2.route[i];
 	}
 
-	/*cout << "parent 1 : ";*/
-	//for (int i = 1; i < rt_size - 1; i++)
-	//{
-	//	cerr << parent1.route[i].num << " ";
 
-	//}
-	//cout << "\nparent 2 : ";
-	//for (int i = 1; i < rt_size - 1; i++)
-	//{
-	//	cerr << parent2.route[i].num << " ";
-	//}
-	//cout << "\nchild1 slice : ";
-	//for (int i = a; i < b; i++)
-	//{
-	//	cerr << child1.route[i].num << " ";
-	//}
-	//cout << "\nchild2 slice : ";
-	//for (int i = a; i < b; i++)
-	//{
-	//	cerr << child2.route[i].num << " ";
-	//}
-	/*int j = 0;
-	for (int i = a; i < b; i++)
-	{
-		slice_ptr1[j] = &parent1.route[i];
-		slice_ptr2[j] = &parent2.route[i];
-	}*/
-	/*cout << "parent 1 : ";
-	for (int i = 1; i < rt_size - 1; i++)
-	{
-		cerr << parent1.route[i].num << " ";
-
-	}
-	cout << "\nparent 2 : ";
-	for (int i = 1; i < rt_size - 1; i++)
-	{
-		cerr << parent2.route[i].num << " ";
-	}
-	cout << "\nchild 1 : ";
-	for (int i = 1; i < rt_size - 1; i++)
-	{
-		cerr << child1.route[i].num << " ";
-	}
-	cout << "\n";*/
-	////shortest difference between any pairs of routes. Find shortest route between one point on graph and another
-	//for (int i = 1; i < a; i++) 
-	//{
-	//	int j = i;
-	//	while (child1.route[i].num == -1)
-	//	{
-	//		if (utility::find(child1.route, parent2.route[j], a, b))
-	//		{
-	//			child1.route[i] = parent2.route[j];
-	//			break;
-	//		}
-	//		j++;
-
-	//	}
-	//	while (child2.route[i].num == -1)
-	//	{
-	//		if (utility::find(child2.route, parent1.route[j], a, b))
-	//		{
-	//			child2.route[i] = parent1.route[j];
-	//			break;
-	//		}
-	//		j++;
-	//	}
-	//}
-	//for (int i = b; i < rt_size; i++) 
-	//{
-	//	
-	//	if (utility::find(child1.route, parent2.route[i], a, b))
-	//		child1.route[i] = parent2.route[i];
-	//	
-	//	if (utility::find(child2.route, parent1.route[i], a, b))
-	//		child2.route[i] = parent1.route[i];
-	////}
-	//int i = 1, pos = 0;
-	//while (i < rt_size - 1)
-	//{
-	//	if (utility::find(child1.route, parent2.route[i], a, b))
-	//	{
-	//		child1.route[i] = parent2.route[i];
-	//		i++;
-	//	}
-	//	else
-	//	{
-	//		while (!utility::find(child1.route, parent2.route[i], a, b))
-	//		{
-	//			i++;
-	//		}
-	//		child1.route[i] = parent2.route[i];
-	//		i++;
-	//	}
-
-	//}
-	/*int idx1 = -1, idx2 = -1;
-	vector<int> index_track1(rt_size - 1);
-	vector<int> index_track2(rt_size - 1);
-	int pos1 = 0, pos2 = 0;
-	for (int i = a; i < b; i++)
-	{
-		if (utility::find(parent2.route, child1.route[i], 1, (rt_size - 1), idx1))
-		{
-			index_track1[i] = idx1;
-		}
-		if (utility::find(parent1.route, child2.route[i], 1, (rt_size - 1), idx2))
-		{
-			index_track2[i] = idx2;
-		}
-	}
-	int j = 1;
-	for (int i = 1; i < a + 1; i++)
-	{
-		while (utility::in(index_track1, i))
-		{
-			i++;
-		}
-		child1.route[j] = parent2.route[i];
-		j++;
-	}
-	j = b;
-	for (int i = b; i < rt_size - 1; i++)
-	{
-		while (utility::in(index_track1, i))
-		{
-			i++;
-		}
-		child1.route[j] = parent2.route[i];
-		j++;
-	}*/
-	//for (int i = 1; i < rt_size - 1; i++)
-	//{
-	//	if (utility::in(index_track2, i))
-	//	{
-	//		continue;
-	//	}
-	//	else
-	//	{
-	//		child2.route[i] = parent1.route[i];
-	//	}
-	//}
-
-	/*for (int i = 1; i < rt_size - 1; i++)
-	{
-		int dx = (b - 1 + i) % (rt_size - 1);
-	}*/
-	/*int j = 1;
-	for (int i = 1; i < a; i++)
-	{
-		while (utility::in(child1.route, a, b, parent2.route[i]))
-		{
-			i++;
-		}
-		child1.route[j] = parent2.route[i];
-		j++;
-	}
-	j = b;
-	for (int i = b; i < rt_size - 1; i++)
-	{
-		while (utility::in(child1.route, a, b, parent2.route[i]))
-		{
-			i++;
-		}
-		child1.route[j] = parent2.route[i];
-		j++;
-	}*/
-	/*for (int i = 1; i < rt_size - 1; i++)
-	{
-		if (!utility::in(slice1, 0, slice1.size(), parent2.route[i]))
-		{
-			child1.route[i] = parent2.route[i];
-		}
-		if (i == a)
-		{
-			child1.route.insert(child1.route.end(), slice1.begin(), slice1.end());
-			s = child1.route.size();
-		}
-	}*/
 	int j = 1, k = 1;
 	for (int i = 1; i < rt_size - 1; i++)
 	{
@@ -260,72 +82,101 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 	}
 }
 
+template<class C, class D>
+void genetic_algorithm<C, D>::crossover_standard(C& parent1, C& parent2, C& child1, C& child2, int a, int b)
+{
+	for (int i = 1; i < rt_size - 1; i++)
+	{
+		// Exchange the numbers of parent1 and parent2 front of the range (a, b)
+		if (i < a)
+		{
+			child2.route[i] = parent1.route[i];
+			child1.route[i] = parent2.route[i];
+		}
+
+
+		// Exchange the numbers of parent1 and parent2 rear of the range (a, b)
+		else if ((a != b) && (i >= b))
+		{
+			child2.route[i] = parent1.route[i];
+			child1.route[i] = parent2.route[i];
+		}
+
+		// Keep the numbers of parent1 and parent2 between the range (a, b)
+		else
+		{
+			child1.route[i] = parent1.route[i];
+			child2.route[i] = parent2.route[i];
+		}
+	}
+}
+
 
 //template <class Circuit>
 //void genetic_algorithm::crossover_collision(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, default_random_engine& generator)
 //{
-	/*for (int i = 0; i < rt_size; i++) 
+	/*for (int i = 0; i < rt_size; i++)
 	{
-		if (!approx_equal(parent1.route[i], parent2.route[i], 1e-6) 
+		if (!approx_equal(parent1.route[i], parent2.route[i], 1e-6)
 		{
 			if (parent1.route[i] > parent2.route[i])
 			{
 				child1.route[i] = parent1.route[i];
 			}
-			else 
+			else
 			{
 				child2.route[i] = parent2.route[i];
 			}
 		}
-		else 
+		else
 		{
 			int r = rand() % 2;
-			if (r == 0) 
+			if (r == 0)
 			{
 				child1.velocity_v[i] = 0;
 				child2.velocity_v[i] = 0;
 			}
-			else 
+			else
 			{
 			child1.velocity_v[i] = -(parent1.velocity_v[i]);
 			child2.velocity_v[i] = -(parent2.velocity_v[i]);
 			}
 		}
 	}*/
-//}
+	//}
 
-//void genetic_algorithm::multi_point_crossover(int no_pivots) 
-//{
-//	vector<int> partitions(no_pivots);
-//	for (int i = 0; i < no_pivots; i++)
-//
-//
-//}
+	//void genetic_algorithm::multi_point_crossover(int no_pivots) 
+	//{
+	//	vector<int> partitions(no_pivots);
+	//	for (int i = 0; i < no_pivots; i++)
+	//
+	//
+	//}
 template <class C, class D>
-void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator& max_it, 
-	double& min, double& fitness_total, vector<double>& fitness_v, vector<Circuit>& gen)
+void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator& max_it,
+	double& min, double& fitness_total, vector<double>& fitness_v, vector<C>& gen)
 {
 	max_it = std::max_element(fitness_v.begin(), fitness_v.end());
 	max = *max_it;
 	min = *(std::min_element(fitness_v.begin(), fitness_v.end()));
-	for (int i = 0; i < lista.generation_size; i++) 
+	for (int i = 0; i < lista.generation_size; i++)
 	{
 		fitness_v[i] = (fitness_v[i] - min) / (max - min + 1e-6); // max and in are -nan
 		fitness_total += fitness_v[i];
 	}
 }
 template <class C, class D>
-void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, std::default_random_engine& generator)
+void genetic_algorithm<C, D>::partial_shuffle_mutation(C& circ, const double mutation_prob, std::default_random_engine& generator)
 {
 	int idx1, idx2;
-	for (int idx = 1; idx < rt_size - 1; idx++) 
+	for (int idx = 1; idx < rt_size - 1; idx++)
 	{
 		double rn = rand_number(generator);
-		if (rn < mutation_prob) 
+		if (rn < mutation_prob)
 		{
 			uniform_int_distribution<int> randunit(1, rt_size - 2);
 			idx1 = randunit(generator);
-			do 
+			do
 			{
 				idx2 = randunit(generator);
 			} while (idx1 == idx2);
@@ -335,6 +186,38 @@ void genetic_algorithm<C, D>::mutation(C& circ, const double mutation_prob, std:
 		}
 	}
 }
+
+template<class C, class D>
+void genetic_algorithm<C, D>::rs_mutation(C& circ, double mutation_prob, std::default_random_engine& generator)
+{
+	if (rand_number(generator) < mutation_prob)
+	{
+		uniform_int_distribution<int> randunit(1, rt_size - 2);
+		int a = randunit(generator);
+		int b;
+		do
+		{
+			b = randunit(generator);
+		} while (a == b);
+		if (a > b) swap(a, b);
+		reverse((circ.route.begin() + a), (circ.route.begin() + b));
+	}
+}
+
+template<class C, class D>
+void genetic_algorithm<C, D>::point_mutation(C& circ, double mutation_prob, std::default_random_engine& generator)
+{
+	uniform_int_distribution<int> randunit(1, rt_size - 2);
+	int a = randunit(generator);
+	int b;
+	do
+	{
+		b = randunit(generator);
+	} while (a == b);
+
+	swap(circ.route[a], circ.route[b]);
+}
+
 template <class C, class D>
 int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
 {
@@ -357,7 +240,7 @@ int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation
 
 template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> fitness_func,
-	std::function<void (vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
+	std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
 {
 
 #ifdef C_DATA
@@ -385,7 +268,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 	double max, min;
 	vector<double>::iterator max_it;
 
-	while (gen_cnt <= lista.max_generation) 
+	while (gen_cnt <= lista.max_generation)
 	{
 		for (int i = 0; i < lista.generation_size; i++)
 			fitness_v[i] = fitness_func(gen[i]);
@@ -408,7 +291,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 		}
 		prev_max = max;
 
-		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation)) 
+		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation))
 		{
 			Result.iteration = gen_cnt;
 			Result.circuit_vector = gen[elite_ind].route;
@@ -439,19 +322,19 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 				temp_v[1] = gen[ind2];
 			}
 
-			mutation(temp_v[0], lista.mutation_prob, generator);
-			mutation(temp_v[1], lista.mutation_prob, generator);
+			rs_mutation(temp_v[0], lista.mutation_prob, generator);
+			rs_mutation(temp_v[1], lista.mutation_prob, generator);
 
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[0];
-					n++;
+				n++;
 			}
 
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[1];
-					n++;
+				n++;
 			}
 		}
 
@@ -463,9 +346,9 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 	size_t route_gen_size = track_route_ov.size();
 	size_t perf_v_size = performance_v.size();
 	ofstream myfile;
-	myfile.open("Routes.txt");
+	myfile.open("b_52_routes_rsm.txt");
 	myfile << "Route_size" << " " << "Generations " << "Convergence_count " << "Generation_count" << "\n";
-	myfile << rt_size << " " << perf_v_size  << " " << conv_cnt <<  " " << gen_cnt << "\n";
+	myfile << rt_size << " " << perf_v_size << " " << conv_cnt << " " << gen_cnt << "\n";
 	for (int i = 0; i < track_route_ov.size(); i++)
 	{
 		for (int j = 0; j < track_route_ov[i].size(); j++)
@@ -481,5 +364,4 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 #endif
 	return Result;
 }
-
 

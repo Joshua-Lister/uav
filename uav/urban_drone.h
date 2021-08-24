@@ -15,7 +15,7 @@ public:
     const double max_flight_time = 30;
     vector<address_metadata>* depots; 
     vector<address_metadata>* charging_ports;
-    virtual bool energy_flight_constraint(double L);
+    //virtual bool energy_flight_constraint(double L);
     double cost_of_drone; //Currency GBP
 private:
     double x_coord, y_coord;

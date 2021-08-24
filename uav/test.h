@@ -4,7 +4,8 @@
 #include "driver_code.h"
 #include "testclass.h"
 #include <algorithm>
-bool check_cluster_ids();
+bool check_utility_distance();
+bool check_utility_in();
 bool check_cluster_stopping_condition();
 bool check_cluster_ids();
 std::tuple<vector<address_metadata>, vector<address_metadata>> setup_adr_v();
@@ -12,8 +13,11 @@ bool check_for_duplicate_centroid();
 bool GA_optimisation_test_1();
 bool GA_optimisation_test_2();
 bool check_centroids_distance();
-bool mutation_test_1();
-bool mutation_test_2();
+bool mutation_test_rsm_1();
+bool mutation_test_rsm_2();
+bool mutation_test_psm_1();
+bool mutation_test_psm_2();
+bool mutaiton_test_pm_1();
+bool mutaiton_test_pm_1();
 bool crossover_test_1();
 void run_tests();
-

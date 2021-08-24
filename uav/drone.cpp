@@ -12,10 +12,10 @@ drone::drone() {};
 drone::~drone() {};
 // linear energy consumption model that energy consumptions increases linearly with battery and payload weight.
 // consume same power whether hovering or flying at constant spee
-void drone::set_payload_capacity()
-{
-	payload = maximum_payload_capacity;
-}
+//void drone::set_payload_capacity
+//{
+//	payload = maximum_payload_capacity;
+//}
 
 //void drone::set_battery_time(){
 //	battery_time_remaining = maximum_battery_time;
@@ -34,16 +34,16 @@ void drone::set_v_velocity_drone(double m_v_v)
 	vertical_max_velocity = m_v_v;
 }
 
-bool drone::energy_flight_constraint(double l)
-{
-	double energy = power_consumption() * (l / horizontal_max_velocity);
-	if (energy <= battery_energy) {
-		battery_energy -= energy;
-		return true;
-	}
-	else
-		return false;
-}
+//bool drone::energy_flight_constraint(double l)
+//{
+//	double energy = power_consumption() * (l / horizontal_max_velocity);
+//	if (energy <= battery_energy) {
+//		battery_energy -= energy;
+//		return true;
+//	}
+//	else
+//		return false;
+//}
 
 double drone::power_consumption()
 {

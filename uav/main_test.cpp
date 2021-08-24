@@ -26,6 +26,7 @@ int run_main()
 	//test_software.run_tests();
 	//try_str();
 	//result R = try_result();
+	run_tests();
 	return 0;
 }
 

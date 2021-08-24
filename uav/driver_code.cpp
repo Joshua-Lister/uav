@@ -23,11 +23,11 @@ double total_cost_urban()
 //}
 void set_GA_params(GA_param_list& lst)
 {
-	lst.generation_size = 20;
+	lst.generation_size = 40;
 	lst.max_generation = 150;
-	lst.crossover_prob = 0.5;
-	lst.max_iterations = 30;
-	lst.mutation_prob = 0.1;
+	lst.crossover_prob = 0.85;
+	lst.max_iterations = 200;
+	lst.mutation_prob = 0.15;
 	lst.seed = std::chrono::system_clock::now().time_since_epoch().count();
 	lst.tolerance = 1.0e-3;
 }
@@ -77,21 +77,21 @@ double run_truck_tandem_drone(string drone_type)
 
 	
 }
-result try_result()
-{
-	/*GA_param_list f;
-	testnum = 6;
-	set_GA_params(f);
-	vector<address_metadata> cl = set_dummy_route(25);
-	address_metadata depot;
-	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	cl.push_back(depot);
-	cl.insert(cl.begin(), depot);
-	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
-	result Result = vb.run_algorithm_genetic(25, &fitness, &initialise_circuit_v, &check_validity_dummy);
-	return Result;*/
-
-}
+//result try_result()
+//{
+//	/*GA_param_list f;
+//	testnum = 6;
+//	set_GA_params(f);
+//	vector<address_metadata> cl = set_dummy_route(25);
+//	address_metadata depot;
+//	depot.x_coord = 1.3, depot.y_coord = 1.3;
+//	cl.push_back(depot);
+//	cl.insert(cl.begin(), depot);
+//	genetic_algorithm<Circuit, address_metadata> vb(f, cl);
+//	result Result = vb.run_algorithm_genetic(25, &fitness, &initialise_circuit_v, &check_validity_dummy);
+//	return Result;*/
+//	return;
+//}
 void try_str()
 {
 	/*GA_param_list f;

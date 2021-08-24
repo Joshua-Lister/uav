@@ -1,12 +1,35 @@
 #include "test.h"
 
+bool check_utility_distance()
+{
+	address_metadata t1, t2;
+	t1.x_coord = 3; t1.y_coord = 3;
+	t2.x_coord = 6; t2.y_coord = 7;
+	double d = std::sqrt(utility::length(t1, t2));
+	if (d == 5)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool check_utility_in()
+{
+	vector<int> int_v = { 1, 2, 5, 10, 200 };
+	int dummy = 200;
+	bool check = utility::in(int_v, dummy);
+	return check;
+}
 
 bool check_cluster_ids()
 {
 	// TRY FIX THIS RUBBISH 
 	read_data rd("postal_data.txt");
 	rd.fill_data();
-	clustering cl(rd);
+	clustering cl(rd, 200);
 	cl.run_K_means();
 	bool check = cl.check_ids();
 	return check;
@@ -16,7 +39,7 @@ bool check_for_duplicate_centroid()
 {
 	read_data rd("postal_data.txt");
 	rd.fill_data();
-	clustering cl(rd);
+	clustering cl(rd, 200);
 	cl.run_K_means();
 	Circuit ct(cl);
 	bool check = ct.check_truck_route_validity();
@@ -27,7 +50,7 @@ bool check_centroids_distance()
 {
 	read_data rd("postal_data.txt");
 	rd.fill_data();
-	clustering cl(rd);
+	clustering cl(rd, 200);
 	cl.run_K_means();
 	urban_drone ub();
 	bool check = cl.check_distances(cl.distances, 10);
@@ -118,35 +141,32 @@ bool GA_optimisation_test_1()
 
 }
 
-bool mutation_test_1()
+bool mutation_test_psm_1()
 {
-	extern vector<address_metadata> test_route;
 	vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	default_random_engine generator(lstt.seed);
-	GA_test.mutation(c1, 1, generator);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
 	return check;
-	return true;
 }
 
-bool mutation_test_2()
+bool mutation_test_psm_2()
 {
-	extern vector<address_metadata>  test_route;
 	vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	default_random_engine generator(lstt.seed);
-	GA_test.mutation(c1, 1, generator);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	int d_track = 0;
 	for (int i = 0; i < c1.route_size; i++)
 	{
-		if (c1.route[i].num == test_route[i].num) 
+		if (c1.route[i].num == test_route[i].num)
 		{
 			d_track++;
 		}
@@ -157,6 +177,82 @@ bool mutation_test_2()
 	}
 	return true;
 }
+
+bool mutation_test_rsm_1()
+{
+	vector<address_metadata> copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route, false);
+	default_random_engine generator(lstt.seed);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
+	bool check = c1.check_truck_route_validity();
+	return check;
+}
+
+bool mutation_test_rsm_2()
+{
+	vector<address_metadata>  copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route, false);
+	default_random_engine generator(lstt.seed);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
+	int d_track = 0;
+	for (int i = 0; i < c1.route_size; i++)
+	{
+		if (c1.route[i].num == test_route[i].num)
+		{
+			d_track++;
+		}
+	}
+	if (d_track == c1.route_size)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool mutaiton_test_pm_1()
+{
+	vector<address_metadata> copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route, false);
+	default_random_engine generator(lstt.seed);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
+	bool check = c1.check_truck_route_validity();
+	return check;
+}
+
+bool mutaiton_test_pm_2()
+{
+	vector<address_metadata>  copy_test_route = test_route;
+	GA_param_list lstt;
+	set_GA_params(lstt);
+	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
+	Circuit c1(copy_test_route, false);
+	default_random_engine generator(lstt.seed);
+	GA_test.partial_shuffle_mutation(c1, 1, generator);
+	int d_track = 0;
+	for (int i = 0; i < c1.route_size; i++)
+	{
+		if (c1.route[i].num == test_route[i].num)
+		{
+			d_track++;
+		}
+	}
+	if (d_track == c1.route_size)
+	{
+		return false;
+	}
+	return true;
+}
+
+
 bool crossover_test_1()
 {
 	extern vector<address_metadata> test_route;
@@ -248,17 +344,26 @@ bool GA_optimisation_test_2()
 
 void run_tests()
 {
+	TestClass utility_test("Utility function checks");
+	utility_test.test(&check_utility_distance, "Utility distance function");
+	utility_test.test(&check_utility_in, "Utility in function");
+
 	TestClass cluster_test("Cluster class checks");
 	cluster_test.test(&check_cluster_ids, "Cluster ids");
 	cluster_test.test(&check_for_duplicate_centroid, "Duplicate centroid");
 	cluster_test.test(&check_centroids_distance, "Cluster distances");
 	cluster_test.test(&check_cluster_stopping_condition, "K-Means stopping condition");
-	
+
 	TestClass circuit_test("Circuit class checks");
 	circuit_test.test(&check_circuit_mix, "Randomise route");
+
 	TestClass GA_tests("Genetic Algorithm checks");
-	GA_tests.test(&mutation_test_1, "Mutation test 1");
-	GA_tests.test(&mutation_test_2, "Mutation test 2");
+	GA_tests.test(&mutation_test_rsm_1, "RS Mutation test 1");
+	GA_tests.test(&mutation_test_rsm_2, "RS Mutation test 2");
+	GA_tests.test(&mutation_test_psm_1, "PS Mutation test 1");
+	GA_tests.test(&mutation_test_psm_2, "PS Mutation test 2");
+	GA_tests.test(&mutaiton_test_pm_1, "P Mutation test 1");
+	GA_tests.test(&mutaiton_test_pm_2, "P Mutation test 2");
 	GA_tests.test(&crossover_test_1, "Crossover test 1");
 	GA_tests.test(&crossover_test_2, "Crossover test 2");
 	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");

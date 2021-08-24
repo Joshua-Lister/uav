@@ -51,7 +51,7 @@ public:
 	double time_to_charge();
 	double power_consumption();
 	void set_battery_time(double t);
-	void set_payload_capacity();
+	//void set_payload_capacity();
 	void update_battery_time(string bc_condition, double L);
 	void update_payload(string pd_condition, double weight);
 	static double return_battery_energy_capacity();

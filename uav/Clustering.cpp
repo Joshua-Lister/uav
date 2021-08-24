@@ -226,7 +226,7 @@ void clustering::add_depot()
 	default_dep.depot = true;
 }
 
-void clustering::run_clustering(address_metadata dep)
+void clustering::run_clustering()
 {
 	run_K_means();
 	group_clusters();
