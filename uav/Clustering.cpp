@@ -20,9 +20,9 @@ clustering::clustering(const clustering& cp)
 }
 void clustering::set_rand_centroids(int k_val) 
 {
-	default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
-	uniform_int_distribution<int> randunit(1, no_of_addresses - 1);
-	set<int> index_track;
+	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+	std::uniform_int_distribution<int> randunit(1, no_of_addresses - 1);
+	std::set<int> index_track;
 	for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) 
 	{
 		do 
@@ -35,7 +35,7 @@ void clustering::set_rand_centroids(int k_val)
 	}
 }
 
-void clustering::K_means(int k_val, vector<double>& distances) 
+void clustering::K_means(int k_val, std::vector<double>& distances)
 {
 	double distance;
 	distances.resize(no_of_addresses);
@@ -44,7 +44,7 @@ void clustering::K_means(int k_val, vector<double>& distances)
 		min_distance = DBL_MAX; // Assigning to maximum value to ensure if statement condition is true for first iteration of second for loop
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) 
 		{
-			distance = std::sqrt(utility::length(d.data[adr_no], centroids[cluster_no]));// change this why??
+			distance = std::sqrt(util::length(d.data[adr_no], centroids[cluster_no]));// change this why??
 			if (distance < min_distance) //Continually comparing distance between a single address and the centroids
 			{ 
 				min_distance = distance; //Set new min distance
@@ -99,7 +99,7 @@ bool clustering::check_ids()
 	}
 	return true;
 }
-bool clustering::stopping_condition(const vector<address_metadata>& obj, const vector<address_metadata>& obj2) 
+bool clustering::stopping_condition(const std::vector<address_metadata>& obj, const std::vector<address_metadata>& obj2)
 {
 	int cnt = 0;
 	int cnt_to_match = obj.size();
@@ -116,7 +116,7 @@ bool clustering::stopping_condition(const vector<address_metadata>& obj, const v
 //	for (size_t i = 0; i < obj.size(); i++){
 //		if ()
 //	}
-void clustering::coord_insert_sort(vector<address_metadata>& arg1) 
+void clustering::coord_insert_sort(std::vector<address_metadata>& arg1)
 {
 	int i = 1;
 	int j;
@@ -138,7 +138,7 @@ void clustering::coord_insert_sort(vector<address_metadata>& arg1)
 		i++;
 	}
 }
-bool clustering::check_distances(vector<double>& check_d_v, double max_dist) 
+bool clustering::check_distances(std::vector<double>& check_d_v, double max_dist)
 {
 	max_dist *= 0.5;
 	for (auto loc_distance : check_d_v)
@@ -152,8 +152,8 @@ void clustering::run_K_means()
 
 	bool in_range = false;
 	bool converge;
-	vector<double> distances_v;
-	vector<address_metadata> track_centroids(2);
+	std::vector<double> distances_v;
+	std::vector<address_metadata> track_centroids(2);
 	while (!in_range)
 	{ //continue all distances are within the flying distance
 		converge = false;

@@ -8,14 +8,14 @@
 class Circuit
 {
 public:
-	Circuit(vector<address_metadata>& centroids, bool empty);
+	Circuit(std::vector<address_metadata>& centroids, bool empty);
 	Circuit(clustering& c1);
 	Circuit(int route_size);
 	Circuit();
 	~Circuit();
 
-	static void swap_addresses(vector<address_metadata>& c, const int& p1, const int& p2);
-	void mix(vector<address_metadata>& vec);
+	static void swap_addresses(std::vector<address_metadata>& c, const int& p1, const int& p2);
+	void mix(std::vector<address_metadata>& vec);
 	double calc_mass(address_metadata& p1, address_metadata& p3);
 
 	void calc_masses();
@@ -26,34 +26,34 @@ public:
 	
 	bool check_truck_drone_volume(const truck vehicle, const size_t no_of_drones, size_t& no_of_drone_missing);
 
-	bool check_if_complete(vector<address_metadata>& obj, vector<int>& undelivered_adr_id);
+	bool check_if_complete(std::vector<address_metadata>& obj, std::vector<int>& undelivered_adr_id);
 
-	void check_drone(vector<drone> drone_list);
+	void check_drone(std::vector<drone> drone_list);
 
 
 	bool check_truck_route_validity();
 
-	double dist(vector<address_metadata>& circuit_vector);
+	double dist(std::vector<address_metadata>& circuit_vector);
 
 	bool check_distance_validity();
 
 	bool check_cluster_validty();
 
 	template<class Te>
-	double return_v_sum(vector<Te>& vec);
+	double return_v_sum(std::vector<Te>& vec);
 
 	void calc_velocities(Circuit& obj);
 	double time = 0;
 	double total_energy = 0;
 	double total_distance_travelled = 0;
-	vector<address_metadata> centroids;
-	vector<address_metadata> route;
-	vector<double> velocity_v;
+	std::vector<address_metadata> centroids;
+	std::vector<address_metadata> route;
+	std::vector<double> velocity_v;
 	double mass_1, mass_2;
 	double velocity_1, velocity_2;
 	double velocity_1_p, velocity_2_p;
 	double object_mass, object_velocity;
-	vector<double> masses;
+	std::vector<double> masses;
 	inline static size_t route_size;
 
 

@@ -1,6 +1,7 @@
 #include "Circuit.h"
+#include "utility.h"
 
-Circuit::Circuit(vector<address_metadata>& centroids, bool empty) : route(centroids) {
+Circuit::Circuit(std::vector<address_metadata>& centroids, bool empty) : route(centroids) {
 	if (!empty)
 	{
 		this->route_size = this->route.size();
@@ -51,18 +52,18 @@ Circuit::~Circuit() {};
 //	}
 //}
 //template <class T>
-void Circuit::mix(vector<address_metadata>& vec) {
+void Circuit::mix(std::vector<address_metadata>& vec) {
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	int r_idx;
-	default_random_engine generator(seed); // does it generate same thing every time
+	std::default_random_engine generator(seed); // does it generate same thing every time
 	for (int i = 1; i < route_size - 1; i++) {
-		uniform_int_distribution<int> dist(i, route_size - 2);
+		std::uniform_int_distribution<int> dist(i, route_size - 2);
 		r_idx = dist(generator);
-		swap(vec[i], vec[r_idx]);
+		std::swap(vec[i], vec[r_idx]);
 	}
 }
-void Circuit::swap_addresses(vector<address_metadata>& c, const int& p1, const int& p2) {
-	swap(c[p1], c[p2]);
+void Circuit::swap_addresses(std::vector<address_metadata>& c, const int& p1, const int& p2) {
+	std::swap(c[p1], c[p2]);
 }
 
 //double Circuit::calc_mass(address_metadata& p1, address_metadata& p3) {
@@ -71,18 +72,18 @@ void Circuit::swap_addresses(vector<address_metadata>& c, const int& p1, const i
 
 void Circuit::calc_masses() {
 	for (size_t i = 1; i < route_size - 1; i++) 
-		masses.push_back(utility::length(route[i - 1], route[i + 1]));
+		masses.push_back(util::length(route[i - 1], route[i + 1]));
 }
 void Circuit::calc_intial_velocities() {
 	double temp_velocity = -1;
 	for (int i = 0; i < route_size - 1; i++) {
-		temp_velocity = utility::length(route[i], route[i + 1]);
+		temp_velocity = util::length(route[i], route[i + 1]);
 		this->velocity_v[i] = temp_velocity;// calc_mass(route[i], route[i + 1]);
 	}
 }
 
 template <class Te>
-double Circuit::return_v_sum(vector<Te>& vec) {
+double Circuit::return_v_sum(std::vector<Te>& vec) {
 	return accumulate(vec.begin(), vec.end(), decltype(vec)::value_type(0));
 }
 
@@ -108,7 +109,7 @@ bool Circuit::check_truck_drone_volume(const truck vehicle, const size_t no_of_d
 	no_of_drone_missing = vehicle.drone_capacity - no_of_drones;
 	return false;
 }
-bool Circuit::check_if_complete(vector<address_metadata>& obj, vector<int>& undelivered_adr_id){
+bool Circuit::check_if_complete(std::vector<address_metadata>& obj, std::vector<int>& undelivered_adr_id){
 	for (auto const& adr : obj) {
 		if (adr.visited == false) 
 			undelivered_adr_id.push_back(adr.id);
@@ -117,7 +118,7 @@ bool Circuit::check_if_complete(vector<address_metadata>& obj, vector<int>& unde
 				return false;
 	return true;
 }
-void Circuit::check_drone(vector<drone> drone_list) {
+void Circuit::check_drone(std::vector<drone> drone_list) {
 
 	for (auto& drone : drone_list)
 		if (drone.battery_energy == 0) {

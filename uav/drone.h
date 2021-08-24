@@ -1,5 +1,5 @@
 #pragma once
-using namespace std;
+
 #include <string>
 #include <iostream>
 #include "clustering.h"
@@ -11,7 +11,7 @@ class drone
 {
 public:
 	bool battery_swap;
-	string battery_type;
+	std::string battery_type;
 	double battery_energy = -1;
 	bool out_of_use = false;
 protected:
@@ -31,7 +31,7 @@ protected:
 	double fluid_density = -1; // kg/m^3
 	double disc_area = -1;
 	int rotors = -1;
-	vector<address_metadata> route;
+	std::vector<address_metadata> route;
 
 
 public:
@@ -45,15 +45,15 @@ public:
 	//virtual bool energy_flight_constraint(double L) = 0;
 
 	virtual bool energy_flight_constraint(double L) = 0;
-	virtual std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route, double max_payload_cap,
+	virtual std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route, double max_payload_cap,
 		double max_dist) = 0;
 	//virtual void set_up_drones(int number_of_drones) = 0;
 	double time_to_charge();
 	double power_consumption();
 	void set_battery_time(double t);
 	//void set_payload_capacity();
-	void update_battery_time(string bc_condition, double L);
-	void update_payload(string pd_condition, double weight);
+	void update_battery_time(std::string bc_condition, double L);
+	void update_payload(std::string pd_condition, double weight);
 	static double return_battery_energy_capacity();
 
 	double maxiumum_distance = 200;

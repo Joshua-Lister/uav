@@ -147,7 +147,7 @@ void rural_drone::set_up_single_drone(rural_drone& uav, address_metadata arg, do
 	uav.y_coord = arg.y_coord;
 }
 
-void rural_drone::singular_flight(int k, vector<vector<address_metadata*>>& cl_data, vector<address_metadata>& opt_route)
+void rural_drone::singular_flight(int k, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route)
 {
 
 	/*for (int i = 0; i < k; i++)

@@ -1,9 +1,9 @@
 #include "genetic_algorithm.h"
 
-uniform_real_distribution<double> rand_number(0, 1.0);
+std::uniform_real_distribution<double> rand_number(0, 1.0);
 
 template <class C, class D>
-genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista, vector<D>& path) : lista(lista), path(path), rt_size(path.size())
+genetic_algorithm<C, D>::genetic_algorithm(GA_param_list lista, std::vector<D>& path) : lista(lista), path(path), rt_size(path.size())
 {
 }
 
@@ -49,7 +49,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 	child1.route[0] = parent1.route[0]; child1.route[rt_size - 1] = parent1.route[rt_size - 1];
 	child2.route[0] = parent2.route[0]; child2.route[rt_size - 1] = parent2.route[rt_size - 1];
 
-	if (a > b) swap(a, b);
+	if (a > b) std::swap(a, b);
 
 	for (int i = a; i < b; i++)
 	{
@@ -65,7 +65,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 		{
 			j = b;
 		}
-		if (!utility::find(child1.route, parent2.route[i], a, b))
+		if (!util::find_f(child1.route, parent2.route[i], a, b))
 		{
 			child1.route[j] = parent2.route[i];
 			j++;
@@ -74,7 +74,7 @@ void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child
 		{
 			k = b;
 		}
-		if (!utility::find(child2.route, parent1.route[i], a, b))
+		if (!util::find_f(child2.route, parent1.route[i], a, b))
 		{
 			child2.route[k] = parent1.route[i];
 			k++;
@@ -153,8 +153,8 @@ void genetic_algorithm<C, D>::crossover_standard(C& parent1, C& parent2, C& chil
 	//
 	//}
 template <class C, class D>
-void genetic_algorithm<C, D>::calc_fitness(double& max, vector<double>::iterator& max_it,
-	double& min, double& fitness_total, vector<double>& fitness_v, vector<C>& gen)
+void genetic_algorithm<C, D>::calc_fitness(double& max, std::vector<double>::iterator& max_it,
+	double& min, double& fitness_total, std::vector<double>& fitness_v, std::vector<C>& gen)
 {
 	max_it = std::max_element(fitness_v.begin(), fitness_v.end());
 	max = *max_it;
@@ -174,7 +174,7 @@ void genetic_algorithm<C, D>::partial_shuffle_mutation(C& circ, const double mut
 		double rn = rand_number(generator);
 		if (rn < mutation_prob)
 		{
-			uniform_int_distribution<int> randunit(1, rt_size - 2);
+			std::uniform_int_distribution<int> randunit(1, rt_size - 2);
 			idx1 = randunit(generator);
 			do
 			{
@@ -182,7 +182,7 @@ void genetic_algorithm<C, D>::partial_shuffle_mutation(C& circ, const double mut
 			} while (idx1 == idx2);
 
 			//Circuit::swap_addresses(circ.route, idx1, idx2);
-			swap(circ.route[idx1], circ.route[idx2]);
+			std::swap(circ.route[idx1], circ.route[idx2]);
 		}
 	}
 }
@@ -192,22 +192,22 @@ void genetic_algorithm<C, D>::rs_mutation(C& circ, double mutation_prob, std::de
 {
 	if (rand_number(generator) < mutation_prob)
 	{
-		uniform_int_distribution<int> randunit(1, rt_size - 2);
+		std::uniform_int_distribution<int> randunit(1, rt_size - 2);
 		int a = randunit(generator);
 		int b;
 		do
 		{
 			b = randunit(generator);
 		} while (a == b);
-		if (a > b) swap(a, b);
-		reverse((circ.route.begin() + a), (circ.route.begin() + b));
+		if (a > b) std::swap(a, b);
+		std::reverse((circ.route.begin() + a), (circ.route.begin() + b));
 	}
 }
 
 template<class C, class D>
 void genetic_algorithm<C, D>::point_mutation(C& circ, double mutation_prob, std::default_random_engine& generator)
 {
-	uniform_int_distribution<int> randunit(1, rt_size - 2);
+	std::uniform_int_distribution<int> randunit(1, rt_size - 2);
 	int a = randunit(generator);
 	int b;
 	do
@@ -215,11 +215,11 @@ void genetic_algorithm<C, D>::point_mutation(C& circ, double mutation_prob, std:
 		b = randunit(generator);
 	} while (a == b);
 
-	swap(circ.route[a], circ.route[b]);
+	std::swap(circ.route[a], circ.route[b]);
 }
 
 template <class C, class D>
-int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
+int genetic_algorithm<C, D>::selection(std::vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
 {
 
 	double random_number = rand_number(generator);
@@ -240,7 +240,8 @@ int genetic_algorithm<C, D>::selection(vector<double>& fitness_v, int generation
 
 template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> fitness_func,
-	std::function<void(vector<C>&, vector<C>&, vector<C>&, vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ)
+	std::function<void(std::vector<C>&, std::vector<C>&, std::vector<C>&, std::vector<D>&, int)> initialise_gen_v, 
+	std::function<bool(C&)> eval_circ)
 {
 
 #ifdef C_DATA
@@ -248,12 +249,12 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 	vector<vector<D>> track_route_ov;
 #endif C_DATA
 
-	uniform_int_distribution<int> randunit(1, rt_size - 2);
-	default_random_engine generator(lista.seed);
-	uniform_int_distribution<int> randgen(0, lista.generation_size - 1);
-	vector<C> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
-	vector<double> fitness_v(lista.generation_size);
-	vector<C> temp_v(2);
+	std::uniform_int_distribution<int> randunit(1, rt_size - 2);
+	std::default_random_engine generator(lista.seed);
+	std::uniform_int_distribution<int> randgen(0, lista.generation_size - 1);
+	std::vector<C> gen(lista.generation_size + 1), new_gen(lista.generation_size + 1);
+	std::vector<double> fitness_v(lista.generation_size);
+	std::vector<C> temp_v(2);
 	result Result;
 	int ind1, ind2;
 	int gen_cnt = 0, conv_cnt = 0, n, elite_ind;
@@ -266,7 +267,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 	//int max_conv_cnt = max(100, lista.max_generation / 5);
 	// reciporcal of fitness remember small distance is better
 	double max, min;
-	vector<double>::iterator max_it;
+	std::vector<double>::iterator max_it;
 
 	while (gen_cnt <= lista.max_generation)
 	{

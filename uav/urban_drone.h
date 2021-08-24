@@ -13,8 +13,8 @@ public:
     void set_battery_time() override;
     void set_payload_capacity() override;*/
     const double max_flight_time = 30;
-    vector<address_metadata>* depots; 
-    vector<address_metadata>* charging_ports;
+    std::vector<address_metadata>* depots;
+    std::vector<address_metadata>* charging_ports;
     //virtual bool energy_flight_constraint(double L);
     double cost_of_drone; //Currency GBP
 private:

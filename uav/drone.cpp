@@ -59,20 +59,20 @@ double drone::time_to_charge()
 	return 1.0;
 }
 
-void drone::update_battery_time(string bt_condition, double l)
+void drone::update_battery_time(std::string bt_condition, double L)
 {
 	if (bt_condition == "charge" || "charge") {
 		battery_time_remaining = maximum_battery_time; // fill in here
 		tempus += 0; // fill in here
 	}
 	else if (bt_condition == "drain" || "drain")
-		battery_time_remaining -= energy_flight_constraint(l); // fill in here
+		battery_time_remaining -= energy_flight_constraint(L); // fill in here
 
 	else
-		cerr << "failed to enter an appropriate condition. enter either charge or drain";
+		std::cerr << "failed to enter an appropriate condition. enter either charge or drain";
 }
 
-void drone::update_payload(string pd_condition, double weight)
+void drone::update_payload(std::string pd_condition, double weight)
 {
 	if (pd_condition == "Release" || "release")
 		payload -= weight; // fill in here
@@ -81,7 +81,7 @@ void drone::update_payload(string pd_condition, double weight)
 		payload += weight; // fill in here
 
 	else
-		cerr << "failed to enter an appropriate condition. enter either release or load";
+		std::cerr << "failed to enter an appropriate condition. enter either release or load";
 }
 
 double drone::return_battery_energy_capacity()

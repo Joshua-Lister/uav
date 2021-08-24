@@ -4,11 +4,12 @@
 #include "driver_code.h"
 #include "testclass.h"
 #include <algorithm>
+
 bool check_utility_distance();
 bool check_utility_in();
 bool check_cluster_stopping_condition();
 bool check_cluster_ids();
-std::tuple<vector<address_metadata>, vector<address_metadata>> setup_adr_v();
+std::tuple<std::vector<address_metadata>, std::vector<address_metadata>> setup_adr_v();
 bool check_for_duplicate_centroid();
 bool GA_optimisation_test_1();
 bool GA_optimisation_test_2();

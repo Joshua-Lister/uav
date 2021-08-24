@@ -74,13 +74,13 @@ int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
 #error Unknown processor
 #endif
 
-	cout << "Crash with exception " << exceptionCode << "(" << pDescription << ") at " << pIP << "! (" << testnum << ")" << endl;
+	std::cout << "Crash with exception " << exceptionCode << "(" << pDescription << ") at " << pIP << "! (" << testnum << ")" << std::endl;
 
 	if (pErrorOffset)
 	{
 		// Float exceptions may be reported in a delayed manner — report the
 		// actual instruction as well.
-		cout << "Faulting instruction may actually be at " << pErrorOffset << endl;
+		std::cout << "Faulting instruction may actually be at " << pErrorOffset << std::endl;
 	}
 
 	return EXCEPTION_EXECUTE_HANDLER;
@@ -105,7 +105,7 @@ int main()
 
 	_except(DescribeException(GetExceptionInformation()))
 	{
-		cout << " with testnum = " << testnum << " and testval= " << testval << endl;
+		std::cout << " with testnum = " << testnum << " and testval= " << testval << std::endl;
 	}
 	
 

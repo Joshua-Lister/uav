@@ -7,18 +7,18 @@
 //extern vector<drone*> drones_v (number_of_drones);
 //clustering obj1;
 //clustering* obj1;
-vector<address_metadata> test_route = set_dummy_route(5);
+std::vector<address_metadata> test_route = set_dummy_route(5);
 double fitness(Circuit& circ1)
 {
 	size_t rt_length = circ1.route.size();
 	double f = 0;
 	for (int i = 1; i < rt_length; i++)
-		f += std::sqrt(utility::length(circ1.route[i], circ1.route[i - 1]));
+		f += std::sqrt(util::length(circ1.route[i], circ1.route[i - 1]));
 	return  1.0 / f;
 }
-vector<address_metadata> set_dummy_route(int rt_length)
+std::vector<address_metadata> set_dummy_route(int rt_length)
 {
-	vector<address_metadata> obj(rt_length);
+	std::vector<address_metadata> obj(rt_length);
 	for (int i = 0; i < rt_length; i++)
 	{
 		obj[i].x_coord = 1 + rand() % 100;
@@ -39,7 +39,8 @@ double test_fitness(Circuit& circ)
 	return f;
 }
 
-void initialise_circuit_v(vector<Circuit>& gen1, vector<Circuit>& gen2, vector<Circuit>& temp_gen, vector<address_metadata>& obj1, int gen_size)
+void initialise_circuit_v(std::vector<Circuit>& gen1, std::vector<Circuit>& gen2, std::vector<Circuit>& temp_gen, 
+	std::vector<address_metadata>& obj1, int gen_size)
 {
 	for (int i = 0; i < gen_size + 1; i++) 
 	{

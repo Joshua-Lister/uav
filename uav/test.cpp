@@ -5,7 +5,7 @@ bool check_utility_distance()
 	address_metadata t1, t2;
 	t1.x_coord = 3; t1.y_coord = 3;
 	t2.x_coord = 6; t2.y_coord = 7;
-	double d = std::sqrt(utility::length(t1, t2));
+	double d = std::sqrt(util::length(t1, t2));
 	if (d == 5)
 	{
 		return true;
@@ -18,9 +18,9 @@ bool check_utility_distance()
 
 bool check_utility_in()
 {
-	vector<int> int_v = { 1, 2, 5, 10, 200 };
+	std::vector<int> int_v = { 1, 2, 5, 10, 200 };
 	int dummy = 200;
-	bool check = utility::in(int_v, dummy);
+	bool check = util::in_f(int_v, dummy);
 	return check;
 }
 
@@ -52,7 +52,7 @@ bool check_centroids_distance()
 	rd.fill_data();
 	clustering cl(rd, 200);
 	cl.run_K_means();
-	urban_drone ub();
+	//urban_drone ub();
 	bool check = cl.check_distances(cl.distances, 10);
 	return check;
 }
@@ -63,10 +63,10 @@ bool check_cluster_stopping_condition()
 	bool check = clustering::stopping_condition(test_adr1, test_adr2);
 	return check;
 }
-std::tuple<vector<address_metadata>, vector<address_metadata>> setup_adr_v()
+std::tuple<std::vector<address_metadata>, std::vector<address_metadata>> setup_adr_v()
 {
 	size_t test_size = 5;
-	vector<address_metadata> test_adr1(test_size), test_adr2(test_size);
+	std::vector<address_metadata> test_adr1(test_size), test_adr2(test_size);
 	float rand_n_x, rand_n_y;
 	for (int i = 0; i < test_size; i++)
 	{
@@ -97,25 +97,25 @@ bool check_circuit_mix()
 }
 bool GA_optimisation_test_1()
 {
-	fstream myfile;
-	myfile.open("Routes.txt", fstream::in);
+	std::fstream myfile;
+	myfile.open("Routes.txt", std::fstream::in);
 	if (!myfile)
 	{
 		std::cerr << "Routes.txt could not be opened !\n";
 		exit(0);
 	}
 	std::string line;
-	vector<double> test_distances;
+	std::vector<double> test_distances;
 	while (getline(myfile, line))
 	{
 		std::stringstream lineStream(line);
-		string cell;
-		vector<string> parsedRow;
+		std::string cell;
+		std::vector<std::string> parsedRow;
 		while (getline(lineStream, cell, ' '))
 		{
 			parsedRow.push_back(cell);
 		}
-		test_distances.push_back(stoi(parsedRow[parsedRow.size() - 1]));
+		test_distances.push_back(std::stoi(parsedRow[parsedRow.size() - 1]));
 	}
 	bool check = true;
 	for (int i = 1; i < test_distances.size(); i++)
@@ -143,12 +143,12 @@ bool GA_optimisation_test_1()
 
 bool mutation_test_psm_1()
 {
-	vector<address_metadata> copy_test_route = test_route;
+	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
 	return check;
@@ -156,12 +156,12 @@ bool mutation_test_psm_1()
 
 bool mutation_test_psm_2()
 {
-	vector<address_metadata>  copy_test_route = test_route;
+	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	int d_track = 0;
 	for (int i = 0; i < c1.route_size; i++)
@@ -180,12 +180,12 @@ bool mutation_test_psm_2()
 
 bool mutation_test_rsm_1()
 {
-	vector<address_metadata> copy_test_route = test_route;
+	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
 	return check;
@@ -193,12 +193,12 @@ bool mutation_test_rsm_1()
 
 bool mutation_test_rsm_2()
 {
-	vector<address_metadata>  copy_test_route = test_route;
+	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	int d_track = 0;
 	for (int i = 0; i < c1.route_size; i++)
@@ -217,12 +217,12 @@ bool mutation_test_rsm_2()
 
 bool mutaiton_test_pm_1()
 {
-	vector<address_metadata> copy_test_route = test_route;
+	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	bool check = c1.check_truck_route_validity();
 	return check;
@@ -230,12 +230,12 @@ bool mutaiton_test_pm_1()
 
 bool mutaiton_test_pm_2()
 {
-	vector<address_metadata>  copy_test_route = test_route;
+	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.partial_shuffle_mutation(c1, 1, generator);
 	int d_track = 0;
 	for (int i = 0; i < c1.route_size; i++)
@@ -255,13 +255,13 @@ bool mutaiton_test_pm_2()
 
 bool crossover_test_1()
 {
-	extern vector<address_metadata> test_route;
-	vector<address_metadata> copy_test_route = test_route;
+	extern std::vector<address_metadata> test_route;
+	std::vector<address_metadata> copy_test_route = test_route;
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
 	copy_test_route.push_back(depot);
 	copy_test_route.insert(copy_test_route.begin(), depot);
-	vector<Circuit> c_v(4);
+	std::vector<Circuit> c_v(4);
 	for (int i = 0; i < 4; i++)
 	{
 		c_v[i] = Circuit(copy_test_route, false);
@@ -270,7 +270,7 @@ bool crossover_test_1()
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 3);
 	for (int i = 2; i < 4; i++)
 	{
@@ -283,13 +283,13 @@ bool crossover_test_1()
 }
 bool crossover_test_2()
 {
-	extern vector<address_metadata>  test_route;
-	vector<address_metadata> copy_test_route = test_route;
+	extern std::vector<address_metadata>  test_route;
+	std::vector<address_metadata> copy_test_route = test_route;
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
 	copy_test_route.push_back(depot);
 	copy_test_route.insert(copy_test_route.begin(), depot);
-	vector<Circuit> c_v(4);
+	std::vector<Circuit> c_v(4);
 	for (int i = 0; i < 4; i++)
 	{
 		c_v[i] = Circuit(copy_test_route, true);
@@ -298,10 +298,10 @@ bool crossover_test_2()
 	GA_param_list lstt;
 	set_GA_params(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
-	default_random_engine generator(lstt.seed);
+	std::default_random_engine generator(lstt.seed);
 	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 4);
-	vector<int> child_target_rt1 = { -1, 4, 1, 2, 3, 0, -1 };
-	vector<int> child_target_rt2 = { -1, 0, 3, 2, 1, 4, -1 };
+	std::vector<int> child_target_rt1 = { -1, 4, 1, 2, 3, 0, -1 };
+	std::vector<int> child_target_rt2 = { -1, 0, 3, 2, 1, 4, -1 };
 	for (int adr_idx = 0; adr_idx < c_v[2].route_size; adr_idx++)
 	{
 		if (c_v[2].route[adr_idx].num != child_target_rt1[adr_idx])
@@ -319,13 +319,13 @@ bool GA_optimisation_test_2()
 {
 	address_metadata depot;
 	depot.x_coord = 1.3, depot.y_coord = 1.3;
-	extern vector<address_metadata> test_route;
-	vector<address_metadata>  copy_test_route = test_route;
+	extern std::vector<address_metadata> test_route;
+	std::vector<address_metadata>  copy_test_route = test_route;
 	/*copy_test_route.push_back(depot);
 	copy_test_route.insert(copy_test_route.begin(), depot);*/
 	for (int i = 2; i < test_route.size() - 1; i++)
 	{
-		swap(copy_test_route[i], copy_test_route[i - 1]);
+		std::swap(copy_test_route[i], copy_test_route[i - 1]);
 	}
 	GA_param_list lstt;
 	set_GA_params(lstt);
