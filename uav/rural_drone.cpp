@@ -7,6 +7,7 @@ rural_drone::rural_drone(double maximum_battery_time, double maximum_payload_cap
 
 rural_drone::rural_drone(double payload, double max_flight_time) : drone(payload, max_flight_time) {};
 
+
 //bool rural_drone::energy_flight_constraint(double L)
 //{
 //	/*double energy1 = power_consumption() * (L / horizontal_max_velocity);
