@@ -45,13 +45,11 @@ Circuit::Circuit(int route_size)
 Circuit::Circuit() {};
 Circuit::~Circuit() {};
 
-
-//double Circuit::evaluation(int max_iterations, double tolerance) {
-//	for (size_t iter_num = 0; iter_num < max_iterations; iter_num++) {
-//		
-//	}
-//}
-//template <class T>
+/***************************************************************************
+The route except for the firstand last index is iteration upon.A generator 
+outputs a random integer within the range of(increment, route size - 2) and 
+swaps positions of route[i] and route[rand_int].
+***************************************************************************/
 void Circuit::mix(std::vector<address_metadata>& vec) {
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	int r_idx;
@@ -62,7 +60,9 @@ void Circuit::mix(std::vector<address_metadata>& vec) {
 		std::swap(vec[i], vec[r_idx]);
 	}
 }
-void Circuit::swap_addresses(std::vector<address_metadata>& c, const int& p1, const int& p2) {
+
+void Circuit::swap_addresses(std::vector<address_metadata>& c, const int& p1, const int& p2) 
+{
 	std::swap(c[p1], c[p2]);
 }
 
@@ -83,11 +83,18 @@ void Circuit::calc_intial_velocities() {
 }
 
 template <class Te>
-double Circuit::return_v_sum(std::vector<Te>& vec) {
+double Circuit::return_v_sum(std::vector<Te>& vec) 
+{
 	return accumulate(vec.begin(), vec.end(), decltype(vec)::value_type(0));
 }
 
-bool Circuit::check_routes_duplicate(Circuit& obj1, Circuit& obj2) {
+/*********************************************************************************
+A for loop in range(1, route _size - 1)  checks two routesand returns true if 
+an element in both routes at the same index position is not equal to one another.
+If the routes are the same then they are duplicated and false is returned.
+*********************************************************************************/
+bool Circuit::check_routes_duplicate(Circuit& obj1, Circuit& obj2) 
+{
 	for (int i = 1; i < route_size - 1; i++) {
 		if (obj1.route[i].num != obj2.route[i].num)
 			return true;
@@ -95,21 +102,25 @@ bool Circuit::check_routes_duplicate(Circuit& obj1, Circuit& obj2) {
 	return false;
 }
 
-void Circuit::calc_velocities(Circuit& obj) {
-	for (size_t i = 0; i < route_size; i++) {
+void Circuit::calc_velocities(Circuit& obj) 
+{
+	for (size_t i = 0; i < route_size; i++) 
+	{
 		this->velocity_v[i] = this->masses[i] - obj.masses[i] / this->masses[i] + obj.masses[i] * this->velocity_v[i] +
 			2 * obj.masses[i] / this->masses[i] + obj.masses[i] * obj.velocity_v[i];
 		obj.velocity_v[i] = 2 * this->masses[i] / this->masses[i] + obj.masses[i] * this->velocity_v[i] - this->masses[i] - 
 			obj.masses[i] / this->masses[i] + obj.masses[i] * obj.velocity_v[i];
 	}
 }
-bool Circuit::check_truck_drone_volume(const truck vehicle, const size_t no_of_drones, size_t& no_of_drone_missing) {
+bool Circuit::check_truck_drone_volume(const truck vehicle, const size_t no_of_drones, size_t& no_of_drone_missing) 
+{
 	if (vehicle.drone_capacity == no_of_drones)
 		return true;
 	no_of_drone_missing = vehicle.drone_capacity - no_of_drones;
 	return false;
 }
-bool Circuit::check_if_complete(std::vector<address_metadata>& obj, std::vector<int>& undelivered_adr_id){
+bool Circuit::check_if_complete(std::vector<address_metadata>& obj, std::vector<int>& undelivered_adr_id)
+{
 	for (auto const& adr : obj) {
 		if (adr.visited == false) 
 			undelivered_adr_id.push_back(adr.id);
@@ -118,7 +129,8 @@ bool Circuit::check_if_complete(std::vector<address_metadata>& obj, std::vector<
 				return false;
 	return true;
 }
-void Circuit::check_drone(std::vector<drone> drone_list) {
+void Circuit::check_drone(std::vector<drone> drone_list) 
+{
 
 	for (auto& drone : drone_list)
 		if (drone.battery_energy == 0) {
@@ -126,7 +138,7 @@ void Circuit::check_drone(std::vector<drone> drone_list) {
 				drone.out_of_use = true;
 		}
 		else {
-			auto x = drone::return_battery_energy_capacity();
+			//auto x = drone::return_battery_energy_capacity();
 			//drone.battery_energy = drone::return_battery_energy_capacity;
 		}
 		
@@ -149,7 +161,14 @@ void Circuit::check_drone(std::vector<drone> drone_list) {
 //	}
 //}
 
-bool Circuit::check_truck_route_validity() {
+/*********************************************************************************
+The truck route is modelled on the travelling salesman problem.Therefore, except 
+for the depot, a location cannot occur more than once in the route path. This 
+function checks for any repeating locationand returns false if a location occurs 
+more than onceand returns true if the routes only visit each location once.
+*********************************************************************************/
+bool Circuit::check_truck_route_validity() 
+{
 	for (int ic1 = 1; ic1 < route_size - 1; ic1++)
 	{
 		for (int ic2 = ic1 + 1; ic2 < route_size - 1; ic2++)

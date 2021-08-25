@@ -23,7 +23,10 @@ bool check_utility_in()
 	bool check = util::in_f(int_v, dummy);
 	return check;
 }
-
+/*********************************************************************
+Calls clustering method check_idsand returns true if all data points 
+ids do not equal - 1 and false if at least one id is - 1.
+*********************************************************************/
 bool check_cluster_ids()
 {
 	// TRY FIX THIS RUBBISH 
@@ -34,7 +37,10 @@ bool check_cluster_ids()
 	bool check = cl.check_ids();
 	return check;
 }
-
+/***********************************************************************************
+Reads in actual dataand performs run_K_means then checks the centroid vector 
+for repeating locations.Returns true if each location is unique else returns false.
+***********************************************************************************/
 bool check_for_duplicate_centroid()
 {
 	read_data rd("postal_data.txt");
@@ -46,6 +52,10 @@ bool check_for_duplicate_centroid()
 	return check;
 }
 
+/*********************************************************************
+Calls clustering method check_distances.If the distance is more than 
+half the maximum drone distance returns false else return true.
+*********************************************************************/
 bool check_centroids_distance()
 {
 	read_data rd("postal_data.txt");
@@ -57,12 +67,18 @@ bool check_centroids_distance()
 	return check;
 }
 
+/************************************************************************
+Creates two dummy routes that are equaland calls clustering method which 
+returns true if the algorithm works as intended as routes are equal and 
+false if not.
+************************************************************************/
 bool check_cluster_stopping_condition()
 {
 	auto [test_adr1, test_adr2] = setup_adr_v();
 	bool check = clustering::stopping_condition(test_adr1, test_adr2);
 	return check;
 }
+
 std::tuple<std::vector<address_metadata>, std::vector<address_metadata>> setup_adr_v()
 {
 	size_t test_size = 5;
@@ -81,6 +97,13 @@ std::tuple<std::vector<address_metadata>, std::vector<address_metadata>> setup_a
 	}
 	return make_tuple(test_adr1, test_adr2);
 }
+
+/*****************************************************************************
+Creates two dummy routes that are equal, mixes one of the routes using the 
+Circuit class method.The routes are iterated overand if a location in one 
+vector is not equal to another location in the other vector at the same index 
+return true else return false.
+*****************************************************************************/
 bool check_circuit_mix()
 {
 	auto [test_adr1, test_adr2] = setup_adr_v();
@@ -95,6 +118,7 @@ bool check_circuit_mix()
 	}
 	return false;
 }
+
 bool GA_optimisation_test_1()
 {
 	std::fstream myfile;
@@ -141,6 +165,11 @@ bool GA_optimisation_test_1()
 
 }
 
+/*************************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm class 
+is called on the route.If the no location appears more than once in the mutated route 
+except for the depot then it returns true else returns false.
+*************************************************************************************/
 bool mutation_test_psm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
@@ -154,6 +183,11 @@ bool mutation_test_psm_1()
 	return check;
 }
 
+/*******************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm 
+class is called on the route.If the mutated route is the same as the original 
+result returns false else return true.
+*******************************************************************************/
 bool mutation_test_psm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
@@ -252,7 +286,13 @@ bool mutaiton_test_pm_2()
 	return true;
 }
 
-
+/**********************************************************************************
+Using the dummy test_route, the depot is added to the route.Two - parent and 
+two child circuits are initialised the route orders are randomised using Circuit 
+member mix.The ordered crossover function is called.The child chromosomes are 
+check using the Circuit member check_truck_route_validity.If invalid returns false 
+else if both child chromosomes are valid return true.
+**********************************************************************************/
 bool crossover_test_1()
 {
 	extern std::vector<address_metadata> test_route;
@@ -315,6 +355,12 @@ bool crossover_test_2()
 	}
 	return true;
 }
+
+/*************************************************************************************
+The genetic_algorithm member run_algorithm_genetic is called and the test_fitness 
+function is passed as a parameter.After, each location of the test route is compared 
+to the optimal circuit vector computed by the genetic algorithm.
+*************************************************************************************/
 bool GA_optimisation_test_2()
 {
 	address_metadata depot;

@@ -12,6 +12,9 @@ public:
     void set_v_velocity_drone(double m_v_v) override;
     void set_battery_time() override;
     void set_payload_capacity() override;*/
+    std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data,
+        std::vector<address_metadata>& opt_route, double max_payload_cap,
+        double max_dist);
     const double max_flight_time = 30;
     std::vector<address_metadata>* depots;
     std::vector<address_metadata>* charging_ports;

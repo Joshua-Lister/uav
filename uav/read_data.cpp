@@ -8,6 +8,11 @@ read_data::read_data() : filename(filename)
 }
 read_data::~read_data() {};
 
+/***************************************************************************************************
+Each line is parsed with the delimiter ' ‘. The delimiter can be changed to suit the format of 
+your text file. Each section of a line is added to a vector. At the end of each line, that vector 
+is then added to the back of another vector.
+****************************************************************************************************/
 void read_data::read_csv() 
 {
 
@@ -37,6 +42,12 @@ void read_data::read_csv()
 
 }
 
+/******************************************************************************************************
+The data is stored in a  vector of structs called address_metadata. Each column of the text file is 
+assigned to their respective variable in the vector of address_metadata. Each address is assigned a 
+unique number.The total parcel mass for all addresses is calculatedand is stored as a class attribute 
+of read_data.
+*******************************************************************************************************/
 void read_data::fill_data()
 {
 	this->no_of_addresses = parsedCsv.size();
@@ -72,6 +83,11 @@ const static std::unordered_map<std::string, int> string_to_int
 	{"All", 4}
 };
 
+/********************************************************************************************************
+Using an ordered map to match string values to an integer, a switch statement is used to print 
+sections of the data read in from the text file.All the data can be printed or the columns independently 
+depending on the string input.
+*********************************************************************************************************/
 void read_data::print_data(std::string type)
 {
 	if (!string_to_int.count(type)) 

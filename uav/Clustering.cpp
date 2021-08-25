@@ -1,6 +1,6 @@
 #include "clustering.h"
 
-clustering::clustering(read_data& d, int max_distance = 500) : d(d), no_of_addresses(d.no_of_addresses) 
+clustering::clustering(read_data& d, double max_distance = 500) : d(d), no_of_addresses(d.no_of_addresses) 
 {
 	centroids.resize(this->k);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
@@ -18,6 +18,13 @@ clustering::clustering(const clustering& cp)
 {
 	centroids = cp.centroids;
 }
+
+/**************************************************************************************************
+K clusters are randomly chosen.Using a generator, a random integer in the range of the number of 
+addresses is computed.If the random integer has already been computed previously, it continually 
+re-calculates one until none are the same.The centroid vector is assigned to the random data point 
+and the id of the random data point is assigned to the value of the loop increment cluster_no.
+**************************************************************************************************/
 void clustering::set_rand_centroids(int k_val) 
 {
 	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
@@ -35,6 +42,13 @@ void clustering::set_rand_centroids(int k_val)
 	}
 }
 
+/**************************************************************************************************
+For each data point, the euclidian distance is calculated from each centroid to said data point.
+The id of the data point is then assigned to the id of the centroid with the shortest distance.
+Each minimum distance for each data point is stored in a vector called distances.This is to ensure 
+all the distances needed to be travelled by a drone are within half of the maximum flight distance 
+of said drone.
+**************************************************************************************************/
 void clustering::K_means(int k_val, std::vector<double>& distances)
 {
 	double distance;
@@ -88,6 +102,12 @@ void clustering::K_means(int k_val, std::vector<double>& distances)
 #endif 
 }
 
+/*********************************************************************************************
+At the point of creation in memory, each object address_metadata is initialised with a 
+default value of - 1. check_ids runs through each data point and checks the id to ensure 
+it is not equal to - 1. This function is to be used after K_means to ensure each data point 
+id is assigned to a centroid.
+*********************************************************************************************/
 bool clustering::check_ids() 
 {
 	for (auto i : d.data) 
@@ -99,6 +119,12 @@ bool clustering::check_ids()
 	}
 	return true;
 }
+
+/*********************************************************************************************
+After another iteration of the function K_means, this function checks that the previous 
+centroid coordinates of the objects in the vector are within a set tolerance to the new 
+coordinates of the objects in the updated centroid vector.
+*********************************************************************************************/
 bool clustering::stopping_condition(const std::vector<address_metadata>& obj, const std::vector<address_metadata>& obj2)
 {
 	int cnt = 0;
@@ -112,10 +138,8 @@ bool clustering::stopping_condition(const std::vector<address_metadata>& obj, co
 		return true;
 	return false;
 }
-//operator !=(vector<address_metadata> const& obj, vector<address_metadata> const& obj2){
-//	for (size_t i = 0; i < obj.size(); i++){
-//		if ()
-//	}
+
+
 void clustering::coord_insert_sort(std::vector<address_metadata>& arg1)
 {
 	int i = 1;
@@ -138,6 +162,12 @@ void clustering::coord_insert_sort(std::vector<address_metadata>& arg1)
 		i++;
 	}
 }
+
+/*********************************************************************************************
+After the stopping_condiiton is met, the distances vector is then checked to ensure 
+that each distance from an address to its matching centroid is within half of the maximum 
+drone flight distance.
+*********************************************************************************************/
 bool clustering::check_distances(std::vector<double>& check_d_v, double max_dist)
 {
 	max_dist *= 0.5;
@@ -147,6 +177,14 @@ bool clustering::check_distances(std::vector<double>& check_d_v, double max_dist
 	return true;
 }
 
+/*********************************************************************************************
+There are two conditions to be met for K-means clustering for this problem of drone delivery. 
+The stopping condition and distances check. set_rand_centroids is called initially to create 
+two random centroids. The K_means algorithm is repeatedly called until the stopping condition 
+is met. If the check_distances condition is also met then the algorithm is finished. However, 
+if the distances are larger than half the drone flight distance constraint, the k value is 
+incremented, new random centroids are set, and the process repeats.
+*********************************************************************************************/
 void clustering::run_K_means() 
 {
 
@@ -184,7 +222,13 @@ void clustering::run_K_means()
 //describe algorithms and also implmentation
 // describing tests,, validation test cases
 // actual results
-
+/*********************************************************************************************
+After the successful completion of run_K_means, a convenient way to access addresses with the 
+same ids is needed.An unordered map is used to calculate the total number of addresses for each 
+cluster.Each cluster vector is then resized appropriately.All data points are iterated upon and 
+pointers within vectors are used to store the memory addresses of matching ids(i.e vector 2 
+stores memory addresses pointing to all data points which have an id = 2).
+*********************************************************************************************/
 void clustering::group_clusters()
 {
 	cluster_regions.resize(k);
@@ -209,7 +253,11 @@ void clustering::group_clusters()
 	} 
 
 }
-
+/*********************************************************************************************
+After the partition of the data points into k clusters.A depot of type address_metadata is 
+inserted at the beginning and the end of the vector centroids.The depot is the starting and 
+finishing place for the truck carrying drones & parcels.
+*********************************************************************************************/
 void clustering::add_depot(address_metadata dep)
 {
 	dep.depot = true;
@@ -218,6 +266,7 @@ void clustering::add_depot(address_metadata dep)
 	
 }
 
+// Does the same as above but sets a default depot with starting cooridantes x : 0, y : 0
 void clustering::add_depot()
 {
 	address_metadata default_dep;

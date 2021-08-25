@@ -145,13 +145,10 @@ void genetic_algorithm<C, D>::crossover_standard(C& parent1, C& parent2, C& chil
 	}*/
 	//}
 
-	//void genetic_algorithm::multi_point_crossover(int no_pivots) 
-	//{
-	//	vector<int> partitions(no_pivots);
-	//	for (int i = 0; i < no_pivots; i++)
-	//
-	//
-	//}
+/****************************************************************
+The maximumand minimum fitness values are calculated.The fitness 
+values are then scaledand the fitness values are totalled.
+****************************************************************/
 template <class C, class D>
 void genetic_algorithm<C, D>::calc_fitness(double& max, std::vector<double>::iterator& max_it,
 	double& min, double& fitness_total, std::vector<double>& fitness_v, std::vector<C>& gen)
@@ -204,6 +201,11 @@ void genetic_algorithm<C, D>::rs_mutation(C& circ, double mutation_prob, std::de
 	}
 }
 
+/************************************************************************
+The route is iterated over the range(1, rt_size - 1).If the rand_number 
+is < mutation probability then two random indexes within(1, rt_size - 2) 
+are generatedand the values at these indexes are swapped.
+************************************************************************/
 template<class C, class D>
 void genetic_algorithm<C, D>::point_mutation(C& circ, double mutation_prob, std::default_random_engine& generator)
 {
@@ -218,6 +220,17 @@ void genetic_algorithm<C, D>::point_mutation(C& circ, double mutation_prob, std:
 	std::swap(circ.route[a], circ.route[b]);
 }
 
+/*********************************************************************************
+The selection is based on a roulette wheel.Parent chromosomes with a higher 
+fitness value are more likely to be chosen to be passed onto the next 
+generation.The fitness value of each parent chromosome is scaled as a fraction 
+over the total fitness.A small number 1e-3 is subtracted from the offset to 
+prevent getting stuck in environments with no variation.If the offset is greater 
+than the random number the increment i is returned.The increment is then the 
+index of the parent chromosome to be passed onto the next generation.If no 
+indexes are returned, a random index in the range(0, generation_size - 1) is 
+returned instead.
+*********************************************************************************/
 template <class C, class D>
 int genetic_algorithm<C, D>::selection(std::vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator)
 {
@@ -238,6 +251,21 @@ int genetic_algorithm<C, D>::selection(std::vector<double>& fitness_v, int gener
 }
 
 
+
+/*****************************************************************************************
+Two vectors named genand new_gen are initialised of size(generation_size + 1).
+The added one is to prevent a vector out of bounds error at the end of the 
+algorithm.While the generation count is below or equal to the max generation 
+size, the fitness values of each parent chromosome are calculated.The chromosome 
+with the best fitness value is passed onto the next generation unchanged by crossover 
+or mutation.If the max - prev max is less than the tolerance value, the convergence 
+count is incremented.If the convergence count equals the set limit then the algorithm 
+stops as it has converged at a local minimum.If the tolerance is not met, the new_gen 
+is populated with parent chromosomes that undergo crossoverand probability depending on 
+if the random numbers generated are less than the user - defined probability values for 
+crossoverand mutation.Only if the evaluation of the routes of the new child chromosomes 
+is valid are they then passed onto the next generation.
+*****************************************************************************************/
 template <class C, class D>
 result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> fitness_func,
 	std::function<void(std::vector<C>&, std::vector<C>&, std::vector<C>&, std::vector<D>&, int)> initialise_gen_v, 
