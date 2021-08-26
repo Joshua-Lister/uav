@@ -11,8 +11,8 @@ double intersection::run_truck_tandem_drone(std::string drone_type)
 	f = std::make_tuple(all_distances, all_masses, number_of_addresses, number_of_drones);
 	std::cout << "Running truck & tandem drone method with drone type " << drone_type << "\n";
 	int additional_adr = 2;
-	double max_flight_distance = 1000;// in metres
-	double max_pay_load = 5;// in kg
+	double max_flight_distance = 150;// in metres
+	double max_pay_load = 12;// in kg
 	rural_drone arcadian_drone(max_pay_load, max_flight_distance);
 	read_data rd("postal_data.txt");
 	rd.fill_data();
@@ -25,7 +25,16 @@ double intersection::run_truck_tandem_drone(std::string drone_type)
 	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
 	f = arcadian_drone.drone_multi_delivery(cl.k, additional_adr, cl.cluster_regions, Result.circuit_vector, max_pay_load, max_flight_distance);
 	//arcadian_drone.drone_multi_delivery(cl.k, additional_adr, cl.cluster_regions,  Result.circuit_vector, )
+	std:: cout << std::get<0>(f) << "\n";	
+	std::cout << std::get<1>(f) << "\n";
+	std::cout << std::get<2>(f) << "\n";
+	std::cout << std::get<3>(f) << "\n";
+	std::tuple<double, int> g;
 
+	g = arcadian_drone.singular_flight(cl.k, cl.cluster_regions, Result.circuit_vector);
+	std:: cout << std::get<0>(g) << "\n";	
+	std::cout << std::get<1>(g) << "\n";
+	return 0;
 
 	//truck t1(no_of_drones_req);
 	

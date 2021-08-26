@@ -5,6 +5,7 @@
 
 class intersection
 {
+public:
 	intersection();
 
 	~intersection();

@@ -1,6 +1,7 @@
 #include "drone.h"
 
-
+std::vector<drone*> drone::v1;
+std::vector<drone*> drone::v2;
 drone::drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
 	int rotors): maximum_battery_time(maximum_battery_time),  drone_mass(drone_mass),
 	payload(payload) {};

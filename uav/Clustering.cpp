@@ -1,6 +1,6 @@
 #include "clustering.h"
 
-clustering::clustering(read_data& d, double max_distance = 500) : d(d), no_of_addresses(d.no_of_addresses) 
+clustering::clustering(read_data d, double max_distance) : d(d), no_of_addresses(d.no_of_addresses), max_distance(max_distance)
 {
 	centroids.resize(this->k);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
@@ -58,7 +58,7 @@ void clustering::K_means(int k_val, std::vector<double>& distances)
 		min_distance = DBL_MAX; // Assigning to maximum value to ensure if statement condition is true for first iteration of second for loop
 		for (auto cluster_no = 0; cluster_no < k_val; cluster_no++) 
 		{
-			distance = std::sqrt(util::length(d.data[adr_no], centroids[cluster_no]));// change this why??
+			distance = util::length(d.data[adr_no], centroids[cluster_no]);
 			if (distance < min_distance) //Continually comparing distance between a single address and the centroids
 			{ 
 				min_distance = distance; //Set new min distance
@@ -205,7 +205,7 @@ void clustering::run_K_means()
 			if (stopping_condition(centroids, track_centroids)) //never met for large routes think of new way to overocme issue
 			{ // strange bug where postcodes have same but swapped coordinates
 				converge = true;
-				if (check_distances(distances_v, 20)) //change this
+				if (check_distances(distances_v, this->max_distance)) //change this
 				{ // change second param
 					in_range = true;
 					return;

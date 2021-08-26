@@ -26,7 +26,11 @@ int run_main()
 	//test_software.run_tests();
 	//try_str();
 	//result R = try_result();
-	run_tests();
+	//run_tests();
+	intersection isf;
+	//isf.do_tests();
+	double f = isf.run_truck_tandem_drone("rural");
+	std::cout << "final : " << f << "\n";
 	return 0;
 }
 
@@ -103,11 +107,11 @@ int main()
 		return run_main();
 	}
 
-	_except(DescribeException(GetExceptionInformation()))
+		_except(DescribeException(GetExceptionInformation()))
 	{
 		std::cout << " with testnum = " << testnum << " and testval= " << testval << std::endl;
 	}
-	
+
 
 	_controlfp_s(0, original_mask, _MCW_EM);
 }

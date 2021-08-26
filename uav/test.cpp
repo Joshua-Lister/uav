@@ -5,7 +5,7 @@ bool check_utility_distance()
 	address_metadata t1, t2;
 	t1.x_coord = 3; t1.y_coord = 3;
 	t2.x_coord = 6; t2.y_coord = 7;
-	double d = std::sqrt(util::length(t1, t2));
+	double d = util::length(t1, t2);
 	if (d == 5)
 	{
 		return true;

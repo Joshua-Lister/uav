@@ -3,7 +3,7 @@
 
 double util::length(const address_metadata& adr, const address_metadata& centroid) 
 {
-	return (abs((adr.x_coord - centroid.x_coord) * (adr.x_coord - centroid.x_coord) + (adr.y_coord - centroid.y_coord) * (adr.y_coord - centroid.y_coord)));
+	return std::sqrt((abs((adr.x_coord - centroid.x_coord) * (adr.x_coord - centroid.x_coord) + (adr.y_coord - centroid.y_coord) * (adr.y_coord - centroid.y_coord))));
 }
 
 double util::length(const address_metadata& adr, const double& x, const double& y)

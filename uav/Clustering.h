@@ -4,7 +4,6 @@
 #include "drone.h"
 #include "truck.h"
 #include "utility.h"
-#include <cmath>
 #include <random>
 #include <stdio.h>
 #include <chrono>
@@ -13,7 +12,7 @@
 class clustering
 {
 public:
-	clustering(read_data& d, double max_distance);
+	clustering(read_data d, double max_distance);
 	clustering(int c_size);
 	clustering(const clustering& cp);
 	~clustering();
@@ -33,7 +32,7 @@ public:
 	int k = 2;
 	bool success;
 	read_data d;
-	double min_distance;
+	double min_distance, max_distance;
 	std::vector<double> points;
 	std::vector<double> distances;
 	std::vector<size_t> no_of_points;
