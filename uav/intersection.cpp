@@ -45,13 +45,14 @@ double intersection::run_truck_tandem_drone(std::string drone_type)
 	return 0.0;
 }
 
-void intersection::set_parameters(double& elec_cost, double& fuel_cost, double& max_flight_distance, double& max_payload, int& truck_vol_capacity)
+void intersection::set_parameters(double& elec_cost, double& fuel_cost, double& max_flight_distance, double& max_payload, int& truck_vol_capacity, std::string drone_choice)
 {
 	fuel_cost = (12 * 1000) / 1000; // Fuel cost per metre (M)
 	elec_cost = (0.12 * 1000) / 1000; //Electricy cost per metre (M)
 	max_flight_distance = 1050; //Metres (M)
 	max_payload = 5; //Kilograms (KG)
 	truck_vol_capacity = 25;
+	drone_choice = "rural";
 }
 
 void intersection::set_GA_params_list(GA_param_list& lst)
@@ -68,11 +69,11 @@ void intersection::run_which_linux()
 
 	double elec_cost, max_flight_distance, max_payload, fuel_cost;
 	int truck_vol_capacity;
-	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity);
+	std::string drone_type;
+	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_type);
 	truck t1(truck_vol_capacity);
-	std::string drone_type; 
 	GA_param_list GA_list;
-	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, "rural", GA_list);
+	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_type, GA_list);
 	
 #ifdef TEST
 
@@ -104,12 +105,15 @@ void intersection::run_which_windows(std::string choice)
 {
 	double elec_cost, max_flight_distance, max_payload, fuel_cost;
 	int truck_vol_capacity;
-	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity);
+	std::string drone_choice;
+	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_choice);
 	truck t1(truck_vol_capacity);
 	std::string drone_type;
 	GA_param_list GA_list;
-	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, "rural", GA_list);
+	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_type, GA_list);
 
+	std::transform(choice.begin(), choice.end(), choice.begin(), ::tolower);
+	
 	if (choice == "test")
 	{
 		run_tests();
@@ -135,6 +139,10 @@ void intersection::run_which_windows(std::string choice)
 	{
 		std::vector<double> compare_a_v(3);
 		compare_a_v = f1.truck_vs_drone_savings();
+	}
+	else
+	{
+		std::cerr << "Incorrect string passed\n";
 	}
 
 
