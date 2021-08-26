@@ -1,13 +1,15 @@
 #include "flight.h"
 
-flight::flight(truck t1, double fuel_cost, double elec_cost, double max_flight_distance, double max_payload, std::string drone_type, GA_param_list& set_params) : truck1(t1)
+flight::flight(truck t1, double fuel_cost, double elec_cost, double max_flight_distance, double max_payload, std::string drone_type, GA_param_list& set_params) : 
+	truck1(t1), fuel_cost(fuel_cost), elec_cost(elec_cost), max_flight_distance(max_flight_distance), max_payload(max_payload), drone_type(drone_type),
+	set_params(set_params)
 {
 
 }
+flight::flight(truck t1, double max_flight_distance, double max_payload) : truck1(t1), max_flight_distance(max_flight_distance), max_payload(max_payload){}
 
 flight::~flight()
 {
-	std::cout << "Many thanks to my supervisor Professor Stephen Neethling for his help and guidance throughout this project\n";
 }
 
 std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route, double max_payload_cap, double max_dist)
@@ -166,6 +168,7 @@ std::tuple<double, double, int, int> flight::single_adr_drone_delivery(int k, st
 			sum_d += 2 * util::length(opt_route[i], *cl_data[centroid_id][j]);
 			num_of_addresses++;
 			total_parcel_mass += cl_data[centroid_id][j]->parcel_mass;
+			cl_data[centroid_id][j]->visited = true;
 		}
 	}
 
@@ -195,7 +198,9 @@ std::vector<savings> flight::drone_method_savings(double max_payload, double max
 	cl.run_clustering();
 	cl.add_depot();
 	genetic_algorithm<Circuit, address_metadata> tsp_ga(this->set_params, cl.centroids);
-	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
 	multi_drone_results = multi_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector, max_payload, max_flight_distance);
 	single_drone_results = single_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector);
 
@@ -245,7 +250,9 @@ savings flight::truck_only(bool verbose)
 	clustering dummy_obj(rd);
 	dummy_obj.add_depot();
 	genetic_algorithm<Circuit, address_metadata> tsp_ga(this->set_params, dummy_obj.centroids);
-	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
 	double price = Result.optimal_performance * this->fuel_cost;
 	save.petrol_savings = price;
 
@@ -268,7 +275,9 @@ savings flight::single_drone(bool verbose)
 	cl.run_clustering();
 	cl.add_depot();
 	genetic_algorithm<Circuit, address_metadata> tsp_ga(this->set_params, cl.centroids);
-	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
 	single_drone_results = single_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector);
 	
 	save.petrol_savings = this->fuel_cost *Result.optimal_performance;
@@ -293,7 +302,9 @@ savings flight::multi_drone(bool verbose)
 	cl.run_clustering();
 	cl.add_depot();
 	genetic_algorithm<Circuit, address_metadata> tsp_ga(set_params, cl.centroids);
-	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_truck_route_validity);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
 	multi_drone_results = multi_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector, max_payload, max_flight_distance);
 	save.energy_savings = this->elec_cost * std::get<0>(multi_drone_results);
 	save.petrol_savings = this->fuel_cost * Result.optimal_performance;

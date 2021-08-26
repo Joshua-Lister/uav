@@ -1,5 +1,6 @@
 #include "intersection.h"
 
+
 intersection::intersection(){}
 intersection::~intersection(){}
 
@@ -49,7 +50,7 @@ void intersection::set_parameters(double& elec_cost, double& fuel_cost, double& 
 {
 	fuel_cost = (12 * 1000) / 1000; // Fuel cost per metre (M)
 	elec_cost = (0.12 * 1000) / 1000; //Electricy cost per metre (M)
-	max_flight_distance = 1050; //Metres (M)
+	max_flight_distance = 400; //Metres (M)
 	max_payload = 5; //Kilograms (KG)
 	truck_vol_capacity = 25;
 	drone_choice = "rural";
@@ -57,8 +58,8 @@ void intersection::set_parameters(double& elec_cost, double& fuel_cost, double& 
 
 void intersection::set_GA_params_list(GA_param_list& lst)
 {
-	lst.generation_size = 40;
-	lst.max_generation = 400;
+	lst.generation_size = 10;
+	lst.max_generation = 100;
 	lst.crossover_prob = 0.8;
 	lst.mutation_prob = 0.15;
 	lst.seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -73,6 +74,7 @@ void intersection::run_which_linux()
 	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_type);
 	truck t1(truck_vol_capacity);
 	GA_param_list GA_list;
+	set_GA_params_list(GA_list);
 	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_type, GA_list);
 	
 #ifdef TEST
@@ -108,9 +110,9 @@ void intersection::run_which_windows(std::string choice)
 	std::string drone_choice;
 	set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_choice);
 	truck t1(truck_vol_capacity);
-	std::string drone_type;
 	GA_param_list GA_list;
-	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_type, GA_list);
+	set_GA_params_list(GA_list);
+	flight f1(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_choice, GA_list);
 
 	std::transform(choice.begin(), choice.end(), choice.begin(), ::tolower);
 	

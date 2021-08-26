@@ -3,6 +3,7 @@
 #include "tsp_funcs.h"
 #include "driver_code.h"
 #include "testclass.h"
+#include "intersection.h"
 #include <algorithm>
 
 bool check_utility_distance();
@@ -21,4 +22,6 @@ bool mutation_test_psm_2();
 bool mutaiton_test_pm_1();
 bool mutaiton_test_pm_1();
 bool crossover_test_1();
+bool all_adr_visited_multi_drone_test();
+bool all_adr_visited_single_drone_test();
 void run_tests();

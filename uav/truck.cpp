@@ -19,11 +19,13 @@ void truck::set_coords(double x, double y)
 	//this->y_coord = y;
 }
 
-double truck::return_drone_capacity(){
+double truck::return_drone_capacity()
+{
 	return this->drone_capacity;
 }
 
-void truck::set_drone_capacity(int dc){
+void truck::set_drone_capacity(int dc)
+{
 	this->drone_capacity = dc;
 }
 

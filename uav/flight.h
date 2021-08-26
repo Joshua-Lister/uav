@@ -15,6 +15,7 @@ class flight
 {
 public:
 	flight(truck t1, double fuel_cost, double elec_cost, double max_flight_distance, double max_payload, std::string drone_type, GA_param_list& set_params);
+	flight(truck t1, double max_flight_distance, double max_payload);
 	~flight();
 	std::tuple<double, double, int, int, int> multi_adr_drone_delivery(int k, std::vector<std::vector<address_metadata*>>& cl_data, 
 		std::vector<address_metadata>& opt_route, double max_payload_cap, double max_dis);

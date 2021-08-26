@@ -83,7 +83,7 @@ std::tuple<std::vector<address_metadata>, std::vector<address_metadata>> setup_a
 {
 	size_t test_size = 5;
 	std::vector<address_metadata> test_adr1(test_size), test_adr2(test_size);
-	float rand_n_x, rand_n_y;
+	double rand_n_x, rand_n_y;
 	for (int i = 0; i < test_size; i++)
 	{
 		rand_n_x = rand() % 100;
@@ -174,7 +174,7 @@ bool mutation_test_psm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -192,7 +192,7 @@ bool mutation_test_psm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -216,7 +216,7 @@ bool mutation_test_rsm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -229,7 +229,7 @@ bool mutation_test_rsm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -253,7 +253,7 @@ bool mutaiton_test_pm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -266,7 +266,7 @@ bool mutaiton_test_pm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	Circuit c1(copy_test_route, false);
 	std::default_random_engine generator(lstt.seed);
@@ -308,7 +308,7 @@ bool crossover_test_1()
 		c_v[i].mix(c_v[i].route);
     }
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	std::default_random_engine generator(lstt.seed);
 	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 3);
@@ -336,7 +336,7 @@ bool crossover_test_2()
 	}
 	std::reverse(c_v[1].route.begin(), c_v[1].route.end());
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	std::default_random_engine generator(lstt.seed);
 	GA_test.crossover_ordered(c_v[0], c_v[1], c_v[2], c_v[3], 2, 4);
@@ -374,7 +374,7 @@ bool GA_optimisation_test_2()
 		std::swap(copy_test_route[i], copy_test_route[i - 1]);
 	}
 	GA_param_list lstt;
-	set_GA_params(lstt);
+	intersection::set_GA_params_list(lstt);
 	lstt.max_generation = 200;
 	genetic_algorithm<Circuit, address_metadata> GA_test(lstt, copy_test_route);
 	result Result = GA_test.run_algorithm_genetic(&test_fitness, &initialise_circuit_v, &check_validity_dummy);
@@ -383,6 +383,84 @@ bool GA_optimisation_test_2()
 		if (test_route[i].num != Result.circuit_vector[i].num)
 		{
 			return false;
+		}
+	}
+	return true;
+}
+
+bool all_adr_visited_multi_drone_test()
+{
+	intersection apollo;
+	double elec_cost, max_flight_distance, max_payload, fuel_cost;
+	int truck_vol_capacity;
+	std::string drone_choice;
+	apollo.set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_choice);
+	truck t1(truck_vol_capacity);
+	std::string drone_type;
+	GA_param_list GA_list;
+	intersection::set_GA_params_list(GA_list);
+	read_data rd("postal_data.txt");
+	rd.fill_data();
+	clustering cl(rd, max_flight_distance);
+	cl.run_clustering();
+	cl.add_depot();
+	genetic_algorithm<Circuit, address_metadata> tsp_ga(GA_list, cl.centroids);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
+	flight titan(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_choice, GA_list);
+	std::tuple<double, double, int, int, int> multi_drone_results = titan.multi_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector, max_payload, max_flight_distance);
+	int centroid_id;
+	std::vector<address_metadata> opt_route = Result.circuit_vector;
+	
+	for (int i = 0; i < cl.k; i++)
+	{
+		centroid_id = opt_route[i].id;
+		for (int j = 0; j < cl.cluster_regions[centroid_id].size(); j++)
+		{
+			if (cl.cluster_regions[centroid_id][j]->visited == false)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool all_adr_visited_single_drone_test()
+{
+	intersection apollo;
+	double elec_cost, max_flight_distance, max_payload, fuel_cost;
+	int truck_vol_capacity;
+	std::string drone_choice;
+	apollo.set_parameters(elec_cost, fuel_cost, max_flight_distance, max_payload, truck_vol_capacity, drone_choice);
+	truck t1(truck_vol_capacity);
+	std::string drone_type;
+	GA_param_list GA_list;
+	intersection::set_GA_params_list(GA_list);
+	read_data rd("postal_data.txt");
+	rd.fill_data();
+	clustering cl(rd, max_flight_distance);
+	cl.run_clustering();
+	cl.add_depot();
+	genetic_algorithm<Circuit, address_metadata> tsp_ga(GA_list, cl.centroids);
+	result Result = tsp_ga.run_algorithm_genetic(&fitness, &initialise_circuit_v, &check_validity_dummy);
+	Result.circuit_vector.pop_back();
+	Result.circuit_vector.erase(Result.circuit_vector.begin());
+	flight titan(t1, elec_cost, fuel_cost, max_flight_distance, max_payload, drone_choice, GA_list);
+	std::tuple<double, double, int, int> single_drone_results = titan.single_adr_drone_delivery(cl.k, cl.cluster_regions, Result.circuit_vector);
+	int centroid_id;
+	std::vector<address_metadata> opt_route = Result.circuit_vector;
+	
+	for (int i = 0; i < cl.k; i++)
+	{
+		centroid_id = opt_route[i].id;
+		for (int j = 0; j < cl.cluster_regions[centroid_id].size(); j++)
+		{
+			if (cl.cluster_regions[centroid_id][j]->visited == false)
+			{
+				return false;
+			}
 		}
 	}
 	return true;
@@ -413,5 +491,9 @@ void run_tests()
 	GA_tests.test(&crossover_test_1, "Crossover test 1");
 	GA_tests.test(&crossover_test_2, "Crossover test 2");
 	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");
+
+	TestClass Drone_delivery_test("Drone Delivery checks");
+	Drone_delivery_test.test(&all_adr_visited_multi_drone_test, "Multi address drone delivery test");
+	Drone_delivery_test.test(&all_adr_visited_single_drone_test, "Single address drone delivery test");
 	
 }

@@ -10,7 +10,7 @@ public:
 
 	~intersection();
 
-	void set_GA_params_list(GA_param_list& lst);
+	static void set_GA_params_list(GA_param_list& lst);
 
 	double run_truck_tandem_drone(std::string drone_type);
 
