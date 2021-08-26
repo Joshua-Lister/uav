@@ -7,7 +7,7 @@
 #include <algorithm>
 
 struct GA_param_list {
-	int num_units, generation_size, max_generation, max_iterations;
+	int num_units, generation_size, max_generation;
 	double crossover_prob, mutation_prob, tolerance;
 	unsigned seed;
 };

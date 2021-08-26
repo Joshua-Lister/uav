@@ -21,16 +21,14 @@ double testval = 0.0;
 
 int run_main()
 {
-	//run_truck_tandem_drone("rural");
-	//TestClass test_software("Drone Delivery Software");
-	//test_software.run_tests();
-	//try_str();
-	//result R = try_result();
-	//run_tests();
-	intersection isf;
-	//isf.do_tests();
-	double f = isf.run_truck_tandem_drone("rural");
-	std::cout << "final : " << f << "\n";
+	intersection iss;
+#if defined (_WIN32)
+	std::string s = "test";
+	iss.run_which_windows(s);
+#else
+	iss.run_which_linux();
+#endif
+	
 	return 0;
 }
 
