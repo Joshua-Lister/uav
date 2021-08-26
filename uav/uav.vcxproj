@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="driver_code.h" />
     <ClInclude Include="flight.h" />
     <ClInclude Include="intersection.h" />
     <ClInclude Include="test.h" />
@@ -159,7 +158,6 @@
     <ClInclude Include="urban_drone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="driver_code.cpp" />
     <ClCompile Include="flight.cpp" />
     <ClCompile Include="intersection.cpp" />
     <ClCompile Include="test.cpp" />

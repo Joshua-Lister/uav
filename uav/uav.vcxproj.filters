@@ -51,9 +51,6 @@
     <ClInclude Include="tsp_funcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="driver_code.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="testclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,9 +96,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tsp_funcs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="driver_code.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testclass.cpp">
