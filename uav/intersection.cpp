@@ -11,7 +11,7 @@ double intersection::run_truck_tandem_drone(std::string drone_type)
 	f = std::make_tuple(all_distances, all_masses, number_of_addresses, number_of_drones);
 	std::cout << "Running truck & tandem drone method with drone type " << drone_type << "\n";
 	int additional_adr = 2;
-	double max_flight_distance = 150;// in metres
+	double max_flight_distance = 200;// in metres
 	double max_pay_load = 12;// in kg
 	rural_drone arcadian_drone(max_pay_load, max_flight_distance);
 	read_data rd("postal_data.txt");

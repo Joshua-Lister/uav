@@ -23,8 +23,8 @@ public:
 	void set_h_velocity_drone(double m_h_v);
 	void set_v_velocity_drone(double m_v_v);
 	//virtual bool energy_flight_constraint(double L) = 0;
-	static std::vector<drone*> v1; 
-	static std::vector<drone*> v2;
+	 std::vector<address_metadata*> v1; 
+	 std::vector<drone*> v2;
 	//virtual bool energy_flight_constraint(double L) = 0;
 	virtual std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route,
 		double max_payload_cap, double max_dist) = 0;

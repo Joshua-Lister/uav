@@ -1,5 +1,5 @@
-#include "Circuit.h"
-#include "genetic_algorithm.h"
+//#include "Circuit.h"
+//#include "genetic_algorithm.h"
 #include "tsp_funcs.h"
 
 //tsp_funcs::tsp_funcs();

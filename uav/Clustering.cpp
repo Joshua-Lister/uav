@@ -1,6 +1,6 @@
 #include "clustering.h"
 
-clustering::clustering(read_data d, double max_distance) : d(d), no_of_addresses(d.no_of_addresses), max_distance(max_distance)
+clustering::clustering(read_data& d, double max_distance) : d(d), no_of_addresses(d.no_of_addresses), max_distance(max_distance)
 {
 	centroids.resize(this->k);
 	no_of_points.resize(no_of_addresses); easting_sum.resize(no_of_addresses); northing_sum.resize(no_of_addresses);
@@ -13,6 +13,10 @@ clustering::clustering(int c_size)
 	centroids.resize(c_size);
 }
 
+clustering::clustering(read_data& d) : no_of_addresses(d.no_of_addresses), centroids(d.data)
+{
+
+}
 //Copy constructor
 clustering::clustering(const clustering& cp) 
 {
@@ -273,6 +277,8 @@ void clustering::add_depot()
 	default_dep.x_coord = 0;
 	default_dep.y_coord = 0;
 	default_dep.depot = true;
+	this->centroids.push_back(default_dep);
+	this->centroids.insert(centroids.begin(), default_dep);
 }
 
 void clustering::run_clustering()

@@ -12,11 +12,11 @@ public:
 	void set_drone_capacity(int dc);
 	double travel_cost(double travel_distance);
 	double tempus = 0;
-	double x_coord = 0, y_coord = 0;
+	double* x_coord = 0, *y_coord = 0;
 	double cost_per_litre = 0, fuel_consumption_rate = 0;
 
 	double tank_capacity = 200; //Liters
-	int drone_capacity = 0;
+	int drone_capacity = 22;
 
 
 };

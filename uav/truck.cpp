@@ -14,8 +14,8 @@ void truck::set_time(double t)
 
 void truck::set_coords(double x, double y)
 {
-	this->x_coord = x;
-	this->y_coord = y;
+	//this->x_coord = x;
+	//this->y_coord = y;
 }
 
 double truck::return_drone_capacity(){

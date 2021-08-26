@@ -375,8 +375,6 @@ std::tuple<int, int, int, int> rural_drone::drone_multi_delivery(int k, int ad_a
 			cnt_m = 1;// add number of address 
 		}
 	}
-	int e = 1;
-	int b = 1;
 	return std::tuple<int, int, int, int>(all_distances, all_masses, number_of_addresses, number_of_drones);
 }
 //void rural_drone::set_up_single_drone(rural_drone* uav, address_metadata arg, double mass_sum)

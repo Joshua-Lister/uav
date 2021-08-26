@@ -12,8 +12,9 @@
 class clustering
 {
 public:
-	clustering(read_data d, double max_distance);
+	clustering(read_data& d, double max_distance);
 	clustering(int c_size);
+	clustering(read_data& d);
 	clustering(const clustering& cp);
 	~clustering();
 	//inline static double length(const address_metadata& pg, const address_metadata& cd);

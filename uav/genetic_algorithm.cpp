@@ -374,7 +374,7 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 
 	size_t route_gen_size = track_route_ov.size();
 	size_t perf_v_size = performance_v.size();
-	ofstream myfile;
+	std::ofstream myfile;
 	myfile.open("b_52_routes_rsm.txt");
 	myfile << "Route_size" << " " << "Generations " << "Convergence_count " << "Generation_count" << "\n";
 	myfile << rt_size << " " << perf_v_size << " " << conv_cnt << " " << gen_cnt << "\n";
