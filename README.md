@@ -1,6 +1,6 @@
 # ACSE-9 Independent Research Project 2021
 
-## An investigation into drone delivery in urban and rural areas
+## An Investigation Into Drone Delivery Methods
 ### Table of contents
   * [Dependencies](#dependencies)
   * [Introduction](#introduction)
