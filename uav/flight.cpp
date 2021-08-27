@@ -144,6 +144,7 @@ std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k
 	}
 
 	int temp_drone_capacity = this->truck1.drone_capacity;
+	number_of_trucks++;
 	while (number_of_drones > temp_drone_capacity)
 	{
 		number_of_trucks++;
@@ -218,9 +219,9 @@ std::vector<savings> flight::drone_method_savings(double max_payload, double max
 	save_single.num_of_drones_savings = drones_single;
 	save_single.petrol_savings = this->fuel_cost * Result.optimal_performance;
 
-	save_multi.energy_savings = energy_cost_single * this->elec_cost;
-	save_multi.num_of_trucks_savings = trucks_single;
-	save_multi.num_of_drones_savings = drones_single;
+	save_multi.energy_savings = energy_cost_multi * this->elec_cost;
+	save_multi.num_of_trucks_savings = trucks_multi;
+	save_multi.num_of_drones_savings = drones_multi;
 	save_multi.petrol_savings = this->fuel_cost * Result.optimal_performance;
 
 
@@ -310,6 +311,14 @@ savings flight::multi_drone(bool verbose)
 	save.petrol_savings = this->fuel_cost * Result.optimal_performance;
 	save.num_of_drones_savings = std::get<3>(multi_drone_results);
 	save.num_of_trucks_savings = std::get<4>(multi_drone_results);
+#ifdef C_DATA
+	std::ofstream myfile;
+	myfile.open("drone_savings_comparison.txt");
+	myfile << "Total cost " << "No of Drones " << " No of Trucks" << std::endl;
+
+	myfile std::endl;
+	myfile <<
+#endif C_DATA
 	return save;
 
 }
@@ -327,7 +336,7 @@ std::vector<double>flight::truck_vs_drone_savings()
 
 #ifdef C_DATA
 	std::ofstream myfile;
-	myfile.open("savings_comparison.txt");
+	myfile.open("all_savings_comparison.txt");
 	myfile << "Truck Delivery Method £ " << "Single Flight Drone Delivery & Truck " << "Multi Flight Drone Delivery & Truck";
 	myfile << std::endl;
 	myfile << p1 << " " << p2 << " " << p3;
