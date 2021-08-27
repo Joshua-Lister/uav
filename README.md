@@ -14,7 +14,6 @@
   * [Author and Course Information](#author-and-course-information)
   * [Licence](#licence)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Dependencies
 This code has been compiled with C++20. The following python libaries are required for the generation of plots and the animation : 
