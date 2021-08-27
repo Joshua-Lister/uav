@@ -1,6 +1,21 @@
 # ACSE-9 Independent Research Project 2021
 
 ## An investigation into drone delivery in urban and rural areas
+### Table of contents
+  * [Dependencies](#dependencies)
+  * [Introduction](#introduction)
+  * [Results](#results)
+  * [Documentation](#documentation)
+  * [Instructions](#instructions)
+    + [Windows OS](#windows-os)
+    + [Linux OS](#linux-os)
+  * [Tests](#tests)
+  * [Repository Structure](#repository-structure)
+  * [Author and Course Information](#author-and-course-information)
+  * [Licence](#licence)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 ## Dependencies
 This code has been compiled with C++20. The following python libaries are required for the generation of plots and the animation : 
 - `numpy`
