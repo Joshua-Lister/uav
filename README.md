@@ -10,17 +10,21 @@ Software for delivery of parcels with the use of autonomous drones or otherwise 
 ## Results
 Savings on electricty when using single address drone method and multi address drone method.
 
-<img src="./images/compare1.png" width="600" height="500" align="centre">
+<p align="center">
+  <img width="400" height="300" src="./images/compare1.png">
+</p>
 
 Savings on number of drones & trucks required for test case.
-
-![plot](./images/compare2.png)
+<p align="center">
+  <img width="400" height="300" src="./images/compare2.png">
+</p>
 
 Optimisation of a truck route with 22 stop off locations.
+<p align="center">
+  <img width="400" height="300" src="./images/route_optimisation.gif">
+</p>
 
-![plot](./images/route_optimisation.gif)
-
-##Documentation
+## Documentation
 Full and extensive documentation can be found here: https://uav-documentation.atlassian.net/wiki/spaces/UAV/overview
 ## Instructions
 ### Windows OS
@@ -37,7 +41,10 @@ Build the makefile with following
 - ` `
 ## Tests
 After running the tests, the output window should look like
-<img src="./images/test_pass.png" width="400" height="400" align="centre">
+
+<p align="center">
+  <img width="400" height="300" src="./images/test_pass.png">
+</p>
 
 ## Author and Course Information
 Author : Joshua P Lister
