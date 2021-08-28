@@ -5,6 +5,7 @@
 #include <random>
 #include <stdio.h>
 #include <algorithm>
+#include <cfloat>
 
 struct GA_param_list {
 	int num_units, generation_size, max_generation;
