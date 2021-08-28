@@ -2,6 +2,7 @@
 #include "rural_drone.h"
 #include "truck.h"
 #include "tsp_funcs.h"
+#include <memory>
 
 struct savings
 {
