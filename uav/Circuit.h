@@ -1,5 +1,6 @@
 #pragma once
 #include "clustering.h"
+#include "utility.h"
 #include <map>
 #include <random>
 #include <numeric>

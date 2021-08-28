@@ -1,5 +1,5 @@
 #pragma once
-#include "Circuit.h"
+#include "circuit.h"
 #include "genetic_algorithm.h"
 extern std::vector<address_metadata> test_route;
 double fitness(Circuit& circ1);

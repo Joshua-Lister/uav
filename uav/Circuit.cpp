@@ -1,5 +1,5 @@
-#include "Circuit.h"
-#include "utility.h"
+#include "circuit.h"
+
 
 Circuit::Circuit(std::vector<address_metadata>& centroids, bool empty) : route(centroids) {
 	if (!empty)

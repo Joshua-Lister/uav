@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 #include "clustering.h"
-#include "Circuit.h"
+#include "circuit.h"
 #include "genetic_algorithm.h"
 #include <chrono>
 #include "test.h"

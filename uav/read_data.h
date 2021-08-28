@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include "postal_region.h"
+#include <vector>
 #include <unordered_map>
 class read_data
 {

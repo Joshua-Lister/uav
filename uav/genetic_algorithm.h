@@ -1,5 +1,5 @@
 #pragma once
-#include "Circuit.h"
+#include "circuit.h"
 #include "postal_region.h"
 #include <cmath>
 #include <random>
