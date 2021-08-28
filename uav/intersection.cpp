@@ -128,7 +128,7 @@ void intersection::run_which_windows(std::string choice)
 	}
 	else
 	{
-		std::cerr << "Incorrect string passed in main (WINDOWS OS)\n";
+		std::cerr << "Incorrect string passed (WINDOWS OS)\n";
 	}
 
 

@@ -1,15 +1,14 @@
 #include "circuit.h"
 
 
-Circuit::Circuit(std::vector<address_metadata>& centroids, bool empty) : route(centroids) {
+Circuit::Circuit(std::vector<address_metadata>& centroids, bool empty) : route(centroids) 
+{
 	if (!empty)
 	{
 		this->route_size = this->route.size();
-		//cout << "route_size circuit" << this->centroids.size() << "\n";
 		route.resize(route_size);
-		//velocity_v.resize(route_size - 1); // here
 		mix(route);
-		//route = centroids;
+	
 	}
 	else
 	{
@@ -20,24 +19,13 @@ Circuit::Circuit(std::vector<address_metadata>& centroids, bool empty) : route(c
 };
 Circuit::Circuit(clustering& c1) : route(c1.centroids) {
 	route_size = route.size();
-	//cout << "route_size circuit" << this->route_size << "\n";
 	route.resize(route_size);
 	velocity_v.resize(route_size - 1);
 	masses.resize(route_size);
 	mix(route);
 
 }
-//Circuit::Circuit(const Circuit& c_old)
-//{
-//	this->route_size = c_old.route_size;
-//	this->route = c_old.centroids;
-//
-//}
-//operator = (const Circuit& mat_old)
-//{
-//	if (this == &mat_old) return *this;
-//
-//}
+
 Circuit::Circuit(int route_size) 
 {
 	route.resize(route_size);
@@ -66,9 +54,6 @@ void Circuit::swap_addresses(std::vector<address_metadata>& c, const int& p1, co
 	std::swap(c[p1], c[p2]);
 }
 
-//double Circuit::calc_mass(address_metadata& p1, address_metadata& p3) {
-//	return (p1.x_coord - p3.x_coord) * (p1.x_coord - p3.x_coord) + (p1.y_coord - p3.y_coord) * (p1.y_coord - p3.y_coord);
-//}
 
 void Circuit::calc_masses() {
 	for (size_t i = 1; i < route_size - 1; i++) 

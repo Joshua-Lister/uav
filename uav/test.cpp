@@ -1,5 +1,10 @@
 #include "test.h"
 
+/*********************************************************************
+Checks that the length function returns the euclidian distance between
+two 2D points. If the returned length matches the expected then 
+the function returns true else returns false.
+*********************************************************************/
 bool check_utility_distance()
 {
 	address_metadata t1, t2;
@@ -15,7 +20,9 @@ bool check_utility_distance()
 		return false;
 	}
 }
-
+/*********************************************************************
+Checks whether a value is in a vector. If the value is present then the function returns true else returns false;
+*********************************************************************/
 bool check_utility_in()
 {
 	std::vector<int> int_v = { 1, 2, 5, 10, 200 };
@@ -212,6 +219,11 @@ bool mutation_test_psm_2()
 	return true;
 }
 
+/*******************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm 
+class is called on the route. If the no location appears more than once in 
+the mutated route except for the depot then it returns true else returns false.
+*******************************************************************************/
 bool mutation_test_rsm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
@@ -225,6 +237,11 @@ bool mutation_test_rsm_1()
 	return check;
 }
 
+/*******************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm 
+class is called on the route. If the mutated route is the same as the original 
+result returns false else return true.
+*******************************************************************************/
 bool mutation_test_rsm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
@@ -249,7 +266,12 @@ bool mutation_test_rsm_2()
 	return true;
 }
 
-bool mutaiton_test_pm_1()
+/*******************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm 
+class is called on the route. If the no location appears more than once in 
+the mutated route except for the depot then it returns true else returns false.
+*******************************************************************************/
+bool mutation_test_pm_1()
 {
 	std::vector<address_metadata> copy_test_route = test_route;
 	GA_param_list lstt;
@@ -262,7 +284,12 @@ bool mutaiton_test_pm_1()
 	return check;
 }
 
-bool mutaiton_test_pm_2()
+/*******************************************************************************
+Using the dummy test_route, the mutation function from the genetic_algorithm 
+class is called on the route. If the mutated route is the same as the original 
+result returns false else return true.
+*******************************************************************************/
+bool mutation_test_pm_2()
 {
 	std::vector<address_metadata>  copy_test_route = test_route;
 	GA_param_list lstt;
@@ -388,6 +415,12 @@ bool GA_optimisation_test_2()
 	return true;
 }
 
+/**********************************************************************************
+Runs through the algorithms, KMC, GA and multi-address drone delivery. The boolean
+value termed ‘visited’ of each address is checked. If for a single address 
+the visited variable is equal to false then the function returns false. If all 
+visited are true then the function returns true.
+***********************************************************************************/
 bool all_adr_visited_multi_drone_test()
 {
 	intersection apollo;
@@ -427,6 +460,12 @@ bool all_adr_visited_multi_drone_test()
 	return true;
 }
 
+/**********************************************************************************
+Runs through the algorithms, KMC, GA and single-address drone delivery. The boolean
+value termed ‘visited’ of each address is checked. If for a single address the 
+visited variable is equal to false then the function returns false. If all 
+visited are true then the function returns true.
+***********************************************************************************/
 bool all_adr_visited_single_drone_test()
 {
 	intersection apollo;
@@ -466,6 +505,9 @@ bool all_adr_visited_single_drone_test()
 	return true;
 }
 
+/*****************************************
+Run all the tests and outputs the results
+******************************************/
 void run_tests()
 {
 	TestClass utility_test("Utility function checks");
@@ -486,8 +528,8 @@ void run_tests()
 	GA_tests.test(&mutation_test_rsm_2, "RS Mutation test 2");
 	GA_tests.test(&mutation_test_psm_1, "PS Mutation test 1");
 	GA_tests.test(&mutation_test_psm_2, "PS Mutation test 2");
-	GA_tests.test(&mutaiton_test_pm_1, "P Mutation test 1");
-	GA_tests.test(&mutaiton_test_pm_2, "P Mutation test 2");
+	GA_tests.test(&mutation_test_pm_1, "P Mutation test 1");
+	GA_tests.test(&mutation_test_pm_2, "P Mutation test 2");
 	GA_tests.test(&crossover_test_1, "Crossover test 1");
 	GA_tests.test(&crossover_test_2, "Crossover test 2");
 	GA_tests.test(&GA_optimisation_test_2, "GA test with target route");

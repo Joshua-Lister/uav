@@ -12,6 +12,12 @@ flight::~flight()
 {
 }
 
+	/*****************************************************************************************
+	Each address in each cluster is iterated over. A drone is assigned to as many addresses
+	as it possibly can be given the drone constraints: payload capacity and maximum flight 
+	distance. The total distance from each drone is summed to the variable all_distance, same 
+	goes for the mass of the parcels.
+	******************************************************************************************/
 std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route, double max_payload_cap, double max_dist)
 {
 	int number_of_addresses = 0;
@@ -154,6 +160,11 @@ std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k
 	return std::tuple<double, double, int, int, int>(all_distances, all_masses, number_of_addresses, number_of_drones, number_of_trucks);
 }
 
+	/*****************************************************************************************
+	Each address in each cluster is iterated over. A drone is assigned to a single address, 
+	the distance for each drone flight and its mass is summed to the total distance 
+	and total mass respectively.
+	******************************************************************************************/
 std::tuple<double, double, int, int> flight::single_adr_drone_delivery(int k, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route)
 {
 	int centroid_id;
@@ -183,6 +194,11 @@ std::tuple<double, double, int, int> flight::single_adr_drone_delivery(int k, st
 	return std::tuple<double, double, int, int>(sum_d, total_parcel_mass, num_of_addresses, number_of_trucks);
 }
 
+	/*****************************************************************************************
+	Both single and multi-address drone delivery methods are called. The energy costs, number
+	of trucks and drones for each method are stored. A vector of type savings is returned 
+	containing the costs associated with each method and the cost difference between them. 
+	******************************************************************************************/
 std::vector<savings> flight::drone_method_savings(double max_payload, double max_flight_distance)
 {
 	savings save_single, save_multi, save_dif;
@@ -238,6 +254,11 @@ std::vector<savings> flight::drone_method_savings(double max_payload, double max
 	
 }
 
+	/*****************************************************************************************
+	As no drone is used in this function, each address has to be visited by the truck. 
+	An optimal route through each address is determined by the genetic algorithm. 
+	The total distance of the route is multiplied by the fuel cost and is returned.
+	******************************************************************************************/
 savings flight::truck_only(bool verbose)
 {
 	if (verbose)
@@ -261,6 +282,10 @@ savings flight::truck_only(bool verbose)
 
 }
 
+	/*****************************************************************************************
+	This function merely calls the KMC, GA and single_ad_drone_delivery method and 
+	returns the petrol and energy costs associated with the single_ad_drone_delivery method. 
+	******************************************************************************************/
 savings flight::single_drone(bool verbose)
 {
 	if (verbose)
@@ -288,6 +313,10 @@ savings flight::single_drone(bool verbose)
 
 }
 
+	/*****************************************************************************************
+	This function merely calls the KMC, GA and multi_adr_drone_delivery method and 
+	returns the petrol and energy costs associated with the multi_adr_drone_delivery method. 
+	******************************************************************************************/
 savings flight::multi_drone(bool verbose)
 {
 	if (verbose)
@@ -323,6 +352,10 @@ savings flight::multi_drone(bool verbose)
 
 }
 
+	/*****************************************************************************************
+	The truck_only and drone_method_savings are called. The total cost associated with 
+	each method is initialised to a vector of doubles and is returned. 
+	******************************************************************************************/
 std::vector<double>flight::truck_vs_drone_savings()
 {
 	std::vector<savings> save_v(3);

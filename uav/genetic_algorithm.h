@@ -24,32 +24,39 @@ template <class C, class D>
 class genetic_algorithm
 {
 public:
-	// address_metadata& depot, bool unique
+
 	genetic_algorithm(GA_param_list list, std::vector<D>& path);
-	//genetic_algorithm(GA_param_list lista, string target_str);
+	
 	~genetic_algorithm();
-	//static double fitness(Circuit& circ1);
+
 	//void crossover_collision(vector<C>& Circuit1, vector<C>& Circuit2, vector<C>& child1, vector<C>& child2, default_random_engine& generator);
+	
 	void calc_fitness(double& max, std::vector<double>::iterator& max_it, double& min, double& fitness_total, std::vector<double>& fitness_v, std::vector<C>& gen);
+	
 	void partial_shuffle_mutation(C& circ, double mutation_prob, std::default_random_engine& generator);
+	
 	void rs_mutation(C& circ, double mutation_prob, std::default_random_engine& generator);
+	
 	void point_mutation(C& circ, double mutation_prob, std::default_random_engine& generator);
+	
 	bool approx_equal(double a, double b, double epsilion);
+	
 	void crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, int a, int b);
+	
 	void crossover_standard(C& parent1, C& parent2, C& child1, C& child2, int a, int b);
+
 	int selection(std::vector<double>& fitness_v, int generation_size, double fitness_total, std::default_random_engine& generator);
-	//static void initialise_circuit_v(vector<C>& gen1, vector<C>& gen2, vector<C>& temp_gen);
+
 	result run_algorithm_genetic(std::function<double(C&)> fitness_func,
 		std::function<void(std::vector<C>&, std::vector<C>&, std::vector<C>&, std::vector<D>&, int)> initialise_gen_v, std::function<bool(C&)> eval_circ);
-	// does it need to be vector d
+	
 	int rt_size;
-	//clustering obj1;
+	
 	std::vector<D> path;
-	//vector<double> distances;
+	
 	std::vector<C> generation, new_generation;
 	GA_param_list lista;
-	//#ifdef TEST
-	//#endif
+	
 };
 
 

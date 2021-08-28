@@ -27,6 +27,7 @@ genetic_algorithm<C, D>::~genetic_algorithm() {}
 //	for (int )
 //}
 
+
 template <class C, class D>
 bool genetic_algorithm<C, D>::approx_equal(double a, double b, double eps)
 {
@@ -39,6 +40,11 @@ bool operator ==(const address_metadata& c1, const address_metadata& c2)
 	return (c1.num == c2.num);
 }
 
+/***********************************************************************************************************************
+The ordered cross-over takes a slice whose length is determined by random integers in the range(1, route_size - 2) 
+from parent1.The slice is inserted into child1.Values that are not already in child 1 are inserted in order from parent 
+2 into child1.The same process occurs for child2.
+***********************************************************************************************************************/
 template <class C, class D>
 void genetic_algorithm<C, D>::crossover_ordered(C& parent1, C& parent2, C& child1, C& child2, int a, int b)
 {
@@ -146,7 +152,7 @@ void genetic_algorithm<C, D>::crossover_standard(C& parent1, C& parent2, C& chil
 	//}
 
 /****************************************************************
-The maximumand minimum fitness values are calculated.The fitness 
+The maximum and minimum fitness values are calculated.The fitness 
 values are then scaledand the fitness values are totalled.
 ****************************************************************/
 template <class C, class D>
@@ -162,6 +168,11 @@ void genetic_algorithm<C, D>::calc_fitness(double& max, std::vector<double>::ite
 		fitness_total += fitness_v[i];
 	}
 }
+/**************************************************************
+Iteratives over a vector, if the random number is higher than 
+the mutation probability threshold two random positions in the
+vector are swapped.
+***************************************************************/
 template <class C, class D>
 void genetic_algorithm<C, D>::partial_shuffle_mutation(C& circ, const double mutation_prob, std::default_random_engine& generator)
 {
@@ -184,6 +195,10 @@ void genetic_algorithm<C, D>::partial_shuffle_mutation(C& circ, const double mut
 	}
 }
 
+/**************************************************************
+Reverses the order of a slice of a vector who's positions are
+determined by a random unit generator.
+***************************************************************/
 template<class C, class D>
 void genetic_algorithm<C, D>::rs_mutation(C& circ, double mutation_prob, std::default_random_engine& generator)
 {

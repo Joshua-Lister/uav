@@ -22,7 +22,8 @@ int run_main()
 {
 	intersection iss;
 #if defined (_WIN32)
-	std::string s = "test";
+	std::string s;
+	std::cin >> s;
 	iss.run_which_windows(s);
 #else
 	iss.run_which_linux();
