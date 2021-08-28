@@ -59,6 +59,7 @@ public:
 	
 };
 
+//Code beneath reduces warnings in windows but returns errors in linux.
 
 template class genetic_algorithm<Circuit, address_metadata>;
 genetic_algorithm<Circuit, address_metadata>::genetic_algorithm(GA_param_list list, std::vector<address_metadata>& path);

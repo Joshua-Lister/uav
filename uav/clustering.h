@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <chrono>
 #include <set>
+#include <cfloat>
 
 class clustering
 {

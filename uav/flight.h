@@ -1,6 +1,7 @@
 #pragma once
 #include "rural_drone.h"
 #include "truck.h"
+#include "clustering.h"
 #include "tsp_funcs.h"
 #include <memory>
 
