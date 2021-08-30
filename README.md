@@ -8,7 +8,6 @@
   * [Documentation](#documentation)
   * [Instructions](#instructions)
     + [Windows OS](#windows-os)
-    + [Linux OS](#linux-os)
   * [Tests](#tests)
   * [Repository Structure](#repository-structure)
   * [Author and Course Information](#author-and-course-information)
@@ -59,13 +58,6 @@ In the main function change the string s in the main file to one of the followin
 - `single_drone` : Run the single address drone method.
 - `drone_method_compare` : Compares the savings of the different drone methods.
 - `all_compare` : Compares the truck only method and the two drone delivery methods.
-### Linux OS
-Build the makefile with following depending on your needs.
-- `make tests` : Run all tests.
-- `make multi` : Run the multi address drone method  run the single address drone method.
-- `make single` : Run the single address drone method Compares the savings of the different drone methods.
-- `make drone_compare` : Compares the savings of the different drone methods.
-- `make all_compare` : Compares the truck only method and the two drone delivery methods.
 ## Tests
 After running the tests successfully, the output window should look like
 
