@@ -49,8 +49,13 @@ Savings on number of drones & trucks required for test case.
 Full and extensive documentation can be found here: https://uav-documentation.atlassian.net/wiki/spaces/UAV/overview
 ## Instructions
 Before running the c++ code. Clean the input data using by using the command
-- `python3 ../clean_data.py` Standard Python Verison
-- `python ../clean_data.py` Anaconda Python Version 
+- `python3 scripts/clean_data.py` Standard Python Verison
+- `python scripts/clean_data.py` Anaconda Python Version
+
+Random Postcodes for testing purposes can be generated using the command
+- `python3 scripts/random_postcodes.py` Standard Python Verison
+- `python scripts/random_postcodes.py`Anaconda Python Version
+
 ### Windows OS
 In the main function change the string s in the main file to one of the following depending on your needs.
 - `test` : Run all tests. 
