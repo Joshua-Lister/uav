@@ -312,29 +312,30 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 	double max, min;
 	std::vector<double>::iterator max_it;
 
-	while (gen_cnt <= lista.max_generation)
+	while (gen_cnt <= lista.max_generation) //continue until generation count leq to max_gen
 	{
-		for (int i = 0; i < lista.generation_size; i++)
+		for (int i = 0; i < lista.generation_size; i++)//calculate fitness of each chromosome
 			fitness_v[i] = fitness_func(gen[i]);
 
-		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen);
+		calc_fitness(max, max_it, min, fitness_total, fitness_v, gen); //adjust fitness values
 		// Store best performing circuit
-		elite_ind = std::distance(fitness_v.begin(), max_it);
-		new_gen[0] = gen[elite_ind];
+		elite_ind = std::distance(fitness_v.begin(), max_it); //store elite chromosome index
+		new_gen[0] = gen[elite_ind]; //store elite chromosome in new generation
 #ifdef C_DATA
 		performance_v.push_back(1 / max);
 		track_route_ov.push_back(gen[elite_ind].route);
 #endif
-		if (((1 / max) - (1 / prev_max)) == 0)
+		if (((1 / max) - (1 / prev_max)) == 0) //if previous max == max
 		{
-			conv_cnt++;
+			conv_cnt++; //increment convergence count
 		}
-		else
+		else // if difference reset convergence count
 		{
 			conv_cnt = 0;
 		}
 		prev_max = max;
 
+		//if convergence count met or gen_cnt == max_generation store results and break
 		if ((conv_cnt > max_conv_cnt) || (gen_cnt == lista.max_generation))
 		{
 			Result.iteration = gen_cnt;
@@ -343,11 +344,14 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 			break;
 		}
 
+		//n = 1 as we stored elite chromosome already so iterative over gen_size - 1
 		n = 1;
 
 		while (n < lista.generation_size)
 		{
+			//select chromosome 
 			ind1 = selection(fitness_v, lista.generation_size, fitness_total, generator);
+			//select chromosome which is not equal to ind1
 			while (ind2 = selection(fitness_v, lista.generation_size, fitness_total, generator) == ind1);
 
 			double random_number = rand_number(generator);
@@ -369,12 +373,14 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 			rs_mutation(temp_v[0], lista.mutation_prob, generator);
 			rs_mutation(temp_v[1], lista.mutation_prob, generator);
 
+			//Only added if the circuit is valid
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[0];
 				n++;
 			}
 
+			//Only added if the circuit is valid
 			if (eval_circ(new_gen[n]))
 			{
 				gen[n] = temp_v[1];
@@ -382,7 +388,9 @@ result genetic_algorithm<C, D>::run_algorithm_genetic(std::function<double(C&)> 
 			}
 		}
 
+		//increase generation count
 		gen_cnt++;
+		//swap the old generation and new generation
 		std::swap(gen, new_gen);
 	}
 #ifdef C_DATA

@@ -3,10 +3,6 @@
 urban_drone::urban_drone(double maximum_battery_time, double maximum_payload_capacity, double drone_mass, double payload, double max_flight_time,
 	int rotors) : drone(maximum_battery_time, maximum_payload_capacity, drone_mass, payload, max_flight_time, rotors){}
 
-std::tuple<int, int, int, int> urban_drone::drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route, double max_payload_cap, double max_dist)
-{
-	return std::tuple<int, int, int, int>();
-}
 
 //bool urban_drone::energy_flight_constraint(double L)
 //{

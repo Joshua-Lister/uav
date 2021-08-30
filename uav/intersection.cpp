@@ -83,17 +83,17 @@ void intersection::run_which_windows(std::string choice)
 	else if (choice == "multi_drone")
 	{
 		savings multi_save = f1.multi_drone(false);
-		std::cout << "Total cost " << "No of Drones " << "No of Trucks ";
-		std::cout << multi_save.energy_savings + multi_save.petrol_savings << " " 
-			<< multi_save.num_of_drones_savings << " " << multi_save.num_of_trucks_savings;
+		std::cout << "Total cost " << "No of Drones " << "No of Trucks \n";
+		std::cout << multi_save.energy_savings + multi_save.petrol_savings << "      " 
+			<< multi_save.num_of_drones_savings << "              " << multi_save.num_of_trucks_savings;
 	}
 
 	else if (choice == "single_drone")
 	{
 		savings single_save = f1.single_drone(false);
-		std::cout << "Total cost " << "No of Drones " << "No of Trucks ";
-		std::cout << single_save.energy_savings + single_save.petrol_savings << " "
-			<< single_save.num_of_drones_savings << " " << single_save.num_of_trucks_savings;
+		std::cout << "Total cost " << "No of Drones " << "No of Trucks\n";
+		std::cout << single_save.energy_savings + single_save.petrol_savings << "      "
+			<< single_save.num_of_drones_savings << "            " << single_save.num_of_trucks_savings;
 	}
 
 	else if (choice == "drone_method_compare")
@@ -120,10 +120,10 @@ void intersection::run_which_windows(std::string choice)
 	{
 		std::vector<double> compare_a_v(3);
 		compare_a_v = f1.truck_vs_drone_savings();
-		std::cout << "       Total cost\n";
-		std::cout <<"Truck only" << compare_a_v[0];
-		std::cout << "Single " << compare_a_v[1];
-		std::cout << "Multi " << compare_a_v[2];
+		std::cout << "           Total cost\n";
+		std::cout <<"Truck only" << "  " << compare_a_v[0] << "\n";
+		std::cout << "Single " << "     " << compare_a_v[1] << "\n";
+		std::cout << "Multi " << "      " << compare_a_v[2] << "\n";
 
 	}
 	else

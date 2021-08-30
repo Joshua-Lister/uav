@@ -25,17 +25,13 @@ public:
 	//virtual bool energy_flight_constraint(double L) = 0;
 	 std::vector<address_metadata*> v1; 
 	 std::vector<drone*> v2;
-	//virtual bool energy_flight_constraint(double L) = 0;
-	virtual std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route,
-		double max_payload_cap, double max_dist) = 0;
-	//virtual void set_up_drones(int number_of_drones) = 0;
-	//double time_to_charge();
-	//double power_consumption();
-	//void set_battery_time();
-	//void set_payload_capacity();
-	//void update_battery_time(std::string bc_condition, double L);
+	double time_to_charge();
+	double power_consumption();
+	void set_battery_time();
+	void set_payload_capacity();
+	void update_battery_time(std::string bc_condition, double L);
 	void update_payload(std::string pd_condition, double weight);
-	//static double return_battery_energy_capacity();
+	double return_battery_energy_capacity();
 
 	double maxiumum_distance;
 	double maximum_payload_capacity;
@@ -56,7 +52,6 @@ protected:
 	double fluid_density = -1; // kg/m^3
 	double disc_area = -1;
 	int rotors = -1;
-	//std::vector<address_metadata> route;
 
 };
 

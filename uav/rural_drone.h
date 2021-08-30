@@ -10,16 +10,7 @@ public:
         int rotors);
     rural_drone(double payload, double max_flight_time);
 
-    //vritual bool energy_flight_constraint(double L) override;
-    std::tuple<int, int, int, int> drone_multi_delivery(int k, int ad_adr, std::vector<std::vector<address_metadata*>>& cl_data, 
-        std::vector<address_metadata>& opt_route, double max_payload_cap,
-        double max_dist);
-    void set_up_single_drone(rural_drone* uav, address_metadata arg, double mass_sum);
-    std::tuple<double, int> singular_flight(int k, std::vector<std::vector<address_metadata*>>& cl_data, std::vector<address_metadata>& opt_route);
-    //virtual void set_up_drones(int number_of_drones) override;
     double cost_of_drone; //Currency GBP
-
-    int number_of_drones;
 private:
     double x_coord, y_coord;
    	

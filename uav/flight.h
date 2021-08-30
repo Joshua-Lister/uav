@@ -44,8 +44,6 @@ public:
 	GA_param_list set_params;
 
 	std::string drone_type;
-	//std::vector<std::shared_ptr<std::shared_ptr<int>>> v1;
-	//std::vector<std::vector<std::shared_ptr<address_metadata>>> v10;
 	std::vector<std::shared_ptr<drone>> v10;
 	truck truck1;
 

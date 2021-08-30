@@ -59,8 +59,6 @@ public:
 	
 };
 
-//Code beneath reduces warnings in windows but returns errors in linux.
-
 template class genetic_algorithm<Circuit, address_metadata>;
 genetic_algorithm<Circuit, address_metadata>::genetic_algorithm(GA_param_list list, std::vector<address_metadata>& path);
 void genetic_algorithm<Circuit, address_metadata>::crossover_ordered(Circuit& parent1, Circuit& parent2, Circuit& child1, Circuit& child2, int a, int b);

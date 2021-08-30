@@ -77,12 +77,9 @@ std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k
 			{
 				if (adr == cl_data[centroid_id].size() - 1) // i use this to prevent index error at '*cl_data[centroid_id][adr + 1]'
 				{
-					double l = distance_track[cnt_d];// util::length(*cl_data[centroid_id][adr], opt_route[i]);
-					sum_d += l;
+					
+					sum_d += distance_track[cnt_d];
 					sum_m = std::accumulate(mass_track.begin(), mass_track.begin() + cnt_m, 0.);
-				
-					//sum_m += mass_track[cnt];
-					//sum_m += cl_data[centroid_id][adr]->parcel_mass;
 					cl_data[centroid_id][adr]->visited = true;
 					break;
 				}
@@ -141,9 +138,7 @@ std::tuple<double, double, int, int, int> flight::multi_adr_drone_delivery(int k
 			number_of_drones++; // when while(!constrained) breaks one drone used
 			all_distances += sum_d; // adding total distance for that drone to all distances
 			all_masses += sum_m; // adding total mass for that drone to all masses 
-			//int lowest_num = std::min(temp_num_of_addresses_distance, temp_num_of_addresses_mass);
-	 // adding number of address the drone could fly to
-			cnt_d = 0;
+			cnt_d = 0; // add number of address
 			cnt_m = 1;// add number of address 
 		}
 
@@ -172,10 +167,10 @@ std::tuple<double, double, int, int> flight::single_adr_drone_delivery(int k, st
 	int number_of_trucks = 0;
 	double sum_d = 0;
 	double total_parcel_mass = 0;
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < k; i++) //iterative over each cluster
 	{
 		centroid_id = opt_route[i].id;
-		for (int j = 0; j < cl_data[centroid_id].size(); j++)
+		for (int j = 0; j < cl_data[centroid_id].size(); j++) //iterate over each adr in each cluster
 		{
 			sum_d += 2 * util::length(opt_route[i], *cl_data[centroid_id][j]);
 			num_of_addresses++;
@@ -308,6 +303,8 @@ savings flight::single_drone(bool verbose)
 	
 	save.petrol_savings = this->fuel_cost *Result.optimal_performance;
 	save.energy_savings = this->elec_cost * std::get<0>(single_drone_results);
+	save.num_of_drones_savings = std::get<2>(single_drone_results);
+	save.num_of_trucks_savings = std::get<3>(single_drone_results);
 
 	return save;
 
@@ -352,10 +349,10 @@ savings flight::multi_drone(bool verbose)
 
 }
 
-	/*****************************************************************************************
-	The truck_only and drone_method_savings are called. The total cost associated with 
-	each method is initialised to a vector of doubles and is returned. 
-	******************************************************************************************/
+/*****************************************************************************************
+The truck_only and drone_method_savings are called. The total cost associated with 
+each method is initialised to a vector of doubles and is returned. 
+******************************************************************************************/
 std::vector<double>flight::truck_vs_drone_savings()
 {
 	std::vector<savings> save_v(3);

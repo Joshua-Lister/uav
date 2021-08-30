@@ -15,8 +15,6 @@ public:
 	void read_csv();
 	void fill_data();
 	void print_data(std::string type);
-	//std::vector<double> longtitude;
-	//std::vector<double> latitude;
 	std::vector <std::string> out_code;
 	std::vector <std::string> in_code;
 	std::string filename;

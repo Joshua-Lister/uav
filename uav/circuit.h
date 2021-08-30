@@ -44,10 +44,7 @@ public:
 	double return_v_sum(std::vector<Te>& vec);
 
 	void calc_velocities(Circuit& obj);
-	double time = 0;
 	double total_energy = 0;
-	double total_distance_travelled = 0;
-	std::vector<address_metadata> centroids;
 	std::vector<address_metadata> route;
 	std::vector<double> velocity_v;
 	double mass_1, mass_2;

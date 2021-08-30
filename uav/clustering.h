@@ -32,7 +32,7 @@ public:
 	bool check_ids();
 	static bool stopping_condition(const std::vector<address_metadata>& obj, const std::vector<address_metadata>& obj2);
 	int k = 2;
-	bool success;
+	bool success = false;
 	read_data d;
 	double min_distance, max_distance;
 	std::vector<double> points;
