@@ -1,4 +1,4 @@
-# Data manipulation imports
+ # Data manipulation imports
 import numpy as np
 # Matplotlib/visualisation support imports
 import matplotlib.pyplot as plt
@@ -51,10 +51,10 @@ y_pos = np.empty(num_dXY, dtype=float, order='C')
 
 def set_plot(x, y):
     for i in range(num_dXY):
-        dx = x[i+1] - x[i]
-        dy = y[i+1] - y[i]
-        xpos = (x[i+1] + x[i]) / 2
-        ypos = (y[i+1] + y[i]) / 2
+        dx = x[i + 1] - x[i]
+        dy = y[i + 1] - y[i]
+        xpos = (x[i + 1] + x[i]) / 2
+        ypos = (y[i + 1] + y[i]) / 2
         
         d_X[i] = dx
         d_Y[i] = dy
@@ -69,7 +69,7 @@ def set_plot(x, y):
 
     # Plot arrow on each line:
     for X,Y,dX,dY in zip(x_pos, y_pos, d_X, d_Y):
-        ax.annotate("", xytext=(X,Y),xy=(X+0.001*dX,Y+0.001*dY), 
+        ax.annotate("", xytext=(X,Y),xy=(X + 0.001 * dX, Y + 0.001 * dY), 
         arrowprops=dict(arrowstyle="->"))
 
 # Creates initial frame
