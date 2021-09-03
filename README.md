@@ -15,7 +15,7 @@
 
 
 ## Dependencies
-This code has been compiled with C++20. The following python libaries are required for the generation of plots and the animation : 
+This code has been compiled with C++20 in Microsoft Visual Studio 2019. The following python libaries are required for the generation of plots and the animation : 
 - `numpy`
 - `matplotlib`
 
@@ -57,7 +57,7 @@ Random Postcodes for testing purposes can be generated using the command
 - `python scripts/random_postcodes.py`Anaconda Python Version
 
 ### Windows OS
-In the main function change the string s in the main file to one of the following depending on your needs.
+In the terminal, enter one of the following depending on your needs.
 - `test` : Run all tests. 
 - `multi_drone` : Run the multi address drone method. 
 - `single_drone` : Run the single address drone method.
